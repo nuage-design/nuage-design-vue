@@ -1,18 +1,12 @@
 <template>
-  <button
-    :class="[
-      'na-button',
-      isColorStyle
-        ? `na-button_color_${color}`
-        : 'na-button_color_custom-color',
-    ]"
-    :style="{ background: color }"
-  >
+  <button :class="['na-button']" :style="styleObject">
     <slot />
   </button>
 </template>
 
 <script>
+// import { isColorStyle } from "../scripts/colors";
+
 export default {
   name: "NaButton",
   props: {
@@ -25,7 +19,7 @@ export default {
     },
     color: {
       type: String,
-      default: "success",
+      default: "primary",
     },
     leftSide: {
       type: Object,
@@ -46,16 +40,22 @@ export default {
       },
     },
   },
-  computed: {
-    buttonColor() {
-      return this.color;
-    },
+  data() {
+    return {
+      componentStyle: {
+        colorDefault: "#7345F0",
+        colorHover: "#8D68F3",
+      },
+    };
   },
-  methods: {
-    isColorStyle() {
-      return ["primary", "success", "warning", "danger", "dark"].includes(
-        this.color
-      );
+  computed: {
+    styleObject: {
+      get: function () {
+        return {
+          "--color-default": this.componentStyle.colorDefault,
+          "--color-hover": this.componentStyle.colorHover,
+        };
+      },
     },
   },
 };
@@ -63,6 +63,7 @@ export default {
 
 <style>
 .na-button {
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -73,13 +74,10 @@ export default {
   cursor: pointer;
   border: none;
   color: white;
+  background: var(--color-default);
 }
 
-.na-button_color_primary {
-  background: #7345f0;
-}
-
-.na-button_color_success {
-  background: #4dc74b;
+.na-button:hover {
+  background: var(--color-hover);
 }
 </style>
