@@ -1,23 +1,25 @@
 <template>
-  <div
-    :class="[
-      'na-bage',
-      isColorStyle
-        ? `na-bage_color_${bageColor}`
-        : 'na-bage_color_custom-color',
-      { 'na-bage_inverse': inverse },
-    ]"
-  >
-    <span class="na-bage__text"><slot /></span>
+  <div :value="value" class="na-bage" :class="classes" :style="styles">
+    <span v-if="!dot">{{ displayValue }}</span>
   </div>
 </template>
 
 <script>
-import { isColorStyle } from "../scripts/colors";
+import { ref, reactive, computed } from "vue";
+
+import _colors from "../scripts/colors";
 
 export default {
   name: "NaBage",
   props: {
+    value: {
+      type: [String, Number],
+      default: null,
+    },
+    maxValue: {
+      type: Number,
+      default: 99,
+    },
     color: {
       type: String,
       default: "primary",
@@ -26,16 +28,40 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      bageColor: this.color,
-    };
-  },
-  methods: {
-    isColorStyle() {
-      return isColorStyle(this.color);
+    dot: {
+      type: Boolean,
+      default: false,
     },
+  },
+  setup(props) {
+    const bage = reactive(props);
+    const isColorStyle = ref(_colors.isColorStyle(bage.color));
+
+    const classes = [
+      isColorStyle.value
+        ? `na-bage_color_${bage.color}`
+        : "na-bage_color_custom-color",
+      { "na-bage_inverse": bage.inverse },
+      { "na-bage_dot": bage.dot },
+    ];
+
+    const styles = [
+      !bage.inverse
+        ? { background: bage.color }
+        : { background: "white", color: bage.color },
+      +bage.value ? { fontSize: "14px" } : { fontSize: "10px", padding: "6px" },
+    ];
+
+    const displayValue = computed(() => {
+      let value = bage.value;
+      let maxValue = bage.maxValue;
+      if (maxValue) {
+        value = value > maxValue ? maxValue + "+" : value;
+      }
+      return value;
+    });
+
+    return { displayValue, isColorStyle, classes, styles };
   },
 };
 </script>
@@ -44,15 +70,23 @@ export default {
 .na-bage {
   box-sizing: border-box;
   display: inline-block;
-  padding: 3px 5.5px;
+  padding: 3px 6px;
+  min-width: 20px;
   height: 20px;
   color: white;
   border-radius: 10px;
-  font-family: Montserrat;
+  font-family: Montserrat, sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 100%;
+}
+
+.na-bage_dot {
+  padding: 0;
+  height: 10px;
+  min-width: 10px;
+  border-radius: 50%;
 }
 
 .na-bage_color_primary {

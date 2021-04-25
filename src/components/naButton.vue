@@ -60,7 +60,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .na-button {
   box-sizing: border-box;

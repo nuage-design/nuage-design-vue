@@ -10,13 +10,13 @@ const Template = (args) => ({
   setup() {
     return { args };
   },
-  template:
-    "<na-bage :color='args.color' :inverse='args.inverse'>99+</na-bage>",
+  template: "<na-bage v-bind='args' />",
 });
 
-export const SingleBage = Template.bind({});
+export const Bage = Template.bind({});
 
-SingleBage.args = {
+Bage.args = {
+  value: 3,
   color: "primary",
   inverse: false,
 };
