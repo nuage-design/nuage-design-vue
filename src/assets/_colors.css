@@ -19,7 +19,6 @@
   --color-primary-800: #360DA5;
   --color-primary-900: #2B0B84;
   --color-primary-outline: rgba(198, 179, 249, 0.5);
-  --color-primary-outline: rgba(198, 179, 249, 0.5);
   --color-primary-gradient-default: linear-gradient(90deg, #541CED 0%, #8D68F3 100%);
   --color-primary-gradient-hover: linear-gradient(270deg, #7345F0 0%, #A98EF6 100%);
 
@@ -34,4 +33,68 @@
   --color-success-700: #30942E;
   --color-success-800: #277926;
   --color-success-900: #1F611E;
+  --color-success-outline: rgba(182, 232, 181, 0.5);
+  --color-success-gradient-default: linear-gradient(90deg, #3AB338 0%, #71D26F 100%);
+  --color-success-gradient-hover: linear-gradient(270deg, #4DC74B 0%, #93DD92 100%);
+
+  /* info */
+  --color-info-50: #E5F6FF;
+  --color-info-100: #CCECFF;
+  --color-info-200: #9EDBFF;
+  --color-info-300: #6BC9FF;
+  --color-info-400: #3DB8FF;
+  --color-info-500: #0AA5FF;
+  --color-info-600: #0091E6;
+  --color-info-700: #0078BD;
+  --color-info-800: #006199;
+  --color-info-900: #004E7A;
+  --color-info-outline: rgba(158, 219, 255, 0.5);
+  --color-info-gradient-default: linear-gradient(90deg, #0091E6 0%, #3DB8FF 100%);
+  --color-info-gradient-hover: linear-gradient(270deg, #0AA5FF 0%, #6BC9FF 100%);
+  --color-success-gradient-hover: linear-gradient(270deg, #4DC74B 0%, #93DD92 100%);
+
+  /* warning */
+  --color-warning-50: #FFF4E5;
+  --color-warning-100: #FFEACC;
+  --color-warning-200: #FFD79E;
+  --color-warning-300: #FFC16B;
+  --color-warning-400: #FFAE3D;
+  --color-warning-500: #FF9A0C;
+  --color-warning-600: #E68600;
+  --color-warning-700: #BD6E00;
+  --color-warning-800: #995900;
+  --color-warning-900: #7A4700;
+  --color-warning-outline: rgba(255, 215, 158, 0.5);
+  --color-warning-gradient-default: linear-gradient(90deg, #E68600 0%, #FFAE3D 100%);
+  --color-warning-gradient-hover: linear-gradient(270deg, #FF9A0C 0%, #FFC16B 100%);
+
+  /* danger */
+  --color-danger-50: #FFEBEB;
+  --color-danger-100: #FFDBDC;
+  --color-danger-200: #FFB3B5;
+  --color-danger-300: #FF8F93;
+  --color-danger-400: #FF666B;
+  --color-danger-500: #FF4248;
+  --color-danger-600: #FF141C;
+  --color-danger-700: #E60008;
+  --color-danger-800: #B80006;
+  --color-danger-900: #940005;
+  --color-danger-outline: rgba(255, 179, 181, 0.5);
+  --color-danger-gradient-default: linear-gradient(90deg, #FF141C 0%, #FF666B 100%);
+  --color-danger-gradient-hover: linear-gradient(270deg, #FF4248 0%, #FF8F93 100%);
+
+  /* dark */
+  --color-dark-50: #E9E7EE;
+  --color-dark-100: #D3D0DD;
+  --color-dark-200: #A59EB8;
+  --color-dark-300: #796E96;
+  --color-dark-400: #534B67;
+  --color-dark-500: #2C2837;
+  --color-dark-600: #26222F;
+  --color-dark-700: #1F1C26;
+  --color-dark-800: #1A1820;
+  --color-dark-900: #15131B;
+  --color-dark-outline: rgba(165, 158, 184, 0.5);
+  --color-dark-gradient-default: linear-gradient(90deg, #26222F 0%, #534B67 100%);
+  --color-dark-gradient-hover: linear-gradient(270deg, #2C2837 0%, #796E96 100%);
 }
