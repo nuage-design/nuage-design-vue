@@ -1,5 +1,12 @@
 <template>
-  <div :value="value" class="na-bage" :class="classes" :style="styles">
+  <div
+    ref="root"
+    :value="value"
+    class="na-bage"
+    :class="classes"
+    :style="styles"
+    :custom-color="!isColorStyle ? color : ''"
+  >
     <span v-if="!dot">{{ displayValue }}</span>
   </div>
 </template>
@@ -37,18 +44,31 @@ export default {
     const bage = reactive(props);
     const isColorStyle = ref(_colors.isColorStyle(bage.color));
 
+    const customBageClass = "na-bage_color_custom-color";
+
+    if (!isColorStyle.value) {
+      const customPalette = _colors.createPalette(bage.color);
+      const customStyles = document.createElement("style");
+
+      customStyles.innerHTML = `
+        [custom-color='${bage.color}'] {
+          background: ${customPalette[500]};
+        }
+        [custom-color='${bage.color}'].na-bage_inverse {
+          color: ${customPalette[500]};
+          background: white;
+        }
+      `;
+      document.head.appendChild(customStyles);
+    }
+
     const classes = [
-      isColorStyle.value
-        ? `na-bage_color_${bage.color}`
-        : "na-bage_color_custom-color",
+      isColorStyle.value ? `na-bage_color_${bage.color}` : customBageClass,
       { "na-bage_inverse": bage.inverse },
       { "na-bage_dot": bage.dot },
     ];
 
     const styles = [
-      !bage.inverse
-        ? { background: bage.color }
-        : { background: "white", color: bage.color },
       +bage.value ? { fontSize: "14px" } : { fontSize: "10px", padding: "6px" },
     ];
 
@@ -66,8 +86,21 @@ export default {
 };
 </script>
 
-<style>
-.na-bage {
+<style lang="scss">
+$component: "na-bage";
+
+@mixin color-style($color) {
+  &_#{$color} {
+    background: var(--color-#{$color});
+
+    &.#{$component}_inverse {
+      color: var(--color-#{$color});
+      background: white;
+    }
+  }
+}
+
+.#{$component} {
   box-sizing: border-box;
   display: inline-block;
   padding: 3px 6px;
@@ -75,35 +108,25 @@ export default {
   height: 20px;
   color: white;
   border-radius: 10px;
-  font-family: Montserrat, sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 100%;
-}
 
-.na-bage_dot {
-  padding: 0;
-  height: 10px;
-  min-width: 10px;
-  border-radius: 50%;
-}
+  &_dot {
+    padding: 0;
+    height: 10px;
+    min-width: 10px;
+    border-radius: 50%;
+  }
 
-.na-bage_color_primary {
-  background: #7345f0;
-}
-
-.na-bage_color_success {
-  background: #4dc74b;
-}
-
-.na-bage_color_primary.na-bage_inverse {
-  color: #7345f0;
-  background: white;
-}
-
-.na-bage_color_success.na-bage_inverse {
-  color: #4dc74b;
-  background: white;
+  &_color {
+    @include color-style("primary");
+    @include color-style("success");
+    @include color-style("warning");
+    @include color-style("danger");
+    @include color-style("dark");
+    @include color-style("info");
+  }
 }
 </style>

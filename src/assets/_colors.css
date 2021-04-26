@@ -51,7 +51,6 @@
   --color-info-outline: rgba(158, 219, 255, 0.5);
   --color-info-gradient-default: linear-gradient(90deg, #0091E6 0%, #3DB8FF 100%);
   --color-info-gradient-hover: linear-gradient(270deg, #0AA5FF 0%, #6BC9FF 100%);
-  --color-success-gradient-hover: linear-gradient(270deg, #4DC74B 0%, #93DD92 100%);
 
   /* warning */
   --color-warning-50: #FFF4E5;
