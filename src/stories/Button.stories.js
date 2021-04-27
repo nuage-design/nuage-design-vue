@@ -11,12 +11,12 @@ const Template = (args) => ({
   setup() {
     return { args };
   },
-  template:
-    "<na-button v-bind='args'>Button<na-bage inverse value='100'/></na-button>",
+  template: "<na-button v-bind='args' />",
 });
 
 export const Button = Template.bind({});
 
 Button.args = {
+  value: "Button",
   color: "primary",
 };

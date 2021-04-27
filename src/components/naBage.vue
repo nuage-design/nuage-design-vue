@@ -1,18 +1,17 @@
 <template>
   <div
     ref="root"
-    :value="value"
     class="na-bage"
     :class="classes"
     :style="styles"
-    :custom-color="!isColorStyle ? color : ''"
+    :custom-color="!isColorStyle ? color : null"
   >
     <span v-if="!dot">{{ displayValue }}</span>
   </div>
 </template>
 
 <script>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 
 import _colors from "../scripts/colors";
 
@@ -44,26 +43,29 @@ export default {
     const bage = reactive(props);
     const isColorStyle = ref(_colors.isColorStyle(bage.color));
 
-    const customBageClass = "na-bage_color_custom-color";
+    const root = ref(null);
 
-    if (!isColorStyle.value) {
-      const customPalette = _colors.createPalette(bage.color);
-      const customStyles = document.createElement("style");
+    onMounted(() => {
+      const elem = root.value;
 
-      customStyles.innerHTML = `
-        [custom-color='${bage.color}'] {
-          background: ${customPalette[500]};
+      if (bage.inverse) {
+        _colors.colorInversion(elem);
+      }
+
+      if (!isColorStyle.value) {
+        const customPalette = _colors.createPalette(bage.color);
+
+        if (customPalette) {
+          elem.style.background = customPalette[500];
+          elem.style.color = "white";
         }
-        [custom-color='${bage.color}'].na-bage_inverse {
-          color: ${customPalette[500]};
-          background: white;
-        }
-      `;
-      document.head.appendChild(customStyles);
-    }
+      }
+    });
 
     const classes = [
-      isColorStyle.value ? `na-bage_color_${bage.color}` : customBageClass,
+      isColorStyle.value
+        ? `na-bage_color_${bage.color}`
+        : "na-bage_color_custom-color",
       { "na-bage_inverse": bage.inverse },
       { "na-bage_dot": bage.dot },
     ];
@@ -81,7 +83,7 @@ export default {
       return value;
     });
 
-    return { displayValue, isColorStyle, classes, styles };
+    return { displayValue, isColorStyle, classes, styles, root };
   },
 };
 </script>
@@ -92,11 +94,6 @@ $component: "na-bage";
 @mixin color-style($color) {
   &_#{$color} {
     background: var(--color-#{$color});
-
-    &.#{$component}_inverse {
-      color: var(--color-#{$color});
-      background: white;
-    }
   }
 }
 
