@@ -1,16 +1,25 @@
 <template>
   <button ref="root" class="na-button" :class="classes">
     <span v-if="value">{{ value }}</span>
+    <span v-if="rightSide">
+      <na-bage v-if="rightSide == 'bage'" :color="color" />
+    </span>
   </button>
 </template>
 
 <script>
 import { ref, reactive, onMounted } from "vue";
+import naBage from "./naBage";
 
 import _colors from "../scripts/colors";
 
+const STYLES = ["solid", "gradient", "border", "transparent"];
+
 export default {
   name: "NaButton",
+  components: {
+    naBage,
+  },
   props: {
     value: {
       type: [String, Number],
@@ -21,7 +30,7 @@ export default {
       type: String,
       default: "solid",
       validator: (value) => {
-        return ["solid", "gradient", "border", "transparent"].includes(value);
+        return STYLES.includes(value);
       },
     },
     color: {
@@ -70,8 +79,6 @@ export default {
       isColorStyle.value
         ? `na-button_color_${button.color}`
         : "na-button_color_custom-color",
-      { "na-button_inverse": button.inverse },
-      { "na-button_dot": button.dot },
     ];
 
     return { button, root, classes };
@@ -88,6 +95,7 @@ $component: "na-button";
 }
 
 .#{$component} {
+  font-size: 14px;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
