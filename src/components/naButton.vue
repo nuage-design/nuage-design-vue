@@ -1,15 +1,11 @@
 <template>
   <button ref="root" class="na-button" :class="classes">
-    <span v-if="value">{{ value }}</span>
-    <span v-if="rightSide">
-      <na-bage v-if="rightSide == 'bage'" :color="color" />
-    </span>
+    <slot />
   </button>
 </template>
 
 <script>
 import { ref, reactive, onMounted } from "vue";
-import naBage from "./naBage";
 
 import _colors from "../scripts/colors";
 
@@ -17,15 +13,7 @@ const STYLES = ["solid", "gradient", "border", "transparent"];
 
 export default {
   name: "NaButton",
-  components: {
-    naBage,
-  },
   props: {
-    value: {
-      type: [String, Number],
-      requier: false,
-      default: null,
-    },
     style: {
       type: String,
       default: "solid",
@@ -37,23 +25,8 @@ export default {
       type: String,
       default: "primary",
     },
-    leftSide: {
-      type: Object,
-      default: function () {
-        return { type: null };
-      },
-    },
-    rightSide: {
-      type: Object,
-      default: function () {
-        return { type: null };
-      },
-    },
     equal: {
       type: Object,
-      default: function () {
-        return { type: null };
-      },
     },
   },
   setup(props) {
@@ -96,6 +69,7 @@ $component: "na-button";
 
 .#{$component} {
   font-size: 14px;
+  font-weight: 600;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -108,6 +82,18 @@ $component: "na-button";
   border: none;
   color: white;
 
+  & > * {
+    margin-left: 4px;
+    margin-right: 4px;
+
+    &:nth-child(1) {
+      margin-left: 0;
+    }
+
+    &:nth-last-child(1) {
+      margin-right: 0;
+    }
+  }
   &_color {
     @include color-style("primary");
     @include color-style("success");

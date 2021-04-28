@@ -6,7 +6,7 @@
     :style="styles"
     :custom-color="!isColorStyle ? color : null"
   >
-    <span v-if="!dot">{{ displayValue }}</span>
+    <span class="na-bage__text" v-if="!dot">{{ displayValue }}</span>
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
   name: "NaBage",
   props: {
     value: {
-      type: [String, Number],
+      type: [String, Number, Object],
       default: null,
     },
     maxValue: {
@@ -62,24 +62,32 @@ export default {
       }
     });
 
+    const styles = [
+      bage.value < 10 &&
+      bage.value >= 0 &&
+      bage.value !== null &&
+      bage.value !== "" &&
+      !bage.dot
+        ? { width: "20px", height: "20px", padding: "0" }
+        : null,
+    ];
+
     const classes = [
       isColorStyle.value
         ? `na-bage_color_${bage.color}`
         : "na-bage_color_custom-color",
       { "na-bage_inverse": bage.inverse },
-      { "na-bage_dot": bage.dot },
-    ];
-
-    const styles = [
-      +bage.value ? { fontSize: "14px" } : { fontSize: "10px", padding: "6px" },
+      { "na-bage_dot": bage.dot || bage.value === null || bage.value === "" },
     ];
 
     const displayValue = computed(() => {
       let value = bage.value;
       let maxValue = bage.maxValue;
+
       if (maxValue) {
         value = value > maxValue ? maxValue + "+" : value;
       }
+
       return value;
     });
 
@@ -98,10 +106,11 @@ $component: "na-bage";
 }
 
 .#{$component} {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
-  display: inline-block;
-  padding: 3px 6px;
-  min-width: 20px;
   height: 20px;
   color: white;
   border-radius: 10px;
@@ -109,11 +118,18 @@ $component: "na-bage";
   font-weight: 500;
   font-size: 14px;
   line-height: 100%;
+  width: 20px;
+  padding: 0 8px;
+  min-width: max-content;
+
+  &__text {
+    text-align: center;
+  }
 
   &_dot {
     padding: 0;
     height: 10px;
-    min-width: 10px;
+    width: 10px;
     border-radius: 50%;
   }
 
