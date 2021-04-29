@@ -1,5 +1,6 @@
 import NaButton from "../components/naButton.vue";
-import NaBage from "../components/naBage.vue";
+import NaBadge from "../components/naBadge.vue";
+import "boxicons";
 
 export default {
   title: "Button",
@@ -7,19 +8,21 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { NaButton, NaBage },
+  components: { NaButton, NaBadge },
   setup() {
     return { args };
   },
-  template: `<na-button v-bind='args'>
-      <span>Button</span>
-      <na-bage :value='100' inverse :color='args.color'/>
-    </na-button>`,
+  template: `
+    <na-button v-bind="args">
+      <span>${args.text}</span>
+      <na-badge :value="100" />
+    </na-button>
+    `,
 });
 
 export const Button = Template.bind({});
 
 Button.args = {
-  value: "Button",
-  color: "primary",
+  active: false,
+  text: "Button",
 };

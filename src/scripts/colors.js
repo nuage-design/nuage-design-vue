@@ -25,8 +25,6 @@ export default {
         900: hslToHex({ h, s, l: Math.round(l - darkness * 3.75) }),
       };
 
-      paletteHex["outline"] = paletteHex[200] + "80";
-
       paletteHex[
         "gradient-default"
       ] = `linear-gradient(90deg, ${paletteHex[600]} 0%, ${paletteHex[400]} 100%)`;

@@ -1,12 +1,12 @@
 <template>
   <div
     ref="root"
-    class="na-bage"
+    class="na-badge"
     :class="classes"
     :style="styles"
     :custom-color="!isColorStyle ? color : null"
   >
-    <span class="na-bage__text" v-if="!dot">{{ displayValue }}</span>
+    <span class="na-badge__text" v-if="!dot">{{ displayValue }}</span>
   </div>
 </template>
 
@@ -16,7 +16,7 @@ import { ref, reactive, computed, onMounted } from "vue";
 import _colors from "../scripts/colors";
 
 export default {
-  name: "NaBage",
+  name: "NaBadge",
   props: {
     value: {
       type: [String, Number, Object],
@@ -40,20 +40,20 @@ export default {
     },
   },
   setup(props) {
-    const bage = reactive(props);
-    const isColorStyle = ref(_colors.isColorStyle(bage.color));
+    const badge = reactive(props);
+    const isColorStyle = ref(_colors.isColorStyle(badge.color));
 
     const root = ref(null);
 
     onMounted(() => {
       const elem = root.value;
 
-      if (bage.inverse) {
+      if (badge.inverse) {
         _colors.colorInversion(elem);
       }
 
       if (!isColorStyle.value) {
-        const customPalette = _colors.createPalette(bage.color);
+        const customPalette = _colors.createPalette(badge.color);
 
         if (customPalette) {
           elem.style.background = customPalette[500];
@@ -63,26 +63,28 @@ export default {
     });
 
     const styles = [
-      bage.value < 10 &&
-      bage.value >= 0 &&
-      bage.value !== null &&
-      bage.value !== "" &&
-      !bage.dot
+      badge.value < 10 &&
+      badge.value >= 0 &&
+      badge.value !== null &&
+      badge.value !== "" &&
+      !badge.dot
         ? { width: "20px", height: "20px", padding: "0" }
         : null,
     ];
 
     const classes = [
       isColorStyle.value
-        ? `na-bage_color_${bage.color}`
-        : "na-bage_color_custom-color",
-      { "na-bage_inverse": bage.inverse },
-      { "na-bage_dot": bage.dot || bage.value === null || bage.value === "" },
+        ? `na-badge_color_${badge.color}`
+        : "na-badge_color_custom-color",
+      { "na-badge_inverse": badge.inverse },
+      {
+        "na-badge_dot": badge.dot || badge.value === null || badge.value === "",
+      },
     ];
 
     const displayValue = computed(() => {
-      let value = bage.value;
-      let maxValue = bage.maxValue;
+      let value = badge.value;
+      let maxValue = badge.maxValue;
 
       if (maxValue) {
         value = value > maxValue ? maxValue + "+" : value;
@@ -97,7 +99,7 @@ export default {
 </script>
 
 <style lang="scss">
-$component: "na-bage";
+$component: "na-badge";
 
 @mixin color-style($color) {
   &_#{$color} {
