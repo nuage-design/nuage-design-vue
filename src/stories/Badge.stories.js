@@ -16,7 +16,7 @@ const Template = (args) => ({
 export const Badge = Template.bind({});
 
 Badge.args = {
-  value: 3,
+  value: 100,
   color: "primary",
   inverse: false,
 };
