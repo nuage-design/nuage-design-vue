@@ -112,7 +112,6 @@ $component: "na-badge";
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
   height: 20px;
   color: white;
   border-radius: 10px;
@@ -120,12 +119,12 @@ $component: "na-badge";
   font-weight: 500;
   font-size: 14px;
   line-height: 100%;
-  width: 20px;
-  padding: 0 8px;
-  min-width: max-content;
+  min-width: 20px;
+  max-width: max-content;
 
   &__text {
     text-align: center;
+    margin: 0 6px;
   }
 
   &_dot {

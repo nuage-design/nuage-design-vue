@@ -36,5 +36,5 @@ export default create({
 
   brandTitle: "Nuage Design System",
   // brandUrl: "https://example.com",
-  brandImage: logo,
+  // brandImage: logo,
 });
