@@ -25,13 +25,8 @@ export default {
         900: hslToHex({ h, s, l: Math.round(l - darkness * 3.75) }),
       };
 
-      paletteHex[
-        "gradient-default"
-      ] = `linear-gradient(90deg, ${paletteHex[600]} 0%, ${paletteHex[400]} 100%)`;
-
-      paletteHex[
-        "gradient-hover"
-      ] = `linear-gradient(270deg, ${paletteHex[500]} 0%, ${paletteHex[300]} 100%)`;
+      paletteHex["100-transparent"] = paletteHex[100] + "80";
+      paletteHex["200-transparent"] = paletteHex[200] + "80";
 
       return paletteHex;
     } else return null;

@@ -1,5 +1,5 @@
-import "../src/assets/_colors.css";
-import "../src/assets/_fonts.css";
+import "../src/styles/_colors.css";
+import "../src/styles/_fonts.css";
 import "../node_modules/boxicons/css/boxicons.min.css";
 
 export const parameters = {

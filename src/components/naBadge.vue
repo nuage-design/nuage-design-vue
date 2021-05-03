@@ -3,7 +3,6 @@
     ref="root"
     class="na-badge"
     :class="classes"
-    :style="styles"
     :custom-color="!isColorStyle ? color : null"
   >
     <span class="na-badge__text" v-if="!dot">{{ displayValue }}</span>
@@ -14,12 +13,13 @@
 import { ref, reactive, computed, onMounted } from "vue";
 
 import _colors from "../scripts/colors";
+import "./styles/na-badge.scss";
 
 export default {
   name: "NaBadge",
   props: {
     value: {
-      type: [String, Number, Object],
+      type: [String, Number],
       default: null,
     },
     maxValue: {
@@ -51,31 +51,10 @@ export default {
       if (badge.inverse) {
         _colors.colorInversion(elem);
       }
-
-      if (!isColorStyle.value) {
-        const customPalette = _colors.createPalette(badge.color);
-
-        if (customPalette) {
-          elem.style.background = customPalette[500];
-          elem.style.color = "white";
-        }
-      }
     });
 
-    const styles = [
-      badge.value < 10 &&
-      badge.value >= 0 &&
-      badge.value !== null &&
-      badge.value !== "" &&
-      !badge.dot
-        ? { width: "20px", height: "20px", padding: "0" }
-        : null,
-    ];
-
     const classes = [
-      isColorStyle.value
-        ? `na-badge_color_${badge.color}`
-        : "na-badge_color_custom-color",
+      `na-badge_color_${badge.color}`,
       { "na-badge_inverse": badge.inverse },
       {
         "na-badge_dot": badge.dot || badge.value === null || badge.value === "",
@@ -93,54 +72,7 @@ export default {
       return value;
     });
 
-    return { displayValue, isColorStyle, classes, styles, root };
+    return { displayValue, isColorStyle, classes, root };
   },
 };
 </script>
-
-<style lang="scss">
-$component: "na-badge";
-
-@mixin color-style($color) {
-  &_#{$color} {
-    background: var(--color-#{$color});
-  }
-}
-
-.#{$component} {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 20px;
-  color: white;
-  border-radius: 10px;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 100%;
-  min-width: 20px;
-  max-width: max-content;
-
-  &__text {
-    text-align: center;
-    margin: 0 6px;
-  }
-
-  &_dot {
-    padding: 0;
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-  }
-
-  &_color {
-    @include color-style("primary");
-    @include color-style("success");
-    @include color-style("warning");
-    @include color-style("danger");
-    @include color-style("dark");
-    @include color-style("info");
-  }
-}
-</style>

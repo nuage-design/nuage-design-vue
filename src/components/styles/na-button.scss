@@ -1,0 +1,240 @@
+@mixin color($color) {
+  &_#{$color} {
+    &.na-button_style_solid {
+      background: var(--color-#{$color});
+      outline: none;
+
+      .na-badge {
+        background: white;
+        color: var(--color-#{$color});
+      }
+
+      &:hover {
+        background: var(--color-#{$color}-400);
+
+        .na-badge {
+          color: var(--color-#{$color}-400);
+        }
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 5px var(--color-#{$color}-transparent);
+        background: var(--color-#{$color}-400);
+
+        .na-badge {
+          color: var(--color-#{$color}-400);
+        }
+      }
+
+      &:active {
+        background: var(--color-#{$color});
+        box-shadow: 0 0 0 5px var(--color-#{$color}-300);
+
+        .na-badge {
+          color: var(--color-#{$color});
+        }
+      }
+
+      &.na-button_disabled {
+        background: var(--color-#{$color});
+        opacity: 0.2;
+        box-shadow: inherit;
+
+        &:hover {
+          background: var(--color-#{$color});
+          cursor: not-allowed;
+
+          .na-badge {
+            color: var(--color-#{$color});
+          }
+        }
+
+        &:active {
+          background: var(--color-#{$color});
+
+          .na-badge {
+            color: var(--color-#{$color});
+          }
+        }
+      }
+    }
+
+    &.na-button_style_border {
+      background: none;
+      color: var(--color-#{$color});
+      border: 2px solid var(--color-#{$color});
+
+      .na-badge {
+        background: var(--color-#{$color});
+      }
+
+      &:hover {
+        border-color: var(--color-#{$color}-300);
+        color: var(--color-#{$color}-300);
+
+        .na-badge {
+          background: var(--color-#{$color}-300);
+        }
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 5px var(--color-#{$color}-transparent);
+        border-color: var(--color-#{$color});
+        color: var(--color-#{$color});
+
+        .na-badge {
+          background: var(--color-#{$color});
+        }
+      }
+
+      &:active {
+        color: var(--color-#{$color});
+        box-shadow: 0 0 0 5px var(--color-#{$color}-300);
+
+        .na-badge {
+          background: var(--color-#{$color});
+        }
+      }
+
+      &.na-button_active {
+        background: var(--color-#{$color}-400);
+        color: white;
+        border: var(--color-#{$color}-400);
+
+        .na-badge {
+          background: white;
+          color: var(--color-#{$color}-400);
+        }
+      }
+
+      &.na-button_disabled {
+        color: var(--color-#{$color});
+        border-color: var(--color-#{$color});
+
+        .na-badge {
+          background: var(--color-#{$color});
+        }
+      }
+    }
+
+    &.na-button_style_transparent {
+      background: none;
+      color: var(--color-#{$color});
+
+      .na-badge {
+        color: white;
+        background: var(--color-#{$color});
+      }
+
+      &:hover {
+        background: var(--color-#{$color}-transparent);
+      }
+
+      &:focus {
+        outline: none;
+        background: var(--color-#{$color}-transparent);
+        color: var(--color-#{$color});
+
+        .na-badge {
+          color: white;
+          background: var(--color-#{$color});
+        }
+      }
+
+      &:active {
+        color: white;
+        background: var(--color-#{$color});
+
+        .na-badge {
+          color: var(--color-#{$color});
+          background: white;
+        }
+      }
+
+      &.na-button_disabled {
+        color: var(--color-#{$color});
+        background: none;
+
+        .na-badge {
+          color: white;
+          background: var(--color-#{$color});
+        }
+      }
+    }
+
+    &.na-button_active {
+      background: var(--color-#{$color}-400);
+      color: white;
+
+      .na-badge {
+        color: var(--color-#{$color}-400);
+        background: white;
+      }
+    }
+
+    &.na-button_disabled {
+      opacity: 0.2;
+
+      &:hover {
+        cursor: not-allowed;
+      }
+
+      &:active, &:focus {
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.na-button {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 9px 21px;
+  height: 42px;
+  border-radius: 14px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  transition: 0.1s;
+
+  &.na-button_style_border {
+    padding: 9px 19px;
+
+    &.na-button_active {
+      padding: 9px 21px;
+    }
+  }
+
+  &>* {
+    margin-left: 4px;
+    margin-right: 4px;
+
+    &:nth-child(1) {
+      margin-left: 0;
+    }
+
+    &:nth-last-child(1) {
+      margin-right: 0;
+    }
+  }
+
+  &_color {
+    @include color("primary");
+    @include color("success");
+    @include color("info");
+    @include color("warning");
+    @include color("danger");
+    @include color("dark");
+  }
+
+  &_equal {
+    font-size: 20px;
+    padding: 9px 9px;
+    width: 42px;
+  }
+}

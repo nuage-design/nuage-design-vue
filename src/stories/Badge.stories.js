@@ -3,6 +3,14 @@ import NaBadge from "../components/naBadge.vue";
 export default {
   title: "Badge",
   component: NaBadge,
+  argTypes: {
+    color: {
+      control: {
+        type: "select",
+        options: ["primary", "success", "info", "warning", "danger", "dark"],
+      },
+    },
+  },
 };
 
 const Template = (args) => ({

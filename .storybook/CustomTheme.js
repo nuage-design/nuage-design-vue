@@ -1,7 +1,7 @@
 // .storybook/YourTheme.js
 
 import { create } from "@storybook/theming";
-import logo from "../src/assets/logo.svg";
+// import logo from "../src/assets/logo.svg";
 
 export default create({
   // base: "light",

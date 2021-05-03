@@ -5,6 +5,20 @@ import "boxicons";
 export default {
   title: "Button",
   component: NaButton,
+  argTypes: {
+    style: {
+      control: {
+        type: "radio",
+        options: ["solid", "border", "transparent"],
+      },
+    },
+    color: {
+      control: {
+        type: "select",
+        options: ["primary", "success", "info", "warning", "danger", "dark"],
+      },
+    },
+  },
 };
 
 const Template = (args) => ({
@@ -18,7 +32,7 @@ const Template = (args) => ({
     </na-button>
     <br/>
     <na-button v-bind="args">
-      <i class='bx bx-coffee' style='font-size: 24px;'></i>
+      <i class='bx bxs-coffee' style='font-size: 24px;'></i>
       <span>${args.text}</span>
     </na-button>
     <br/>
