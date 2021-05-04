@@ -25,6 +25,10 @@ export default {
       type: String,
       default: "primary",
     },
+    lightText: {
+      type: Boolean,
+      default: false,
+    },
     equal: {
       type: Boolean,
       default: false,
@@ -45,6 +49,15 @@ export default {
 
     onMounted(() => {
       const elem = root.value;
+      const active = elem.classList.contains("na-button_active");
+
+      if (button.style == "solid" || active) {
+        const badges = elem.querySelectorAll(".na-badge");
+
+        badges.forEach((badge) => {
+          badge.classList.add("na-badge_inverse");
+        });
+      }
 
       if (button.equal) {
         const firstItem = elem.firstElementChild;
@@ -66,6 +79,7 @@ export default {
     const classes = [
       `na-button_style_${button.style}`,
       button.color ? `na-button_color_${button.color}` : "",
+      { "na-button_light-text": button.lightText },
       { "na-button_active": button.active },
       { "na-button_disabled": button.disabled },
       { "na-button_equal": button.equal },

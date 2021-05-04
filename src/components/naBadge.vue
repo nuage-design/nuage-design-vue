@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed } from "vue";
 
 import _colors from "../scripts/colors";
 import "./styles/na-badge.scss";
@@ -44,14 +44,6 @@ export default {
     const isColorStyle = ref(_colors.isColorStyle(badge.color));
 
     const root = ref(null);
-
-    onMounted(() => {
-      const elem = root.value;
-
-      if (badge.inverse) {
-        _colors.colorInversion(elem);
-      }
-    });
 
     const classes = [
       `na-badge_color_${badge.color}`,

@@ -1,0 +1,106 @@
+@mixin badge-color($color, $intensity) {
+  &_#{$color} {
+    background: var(--color-#{$color}-#{$intensity});
+
+    &.na-badge_inverse {
+      color: var(--color-#{$color}-#{$intensity});
+      background: white;
+    }
+  }
+}
+
+@mixin button-color($color) {
+  &_#{$color} {
+    &.na-button_style_solid {
+      background: var(--color-#{$color});
+
+      &:hover:not(.na-button_disabled, .na-button_active),
+      &:focus:not(.na-button_disabled, .na-button_active) {
+        background: var(--color-#{$color}-400);
+
+        .na-badge_color {
+          @include badge-color($color, 400);
+        }
+      }
+    }
+
+    &.na-button_style_border {
+      background: none;
+      color: var(--color-#{$color});
+      border: 1px solid var(--color-#{$color});
+
+      &:hover:not(.na-button_disabled, .na-button_active) {
+        color: var(--color-#{$color}-300);
+        border-color: var(--color-#{$color}-300);
+
+        .na-badge_color {
+          @include badge-color($color, 300);
+        }
+      }
+
+      &:focus:not(.na-button_disabled, .na-button_active),
+      &:active:not(.na-button_disabled, .na-button_active) {
+        color: var(--color-#{$color});
+        border-color: var(--color-#{$color});
+
+        .na-badge_color {
+          @include badge-color($color, 500);
+        }
+      }
+    }
+
+    &.na-button_style_transparent {
+      background: none;
+      color: var(--color-#{$color});
+
+      &:hover:not(.na-button_disabled, .na-button_active),
+      &:focus:not(.na-button_disabled, .na-button_active) {
+        background: var(--color-#{$color}-transparent);
+        box-shadow: none;
+      }
+
+      &:active:not(.na-button_disabled, .na-button_active) {
+        color: white;
+        background: var(--color-#{$color});
+      }
+    }
+
+    &.na-button_light-text:not(.na-button_style_solid) :not(i, .na-badge__text) {
+      color: white;
+    }
+
+    &.na-button_active {
+      color: white;
+      background: var(--color-#{$color}-400);
+      border-color: var(--color-#{$color}-400);
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: white;
+        background: var(--color-#{$color}-400);
+      }
+
+      .na-badge_color {
+        @include badge-color($color, 400);
+      }
+    }
+
+    &.na-button_disabled {
+      opacity: 0.2;
+
+      &:hover {
+        cursor: not-allowed;
+      }
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 5px var(--color-#{$color}-transparent);
+    }
+  }
+}
