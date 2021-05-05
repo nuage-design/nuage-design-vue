@@ -54,7 +54,7 @@ const Template = (args) => ({
     <br/>
     <na-button v-bind="args">
       <span>${args.text}</span>
-      <na-badge :value="100" :color="args.color" />
+      <na-badge :value="300" :color="args.color" />
     </na-button>
     `,
 });

@@ -26,6 +26,11 @@
   color: white;
   transition: 0.1s;
 
+  .na-badge {
+    --height: var(--height);
+    --font-size: var(--font-size);
+  }
+
   // margins between elements
   &>* {
     margin-left: 4px;

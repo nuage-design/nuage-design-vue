@@ -16,14 +16,14 @@ $colors: primary, success, info, warning, danger, dark;
 
   line-height: var(--font-line-height);
 
-  height: 20px;
+  height: var(--height);
+  min-width: var(--height);
   color: white;
-  border-radius: 10px;
-  min-width: 20px;
+  border-radius: calc(var(--height) / 2);
   max-width: max-content;
 
   &__text {
-    margin: 0 6px;
+    margin: 0 calc((var(--height) - var(--font-size)) / 2 + 2px);
   }
 
   &_dot {
