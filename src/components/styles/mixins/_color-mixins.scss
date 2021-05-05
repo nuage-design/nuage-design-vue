@@ -14,8 +14,8 @@
     &.na-button_style_solid {
       background: var(--color-#{$color});
 
-      &:hover:not(.na-button_disabled, .na-button_active),
-      &:focus:not(.na-button_disabled, .na-button_active) {
+      &:hover:not(.na-button_active, [disabled]),
+      &:focus:not(.na-button_active, [disabled]) {
         background: var(--color-#{$color}-400);
 
         .na-badge_color {
@@ -29,7 +29,7 @@
       color: var(--color-#{$color});
       border: 1px solid var(--color-#{$color});
 
-      &:hover:not(.na-button_disabled, .na-button_active) {
+      &:hover:not(.na-button_active, [disabled]) {
         color: var(--color-#{$color}-300);
         border-color: var(--color-#{$color}-300);
 
@@ -38,8 +38,8 @@
         }
       }
 
-      &:focus:not(.na-button_disabled, .na-button_active),
-      &:active:not(.na-button_disabled, .na-button_active) {
+      &:focus:not(.na-button_active, [disabled]),
+      &:active:not(.na-button_active, [disabled]) {
         color: var(--color-#{$color});
         border-color: var(--color-#{$color});
 
@@ -53,13 +53,13 @@
       background: none;
       color: var(--color-#{$color});
 
-      &:hover:not(.na-button_disabled, .na-button_active),
-      &:focus:not(.na-button_disabled, .na-button_active) {
+      &:hover:not(.na-button_active, [disabled]),
+      &:focus:not(.na-button_active, [disabled]) {
         background: var(--color-#{$color}-transparent);
         box-shadow: none;
       }
 
-      &:active:not(.na-button_disabled, .na-button_active) {
+      &:active:not(.na-button_active, [disabled]) {
         color: white;
         background: var(--color-#{$color});
       }
@@ -86,21 +86,18 @@
       }
     }
 
-    &.na-button_disabled {
+    &[disabled] {
       opacity: 0.2;
-
-      &:hover {
-        cursor: not-allowed;
-      }
-
-      &:focus {
-        box-shadow: none;
-      }
+      cursor: not-allowed;
     }
 
     &:focus {
       outline: none;
       box-shadow: 0 0 0 5px var(--color-#{$color}-transparent);
+    }
+
+    i {
+      font-size: var(--icon-size);
     }
   }
 }

@@ -9,16 +9,32 @@ import { ref, reactive, onMounted } from "vue";
 
 import "./styles/na-button.scss";
 
-const STYLES = ["solid", "border", "transparent"];
+const sizes = ["mini", "small", "medium", "large"];
+const types = ["rounded", "rect", "circle"];
+const styles = ["solid", "border", "transparent"];
 
 export default {
   name: "NaButton",
   props: {
+    size: {
+      type: String,
+      default: "medium",
+      validator: (value) => {
+        return sizes.includes(value);
+      },
+    },
+    type: {
+      type: String,
+      default: "rounded",
+      validator: (value) => {
+        return types.includes(value);
+      },
+    },
     style: {
       type: String,
       default: "solid",
       validator: (value) => {
-        return STYLES.includes(value);
+        return styles.includes(value);
       },
     },
     color: {
@@ -34,10 +50,6 @@ export default {
       default: false,
     },
     active: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
       type: Boolean,
       default: false,
     },
@@ -77,11 +89,13 @@ export default {
     });
 
     const classes = [
+      `na-button_size_${button.size}`,
+      `na-button_type_${button.type}`,
       `na-button_style_${button.style}`,
-      button.color ? `na-button_color_${button.color}` : "",
+      `na-button_color_${button.color}`,
       { "na-button_light-text": button.lightText },
       { "na-button_active": button.active },
-      { "na-button_disabled": button.disabled },
+      // { "na-button_disabled": button.disabled },
       { "na-button_equal": button.equal },
     ];
 

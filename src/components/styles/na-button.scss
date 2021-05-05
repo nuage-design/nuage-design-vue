@@ -1,7 +1,8 @@
 @import "./mixins/color-mixins";
 @import "./mixins/align-mixins";
+@import "./mixins/prefix-mixins";
 
-@import "./_variables.css";
+@import "./variables";
 
 .na-button {
   @include align-center;
@@ -15,18 +16,17 @@
 
   line-height: var(--font-line-height);
 
-  padding: 9px 21px;
-  height: 42px;
-  border-radius: 14px;
+  @include border-radius(var(--border-radius));
+
+  padding: var(--padding);
+  height: var(--height);
+  width: var(--width);
   cursor: pointer;
   border: none;
   color: white;
   transition: 0.1s;
 
-  &.na-button_style_border {
-    padding: 9px 20px;
-  }
-
+  // margins between elements
   &>* {
     margin-left: 4px;
     margin-right: 4px;
@@ -47,12 +47,5 @@
     @include button-color("warning");
     @include button-color("danger");
     @include button-color("dark");
-  }
-
-  &_equal {
-    font-size: var(--font-size-equal);
-    
-    padding: 9px 9px;
-    width: 42px;
   }
 }

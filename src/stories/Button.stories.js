@@ -6,6 +6,12 @@ export default {
   title: "Button",
   component: NaButton,
   argTypes: {
+    type: {
+      control: {
+        type: "radio",
+        options: ["rounded", "rect", "circle"],
+      },
+    },
     style: {
       control: {
         type: "radio",
@@ -16,6 +22,12 @@ export default {
       control: {
         type: "select",
         options: ["primary", "success", "info", "warning", "danger", "dark"],
+      },
+    },
+    size: {
+      control: {
+        type: "select",
+        options: ["mini", "small", "medium", "large"],
       },
     },
   },
@@ -31,8 +43,12 @@ const Template = (args) => ({
       <span>${args.text}</span>
     </na-button>
     <br/>
+    <na-button v-bind="args" disabled>
+      <span>${args.text}</span>
+    </na-button>
+    <br/>
     <na-button v-bind="args">
-      <i class='bx bxs-coffee' style='font-size: 24px;'></i>
+      <i class='bx bxs-coffee' />
       <span>${args.text}</span>
     </na-button>
     <br/>
