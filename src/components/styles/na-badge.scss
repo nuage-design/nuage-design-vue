@@ -23,7 +23,7 @@ $colors: primary, success, info, warning, danger, dark;
   max-width: max-content;
 
   &__text {
-    margin: 0 calc((var(--height) - var(--font-size)) / 2 + 2px);
+    margin: 0 calc((var(--height) - var(--font-size)) / 2 + 1px);
   }
 
   &_dot {

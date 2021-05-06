@@ -12,7 +12,7 @@
     border-radius: (rounded: 9px, rect: 3px, circle: 13.5px),
     height: 27px,
     padding: 12px,
-    font-size: 12px,
+    font-size: 11px,
     font-equal: 14px,
     icon-size: 16px,
   );
@@ -48,7 +48,7 @@
 
   --font-family: var(--main-font-family);
   --font-style: normal;
-  --font-weight: 600;
+  --font-weight: 500;
   --font-line-height: 100%;
 
   @each $size, $values in $sizes {
