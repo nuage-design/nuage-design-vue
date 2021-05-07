@@ -1,8 +1,9 @@
 @import "./mixins/color-mixins";
 @import "./mixins/align-mixins";
-@import "./mixins/prefix-mixins";
 
 @import "./variables";
+
+$colors: primary, success, info, warning, danger, dark;
 
 .na-button {
   @include align-center;
@@ -15,9 +16,7 @@
   }
 
   line-height: var(--font-line-height);
-
-  @include border-radius(var(--border-radius));
-
+  border-radius: var(--border-radius);
   padding: var(--padding);
   height: var(--height);
   width: var(--width);
@@ -26,15 +25,14 @@
   color: white;
   transition: 0.1s;
 
-  .na-badge {
-    --height: var(--height);
-    --font-size: var(--font-size);
+  &_block {
+    width: 100%;
   }
 
-  // margins between elements
+  // space between elements
   &>* {
-    margin-left: 4px;
-    margin-right: 4px;
+    margin-left: calc(var(--space) / 2);
+    margin-right: calc(var(--space) / 2);
 
     &:nth-child(1) {
       margin-left: 0;
@@ -45,12 +43,7 @@
     }
   }
 
-  &_color {
-    @include button-color("primary");
-    @include button-color("success");
-    @include button-color("info");
-    @include button-color("warning");
-    @include button-color("danger");
-    @include button-color("dark");
+  @each $color in $colors {
+    @include button-color($color);
   }
 }

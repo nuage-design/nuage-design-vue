@@ -18,6 +18,10 @@ import "./styles/na-badge.scss";
 export default {
   name: "NaBadge",
   props: {
+    size: {
+      type: String,
+      default: "medium",
+    },
     value: {
       type: [String, Number],
       default: null,
@@ -46,6 +50,7 @@ export default {
     const root = ref(null);
 
     const classes = [
+      `na-badge_size_${badge.size}`,
       `na-badge_color_${badge.color}`,
       { "na-badge_inverse": badge.inverse },
       {

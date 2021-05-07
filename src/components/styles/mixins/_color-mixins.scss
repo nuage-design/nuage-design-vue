@@ -1,5 +1,5 @@
 @mixin badge-color($color, $intensity) {
-  &_#{$color} {
+  &_color_#{$color} {
     background: var(--color-#{$color}-#{$intensity});
 
     &.na-badge_inverse {
@@ -10,7 +10,7 @@
 }
 
 @mixin button-color($color) {
-  &_#{$color} {
+  &_color_#{$color} {
     &.na-button_style_solid {
       background: var(--color-#{$color});
 

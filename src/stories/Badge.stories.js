@@ -4,6 +4,12 @@ export default {
   title: "Badge",
   component: NaBadge,
   argTypes: {
+    size: {
+      control: {
+        type: "select",
+        options: ["mini", "small", "medium", "large"],
+      }
+    },
     color: {
       control: {
         type: "select",

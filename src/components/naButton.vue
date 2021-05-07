@@ -45,13 +45,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    active: {
+      type: Boolean,
+      default: false,
+    },
+    block: {
+      type: Boolean,
+      default: false,
+    },
     equal: {
       type: Boolean,
       default: false,
     },
-    active: {
-      type: Boolean,
-      default: false,
+    space: {
+      type: [String, Number],
+      default: 8,
     },
   },
   setup(props) {
@@ -63,7 +71,12 @@ export default {
       const elem = root.value;
       const active = elem.classList.contains("na-button_active");
 
-      if (button.style == "solid" || active) {
+      elem.style.setProperty(
+        "--space",
+        +button.space ? button.space + "px" : button.space
+      );
+
+      if (button.style === "solid" || active) {
         const badges = elem.querySelectorAll(".na-badge");
 
         badges.forEach((badge) => {
@@ -95,8 +108,8 @@ export default {
       `na-button_color_${button.color}`,
       { "na-button_light-text": button.lightText },
       { "na-button_active": button.active },
-      // { "na-button_disabled": button.disabled },
       { "na-button_equal": button.equal },
+      { "na-button_block": button.block },
     ];
 
     return { button, root, classes };

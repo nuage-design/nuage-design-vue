@@ -23,7 +23,7 @@ $colors: primary, success, info, warning, danger, dark;
   max-width: max-content;
 
   &__text {
-    margin: 0 calc((var(--height) - var(--font-size)) / 2 + 1px);
+    margin: 0 var(--side-space);
   }
 
   &_dot {
@@ -33,9 +33,7 @@ $colors: primary, success, info, warning, danger, dark;
     border-radius: 50%;
   }
 
-  &_color {
-    @each $color in $colors {
-      @include badge-color($color, 500);
-    }
+  @each $color in $colors {
+    @include badge-color($color, 500);
   }
 }
