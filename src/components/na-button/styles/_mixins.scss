@@ -1,13 +1,4 @@
-@mixin badge-color($color, $intensity) {
-  &_color_#{$color} {
-    background: var(--color-#{$color}-#{$intensity});
-
-    &.na-badge_inverse {
-      color: var(--color-#{$color}-#{$intensity});
-      background: white;
-    }
-  }
-}
+@import "../../na-badge/styles/mixins";
 
 @mixin button-color($color) {
   &_color_#{$color} {
@@ -100,4 +91,11 @@
       font-size: var(--icon-size);
     }
   }
+}
+
+@mixin align-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }

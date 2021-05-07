@@ -1,6 +1,4 @@
-@import "./mixins/color-mixins";
-@import "./mixins/align-mixins";
-
+@import "./mixins";
 @import "./variables";
 
 $colors: primary, success, info, warning, danger, dark;

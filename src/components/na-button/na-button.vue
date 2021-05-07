@@ -7,8 +7,6 @@
 <script>
 import { ref, reactive, onMounted } from "vue";
 
-import "./styles/na-button.scss";
-
 const sizes = ["mini", "small", "medium", "large"];
 const types = ["rounded", "rect", "circle"];
 const styles = ["solid", "border", "transparent"];

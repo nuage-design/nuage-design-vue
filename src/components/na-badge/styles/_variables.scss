@@ -1,0 +1,33 @@
+.na-badge {
+  --font-family: var(--main-font-family);
+  --font-style: normal;
+  --font-weight: 500;
+  --font-line-height: 100%;
+  --dot-size: 10px;
+
+  &_size {
+    &_mini {
+      --font-size: 11px;
+      --height: 14px;
+      --side-space: 4px;
+    }
+
+    &_small {
+      --font-size: 13px;
+      --height: 17px;
+      --side-space: 5px;
+    }
+
+    &_medium {
+      --font-size: 14px;
+      --height: 20px;
+      --side-space: 6px;
+    }
+
+    &_large {
+      --font-size: 17px;
+      --height: 24px;
+      --side-space: 7px;
+    }
+  }
+}

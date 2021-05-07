@@ -1,0 +1,17 @@
+@mixin badge-color($color, $intensity) {
+  &_color_#{$color} {
+    background: var(--color-#{$color}-#{$intensity});
+
+    &.na-badge_inverse {
+      color: var(--color-#{$color}-#{$intensity});
+      background: white;
+    }
+  }
+}
+
+@mixin align-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

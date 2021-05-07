@@ -1,17 +1,18 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
+  <h1>Hello</h1>
+  <na-badge :value="100" />
+  <na-button>Button</na-button>
 </template>
 
 <script>
+import "./styles/_fonts.css";
+import "./styles/_colors.css";
+
+import naBadge from "./components/na-badge";
+import naButton from "./components/na-button";
+
 export default {
+  components: { naBadge, naButton },
   name: "App",
 };
 </script>
-
-<style lang="scss">
-$hello: rgb(158, 73, 73);
-
-#app {
-  background: $hello;
-}
-</style>

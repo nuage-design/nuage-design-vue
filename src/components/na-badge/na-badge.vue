@@ -12,8 +12,7 @@
 <script>
 import { ref, reactive, computed } from "vue";
 
-import _colors from "../scripts/colors";
-import "./styles/na-badge.scss";
+import _colors from "../../scripts/colors";
 
 export default {
   name: "NaBadge",

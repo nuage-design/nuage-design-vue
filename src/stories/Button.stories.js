@@ -1,5 +1,5 @@
-import NaButton from "../components/naButton.vue";
-import NaBadge from "../components/naBadge.vue";
+import NaButton from "../components/na-button";
+import NaBadge from "../components/na-badge";
 import "boxicons";
 
 export default {

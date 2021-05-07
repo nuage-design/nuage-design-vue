@@ -1,5 +1,4 @@
-@import "./mixins/color-mixins";
-@import "./mixins/align-mixins";
+@import "./mixins";
 @import "./variables";
 
 $colors: primary, success, info, warning, danger, dark;
@@ -28,8 +27,8 @@ $colors: primary, success, info, warning, danger, dark;
 
   &_dot {
     padding: 0;
-    height: 10px;
-    min-width: 10px;
+    height: var(--dot-size);
+    min-width: var(--dot-size);
     border-radius: 50%;
   }
 
