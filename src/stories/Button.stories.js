@@ -1,4 +1,4 @@
-import { NaButton } from "../components/na-button";
+import { NaButton, NaButtonGroup } from "../components/na-button";
 import NaBadge from "../components/na-badge";
 import "boxicons";
 
@@ -33,47 +33,60 @@ export default {
   },
 };
 
-const Template = (args) => ({
+export const Button = (args) => ({
   components: { NaButton, NaBadge },
   setup() {
     return { args };
   },
+  template: `<na-button v-bind="args">
+    <span>${args.text}</span>
+  </na-button>
+  <br/>
+  <na-button v-bind="args" disabled>
+    <span>${args.text}</span>
+  </na-button>
+  <br/>
+  <na-button v-bind="args">
+    <i class='bx bx-coffee' />
+    <span>${args.text}</span>
+  </na-button>
+  <br/>
+  <na-button v-bind="args">
+    <span>${args.text}</span>
+    <na-badge :value="100" :color="args.color" :size="args.size" />
+  </na-button>`,
+});
+
+Button.args = {
+  text: "Button",
+};
+
+export const ButtonGroup = (args) => ({
+  components: { NaButton, NaButtonGroup, NaBadge },
+  setup() {
+    return { args };
+  },
   template: `
+  <na-button-group :vertical="args.vertical">
     <na-button v-bind="args">
       <span>${args.text}</span>
     </na-button>
-    <br/>
     <na-button v-bind="args" disabled>
       <span>${args.text}</span>
     </na-button>
-    <br/>
     <na-button v-bind="args">
-      <i class='bx bxs-coffee' />
+      <i class='bx bx-coffee' />
       <span>${args.text}</span>
     </na-button>
-    <br/>
     <na-button v-bind="args">
       <span>${args.text}</span>
       <na-badge :value="100" :color="args.color" :size="args.size" />
     </na-button>
-    `,
+  </na-button-group>
+  `,
 });
 
-export const Button = Template.bind({});
-
-Button.args = {
-  active: false,
+ButtonGroup.args = {
   text: "Button",
+  vertical: false,
 };
-
-// export const ButtonGroup = (args) => ({
-//   components: { NaButton, NaButtonGroup },
-//   setup() {
-//     return { args };
-//   },
-//   template: `
-//   <na-button-group>
-//     <na-button></na-button>
-//   </na-button-group>
-//   `,
-// });
