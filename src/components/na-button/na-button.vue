@@ -28,7 +28,7 @@ export default {
         return types.includes(value);
       },
     },
-    style: {
+    buttonStyle: {
       type: String,
       default: "solid",
       validator: (value) => {
@@ -62,7 +62,6 @@ export default {
   },
   setup(props) {
     const button = reactive(props);
-
     const root = ref(null);
 
     onMounted(() => {
@@ -74,7 +73,7 @@ export default {
         +button.space ? button.space + "px" : button.space
       );
 
-      if (button.style === "solid" || active) {
+      if (button.buttonStyle === "solid" || active) {
         const badges = elem.querySelectorAll(".na-badge");
 
         badges.forEach((badge) => {
@@ -102,7 +101,7 @@ export default {
     const classes = [
       `na-button_size_${button.size}`,
       `na-button_type_${button.type}`,
-      `na-button_style_${button.style}`,
+      `na-button_style_${button.buttonStyle}`,
       `na-button_color_${button.color}`,
       { "na-button_light-text": button.lightText },
       { "na-button_active": button.active },

@@ -1,9 +1,9 @@
-import NaButton from "../components/na-button";
+import { NaButton } from "../components/na-button";
 import NaBadge from "../components/na-badge";
 import "boxicons";
 
 export default {
-  title: "Button",
+  title: "Components/Button",
   component: NaButton,
   argTypes: {
     type: {
@@ -12,7 +12,7 @@ export default {
         options: ["rounded", "rect", "circle"],
       },
     },
-    style: {
+    buttonStyle: {
       control: {
         type: "radio",
         options: ["solid", "border", "transparent"],
@@ -65,3 +65,15 @@ Button.args = {
   active: false,
   text: "Button",
 };
+
+// export const ButtonGroup = (args) => ({
+//   components: { NaButton, NaButtonGroup },
+//   setup() {
+//     return { args };
+//   },
+//   template: `
+//   <na-button-group>
+//     <na-button></na-button>
+//   </na-button-group>
+//   `,
+// });

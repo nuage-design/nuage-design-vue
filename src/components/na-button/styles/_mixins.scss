@@ -4,12 +4,13 @@
   &_color_#{$color} {
     &.na-button_style_solid {
       background: var(--color-#{$color});
+      box-shadow: 0px 4px 10px var(--color-#{$color}-transparent);
 
       &:hover:not(.na-button_active, [disabled]),
       &:focus:not(.na-button_active, [disabled]) {
         background: var(--color-#{$color}-400);
 
-        .na-badge_color {
+        .na-badge {
           @include badge-color($color, 400);
         }
       }
@@ -24,7 +25,7 @@
         color: var(--color-#{$color}-300);
         border-color: var(--color-#{$color}-300);
 
-        .na-badge_color {
+        .na-badge {
           @include badge-color($color, 300);
         }
       }
@@ -34,7 +35,7 @@
         color: var(--color-#{$color});
         border-color: var(--color-#{$color});
 
-        .na-badge_color {
+        .na-badge {
           @include badge-color($color, 500);
         }
       }
@@ -72,7 +73,7 @@
         background: var(--color-#{$color}-400);
       }
 
-      .na-badge_color {
+      .na-badge {
         @include badge-color($color, 400);
       }
     }

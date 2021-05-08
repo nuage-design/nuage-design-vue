@@ -44,4 +44,29 @@ $colors: primary, success, info, warning, danger, dark;
   @each $color in $colors {
     @include button-color($color);
   }
+
+  &-group {
+    display: flex;
+
+    &>.na-button {
+      border-radius: 0;
+      z-index: 0;
+
+      &:hover {
+        z-index: 1;
+      }
+
+      &:nth-child(1) {
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+      }
+
+      &:nth-last-child(1) {
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      }
+    }
+
+    &.na-button-group_vertical {
+      display: block;
+    }
+  }
 }

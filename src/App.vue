@@ -1,18 +1,20 @@
 <template>
   <h1>Hello</h1>
-  <na-badge :value="100" />
-  <na-button>Button</na-button>
+  <na-button-group vertical>
+    <na-button buttonStyle="border"><span>Button</span></na-button>
+    <na-button><span>Button</span></na-button>
+    <na-button buttonStyle="border"><span>Button</span></na-button>
+  </na-button-group>
 </template>
 
 <script>
 import "./styles/_fonts.css";
 import "./styles/_colors.css";
 
-import naBadge from "./components/na-badge";
-import naButton from "./components/na-button";
+import { NaButton, NaButtonGroup } from "./components/na-button";
 
 export default {
-  components: { naBadge, naButton },
+  components: { NaButton, NaButtonGroup },
   name: "App",
 };
 </script>

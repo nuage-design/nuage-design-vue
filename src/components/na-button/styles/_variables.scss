@@ -58,12 +58,13 @@
       --icon-size: #{map-get($values, icon-size)};
 
       &.na-button_style_border {
-        --padding: #{map-get($values, padding) - 1px};
+        --padding: 0 #{map-get($values, padding) - 1px};
       }
 
       &.na-button_equal {
         --width: var(--height);
         --font-size: #{map-get($values, font-equal)};
+        --padding: 0;
       }
 
       @each $type, $border-radius in $types-border-radius {

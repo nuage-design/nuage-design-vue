@@ -1,7 +1,7 @@
 import NaBadge from "../components/na-badge/na-badge.vue";
 
 export default {
-  title: "Badge",
+  title: "Components/Badge",
   component: NaBadge,
   argTypes: {
     size: {
