@@ -27,7 +27,7 @@ export default {
     size: {
       control: {
         type: "select",
-        options: ["mini", "small", "medium", "large"],
+        options: ["small", "default", "large", "xl"],
       },
     },
   },
@@ -47,7 +47,7 @@ export const Button = (args) => ({
   </na-button>
   <br/>
   <na-button v-bind="args">
-    <i class='bx bx-coffee' />
+    <i class='bx bx-heart' />
     <span>${args.text}</span>
   </na-button>
   <br/>
@@ -75,7 +75,7 @@ export const ButtonGroup = (args) => ({
       <span>${args.text}</span>
     </na-button>
     <na-button v-bind="args">
-      <i class='bx bx-coffee' />
+      <i class='bx bx-heart' />
       <span>${args.text}</span>
     </na-button>
     <na-button v-bind="args">

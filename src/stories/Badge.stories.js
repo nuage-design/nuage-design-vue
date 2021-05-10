@@ -7,7 +7,7 @@ export default {
     size: {
       control: {
         type: "select",
-        options: ["mini", "small", "medium", "large"],
+        options: ["small", "default", "large", "xl"],
       },
     },
     color: {

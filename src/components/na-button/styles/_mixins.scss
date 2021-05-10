@@ -4,7 +4,6 @@
   &_color_#{$color} {
     &.na-button_style_solid {
       background: var(--color-#{$color});
-      box-shadow: 0px 4px 10px var(--color-#{$color}-transparent);
 
       &:hover:not(.na-button_active, [disabled]),
       &:focus:not(.na-button_active, [disabled]) {
