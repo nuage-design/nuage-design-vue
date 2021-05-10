@@ -7,7 +7,7 @@
 <script>
 import { ref, reactive, onMounted } from "vue";
 
-const sizes = ["mini", "small", "medium", "large"];
+const sizes = ["small", "default", "large", "xl"];
 const types = ["rounded", "rect", "circle"];
 const styles = ["solid", "border", "transparent"];
 
@@ -16,7 +16,7 @@ export default {
   props: {
     size: {
       type: String,
-      default: "medium",
+      default: "default",
       validator: (value) => {
         return sizes.includes(value);
       },

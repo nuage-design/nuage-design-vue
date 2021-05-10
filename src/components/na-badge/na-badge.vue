@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 
 import _colors from "../../scripts/colors";
 
@@ -19,7 +19,7 @@ export default {
   props: {
     size: {
       type: String,
-      default: "medium",
+      default: "default",
     },
     value: {
       type: [String, Number],
@@ -47,6 +47,13 @@ export default {
     const isColorStyle = ref(_colors.isColorStyle(badge.color));
 
     const root = ref(null);
+
+    onMounted(() => {
+      const elem = root.value;
+      if (badge.value >= 0 && badge.value < 10) {
+        elem.style.setProperty("--side-space", "0");
+      }
+    });
 
     const classes = [
       `na-badge_size_${badge.size}`,

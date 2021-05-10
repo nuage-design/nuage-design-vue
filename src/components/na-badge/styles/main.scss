@@ -22,9 +22,7 @@ $colors: primary, success, info, warning, danger, dark;
   max-width: max-content;
   transition: 0.1s;
 
-  &__text {
-    margin: 0 var(--side-space);
-  }
+  padding: 0 var(--side-space);
 
   &_dot {
     padding: 0;
