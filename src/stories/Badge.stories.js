@@ -1,4 +1,4 @@
-import NaBadge from "../components/na-badge/na-badge.vue";
+import NaBadge from "../components/na-badge";
 
 export default {
   title: "Components/Badge",
