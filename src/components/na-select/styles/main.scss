@@ -1,93 +1,84 @@
 .na-select {
   --height: 33px;
   --padding: 13px;
+  --font-size: 14px;
   --label-margin-bottom: 7px;
   --label-font-size: 13px;
 
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+
   position: relative;
+  
+  font: {
+    family: inherit;
+    style: normal;
+    weight: 500;
+    size: var(--font-size);
+  }
 
   &__input {
-    box-sizing: border-box;
-    position: relative;
-    top: 0;
-    margin-left: 100px;
-    width: auto;
+    min-width: 10px;
     height: var(--height);
     border-radius: calc(var(--height) / 3);
+    background: none;
 
+    &::placeholder {
+      color: var(--color-dark-200);
+    }
+  
     font: {
       family: inherit;
       style: normal;
       weight: 500;
-      size: 14px;
+      size: var(--font-size);
     }
+
 
     line-height: 100%;
-
     padding: 0 var(--padding);
-
-    appearance: none;
-    background: transparent;
-    margin: 20px 0 0 0;
-    cursor: inherit;
-
-    border: 1px solid var(--color-primary);
-
-    &::-ms-expand {
-      display: none;
-    }
+    border: 1px solid var(--color-dark-100);
 
     &:focus {
       outline: none;
       box-shadow: 0 0 0 5px var(--color-primary-transparent);
+      border-color: var(--color-primary);
+      transition: .1s;
     }
   }
-  
+
   &__label {
-    position: absolute;
-    display: block;
+    pointer-events: auto;
     color: var(--color-primary);
+    width: max-content;
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 100%;
+
+    +.na-select__input {
+      margin-top: 23px;
+    }
 
     font: {
       weight: 500;
       size: var(--label-font-size);
     }
 
-    line-height: 100%;
+    transition: .1s;
 
-    margin-bottom: var(--label-margin-bottom);
-
-    &-placeholder {
-      width: max-content;
-      display: flex;
-      position: absolute;
-
-      font: {
-        weight: 500;
-        size: 14px;
-      }
-
-      line-height: 100%;
-      transition: .1s ease-in-out;
-
-      top: calc( 
-        var(--label-margin-bottom) + (var(--height) - 
-        var(--label-font-size)) / 2 + var(--label-font-size));
-
-      left: calc(1px + var(--padding));
+    &_placeholder {
       pointer-events: none;
+      font-size: 14px;
+      color: var(--color-dark-200);
 
-      &.focused {
-        font-size: 13px;
-        pointer-events: auto;
-        top: 0;
-        left: 0;
-        color: var(--color-primary);
-      }
+      left: calc(var(--padding) + 1px);
+
+      top: calc(
+        var(--label-margin-bottom) + var(--font-size) +
+        (var(--height) - var(--font-size)) / 2 + 3px
+      );
     }
-  }
-
-  &__placeholder {
-    display: none;
   }
 }

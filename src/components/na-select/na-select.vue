@@ -1,40 +1,29 @@
 <template>
   <div class="na-select">
-    <label v-if="label">
-      <span v-if="!labelPlaceholder" class="na-select__label">{{ label }}</span>
-      <span v-else class="na-select__label-placeholder" :class="{ focused }">
-        {{ labelPlaceholder }}
-      </span>
-      <select
-        ref="input"
-        class="na-select__input"
-        @focus="focused = true"
-        @blur="isSelected"
-      >
-        <na-option class="na-select__placeholder">
-          <template v-if="!labelPlaceholder">
-            {{ placeholder }}
-          </template>
-        </na-option>
-        <slot></slot>
-      </select>
-    </label>
-    <select v-else class="na-select__input">
-      <na-option value="" class="na-select__placeholder">
-        {{ placeholder }}
-      </na-option>
-      <slot></slot>
-    </select>
+    <span
+      ref="selectLabel"
+      v-if="displayLabel"
+      class="na-select__label"
+      :class="classes"
+    >
+      {{ displayLabel }}
+    </span>
+    <input
+      ref="input"
+      @focus="placeholderToLabel"
+      @blur="labelToPlaceholder"
+      class="na-select__input"
+      :placeholder="!labelPlaceholder ? placeholder : ''"
+    />
+    <slot></slot>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import NaOption from "./na-option";
 
 export default {
   name: "NaSelect",
-  components: { NaOption },
   props: {
     label: {
       type: String,
@@ -42,7 +31,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "Select item",
+      default: null,
     },
     labelPlaceholder: {
       type: String,
@@ -50,15 +39,38 @@ export default {
     },
   },
   setup(props) {
-    const focused = ref(false);
     const input = ref(null);
+    const selectLabel = ref(null);
+    const displayLabel = props.labelPlaceholder
+      ? ref(props.labelPlaceholder)
+      : props.label
+      ? ref(props.label)
+      : null;
 
-    const isSelected = () => {
-      if (input.value.value) focused.value = true;
-      else focused.value = false;
+    const classes = ref([
+      { "na-select__label_placeholder": props.labelPlaceholder },
+    ]);
+
+    const placeholderToLabel = () => {
+      if (!props.labelPlaceholder) return;
+
+      selectLabel.value.classList.remove("na-select__label_placeholder");
     };
 
-    return { props, focused, input, isSelected };
+    const labelToPlaceholder = () => {
+      if (!props.labelPlaceholder || input.value.value) return;
+
+      selectLabel.value.classList.add("na-select__label_placeholder");
+    };
+
+    return {
+      displayLabel,
+      classes,
+      placeholderToLabel,
+      labelToPlaceholder,
+      input,
+      selectLabel,
+    };
   },
 };
 </script>

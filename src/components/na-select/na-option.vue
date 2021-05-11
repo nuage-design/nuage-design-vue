@@ -1,7 +1,7 @@
 <template>
-  <option class="na-option">
+  <div class="na-option">
     <slot></slot>
-  </option>
+  </div>
 </template>
 
 <script>
