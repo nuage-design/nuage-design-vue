@@ -19,10 +19,10 @@
   </div>
 </template>
 
-<script>
-import { ref } from "vue";
+<script lang="ts">
+import { defineComponent, ref } from "vue";
 
-export default {
+export default defineComponent({
   name: "NaSelect",
   props: {
     label: {
@@ -39,9 +39,9 @@ export default {
     },
   },
   setup(props) {
-    const input = ref(null);
-    const selectLabel = ref(null);
-    const displayLabel = props.labelPlaceholder
+    const input = ref<HTMLInputElement>(null);
+    const selectLabel = ref<HTMLElement>(null);
+    const displayLabel: string = props.labelPlaceholder
       ? ref(props.labelPlaceholder)
       : props.label
       ? ref(props.label)
@@ -72,5 +72,5 @@ export default {
       selectLabel,
     };
   },
-};
+});
 </script>

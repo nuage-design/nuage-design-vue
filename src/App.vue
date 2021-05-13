@@ -1,29 +1,27 @@
 <template>
-  <h1>Hello</h1>
-  <na-button-group>
-    <na-button buttonStyle="border"><span>Button</span></na-button>
-    <na-button><span>Button</span></na-button>
-    <na-button buttonStyle="border"><span>Button</span></na-button>
-  </na-button-group>
-  <br />
-  <na-select size="1">
-    <na-option>Hello 1</na-option>
-    <na-option>Hello 22222222222222</na-option>
-    <na-option>Hello 3</na-option>
-    <na-option>Hello 4</na-option>
-    <na-option>Hello 5</na-option>
-  </na-select>
+  <img alt="Vue logo" src="./assets/logo.png">
+  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
 </template>
 
-<script>
-import "./styles/_fonts.css";
-import "./styles/_colors.css";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import HelloWorld from './components/HelloWorld.vue';
 
-import { NaButton, NaButtonGroup } from "./components/na-button";
-import { NaSelect, NaOption } from "./components/na-select";
-
-export default {
-  components: { NaButton, NaButtonGroup, NaSelect, NaOption },
-  name: "App",
-};
+export default defineComponent({
+  name: 'App',
+  components: {
+    HelloWorld
+  }
+});
 </script>
+
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>

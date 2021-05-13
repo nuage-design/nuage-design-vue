@@ -1,18 +1,34 @@
 const PALETTE = ["primary", "success", "info", "warning", "danger", "dark"];
 
 export default {
-  isColorStyle(color) {
+  isColorStyle(color: string) {
     return PALETTE.includes(color);
   },
-  createPalette(hex) {
+  createPalette(hex: string) {
     const ex = /^#([\da-f]{3}){1,2}$/i;
     if (ex.test(hex)) {
+      const hsl: HSL = hexToHSL(hex);
       const { h, s, l } = hexToHSL(hex);
 
       const lightness = (100 - l) / 5;
       const darkness = l / 7;
 
-      const paletteHex = {
+      interface PaletteHex {
+        50: string,
+        100: string,
+        200: string,
+        300: string,
+        400: string,
+        500: string,
+        600: string,
+        700: string,
+        800: string,
+        900: string,
+        "100-transparent": string,
+        "200-transparent": string,
+      }
+
+      const paletteHex: PaletteHex = {
         50: hslToHex({ h, s, l: Math.round(l + lightness * 4.5) }),
         100: hslToHex({ h, s, l: Math.round(l + lightness * 4) }),
         200: hslToHex({ h, s, l: Math.round(l + lightness * 3) }),
@@ -23,6 +39,8 @@ export default {
         700: hslToHex({ h, s, l: Math.round(l - darkness * 2) }),
         800: hslToHex({ h, s, l: Math.round(l - darkness * 3) }),
         900: hslToHex({ h, s, l: Math.round(l - darkness * 3.75) }),
+        "100-transparent": "",
+        "200-transparent": "",
       };
 
       paletteHex["100-transparent"] = paletteHex[100] + "80";
@@ -31,7 +49,7 @@ export default {
       return paletteHex;
     } else return null;
   },
-  colorInversion(elem) {
+  colorInversion(elem: HTMLElement) {
     setTimeout(() => {
       const elemColor = window.getComputedStyle(elem).color;
       const elemBackground = window.getComputedStyle(elem).background;
@@ -47,8 +65,8 @@ export default {
   },
 };
 
-function hexToHSL(H) {
-  let ex = /^#([\da-f]{3}){1,2}$/i;
+function hexToHSL(H: string): HSL {
+  const ex = /^#([\da-f]{3}){1,2}$/i;
   if (ex.test(H)) {
     // convert hex to RGB first
     let r = 0;
@@ -69,9 +87,9 @@ function hexToHSL(H) {
     g /= 255;
     b /= 255;
 
-    let cmin = Math.min(r, g, b);
-    let cmax = Math.max(r, g, b);
-    let delta = cmax - cmin;
+    const cmin = Math.min(r, g, b);
+    const cmax = Math.max(r, g, b);
+    const delta = cmax - cmin;
 
     let h = 0;
     let s = 0;
@@ -93,15 +111,22 @@ function hexToHSL(H) {
 
     return { h, s, l };
   } else {
-    return null;
+    return { h:0, s:0, l:0 };
   }
 }
 
-function hslToHex(hsl) {
-  let { h, s, l } = hsl;
+interface HSL {
+  h: number,
+  s: number,
+  l: number,
+}
+
+function hslToHex(hsl: HSL): string {
+  const { h, s } = hsl;
+  let l = hsl.l;
   l /= 100;
   const a = (s * Math.min(l, 1 - l)) / 100;
-  const f = (n) => {
+  const f = (n: number) => {
     const k = (n + h / 30) % 12;
     const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
     return Math.round(255 * color)
