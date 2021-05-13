@@ -10,7 +10,7 @@
   width: max-content;
 
   position: relative;
-  
+
   font: {
     family: inherit;
     style: normal;
@@ -18,23 +18,49 @@
     size: var(--font-size);
   }
 
+  select {
+    cursor: pointer;
+  }
+
+  &::after {
+    position: relative;
+    width: max-content;
+    color: var(--color-dark-200);
+    content: var(--placeholder);
+    line-height: 100%;
+
+    padding: 0 calc(var(--padding) + 1px);
+
+    top: calc(
+      -1 * (var(--font-size) + (var(--height) - var(--font-size)) / 2 + 1px)
+    );
+
+    pointer-events: none;
+  }
+
   &__input {
+    box-sizing: content-box;
     min-width: 10px;
     height: var(--height);
     border-radius: calc(var(--height) / 3);
     background: none;
+    appearance: none;
 
     &::placeholder {
       color: var(--color-dark-200);
     }
-  
+
+    &__placeholder {
+      display: none;
+      color: var(--color-dark-200);
+    }
+
     font: {
       family: inherit;
       style: normal;
       weight: 500;
       size: var(--font-size);
     }
-
 
     line-height: 100%;
     padding: 0 var(--padding);
@@ -44,21 +70,20 @@
       outline: none;
       box-shadow: 0 0 0 5px var(--color-primary-transparent);
       border-color: var(--color-primary);
-      transition: .1s;
+      transition: 0.1s;
     }
   }
 
   &__label {
-    pointer-events: auto;
     color: var(--color-primary);
     width: max-content;
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
-    line-height: 100%;
+    line-height: 13px;
 
-    +.na-select__input {
-      margin-top: 23px;
+    + .na-select__input {
+      margin-top: var(--label-margin-bottom);
     }
 
     font: {
@@ -66,18 +91,19 @@
       size: var(--label-font-size);
     }
 
-    transition: .1s;
+    transition: 0.1s;
 
     &_placeholder {
+      position: relative;
       pointer-events: none;
       font-size: 14px;
       color: var(--color-dark-200);
 
-      left: calc(var(--padding) + 1px);
+      padding: 0 calc(var(--padding) + 1px);
 
       top: calc(
         var(--label-margin-bottom) + var(--font-size) +
-        (var(--height) - var(--font-size)) / 2 + 3px
+          (var(--height) - var(--font-size)) / 2 + 1px
       );
     }
   }

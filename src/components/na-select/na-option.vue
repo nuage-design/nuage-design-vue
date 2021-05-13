@@ -1,27 +1,16 @@
 <template>
-  <div ref="root" v-if="!native" class="na-option">
-    <slot></slot>
-  </div>
-  <option v-else>
+  <option class="na-option">
     <slot></slot>
   </option>
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from "vue";
+// import { ref } from "vue";
 export default {
   name: "NaOption",
   props: {},
   setup() {
-    const root = ref<HTMLElement>();
-    const native = ref(false);
-
-    onMounted((): void => {
-      const parentTag = root.value.parentElement.tagName;
-      if (parentTag === "SELECT") native.value = true;
-    });
-
-    return { root, native };
+    return {};
   },
 };
 </script>

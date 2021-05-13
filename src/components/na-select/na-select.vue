@@ -1,5 +1,5 @@
 <template>
-  <div class="na-select">
+  <div ref="root" class="na-select">
     <span
       ref="selectLabel"
       v-if="displayLabel"
@@ -18,14 +18,26 @@
       />
       <slot></slot>
     </template>
-    <select v-else class="na-select__input">
-      <slot native></slot>
+    <select
+      v-else
+      ref="input"
+      @focus="placeholderToLabel"
+      @blur="labelToPlaceholder"
+      @change="clearPlaceholder"
+      class="na-select__input"
+    >
+      <option
+        v-if="placeholder || labelPlaceholder"
+        value=""
+        class="na-select__input__placeholder"
+      ></option>
+      <slot></slot>
     </select>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
   name: "NaSelect",
@@ -60,6 +72,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const root = ref<HTMLElement>();
     const input = ref<HTMLInputElement>();
     const selectLabel = ref<HTMLElement>();
     const displayLabel = props.labelPlaceholder
@@ -67,27 +80,38 @@ export default defineComponent({
       : props.label
       ? ref(props.label)
       : null;
+    const displayPlaceholder = props.labelPlaceholder
+      ? ref("")
+      : ref(props.placeholder);
+
+    onMounted((): void => {
+      if (displayPlaceholder.value && props.native)
+        root.value?.style.setProperty(
+          "--placeholder",
+          `'${displayPlaceholder.value}'`
+        );
+    });
 
     const classes = ref([
-      { "na-select__label_placeholder": props.labelPlaceholder },
+      {
+        "na-select__label_placeholder": props.labelPlaceholder,
+      },
     ]);
 
-    const placeholderToLabel = () => {
-      if (!selectLabel.value || !props.labelPlaceholder) return;
+    const placeholderToLabel = (): void => {
+      if (!props.labelPlaceholder) return;
 
-      selectLabel.value.classList.remove("na-select__label_placeholder");
+      selectLabel.value?.classList.remove("na-select__label_placeholder");
     };
 
-    const labelToPlaceholder = () => {
-      if (
-        !selectLabel.value ||
-        !input.value ||
-        !props.labelPlaceholder ||
-        input.value.value
-      )
-        return;
+    const labelToPlaceholder = (): void => {
+      if (!props.labelPlaceholder || input.value?.value) return;
 
-      selectLabel.value.classList.add("na-select__label_placeholder");
+      selectLabel.value?.classList.add("na-select__label_placeholder");
+    };
+
+    const clearPlaceholder = (): void => {
+      root.value?.style.setProperty("--placeholder", "");
     };
 
     return {
@@ -95,8 +119,10 @@ export default defineComponent({
       classes,
       placeholderToLabel,
       labelToPlaceholder,
+      clearPlaceholder,
       input,
       selectLabel,
+      root,
     };
   },
 });

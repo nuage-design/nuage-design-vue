@@ -20,6 +20,7 @@
     "@storybook/addon-actions": "^6.3.0-alpha.14",
     "@storybook/addon-essentials": "^6.3.0-alpha.14",
     "@storybook/addon-links": "^6.3.0-alpha.14",
+    "@storybook/addon-postcss": "^2.0.0",
     "@storybook/addons": "^6.2.9",
     "@storybook/preset-scss": "^1.0.3",
     "@storybook/theming": "^6.2.9",
