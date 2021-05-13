@@ -8,14 +8,19 @@
     >
       {{ displayLabel }}
     </span>
-    <input
-      ref="input"
-      @focus="placeholderToLabel"
-      @blur="labelToPlaceholder"
-      class="na-select__input"
-      :placeholder="!labelPlaceholder ? placeholder : ''"
-    />
-    <slot></slot>
+    <template v-if="filter && !native">
+      <input
+        ref="input"
+        @focus="placeholderToLabel"
+        @blur="labelToPlaceholder"
+        class="na-select__input"
+        :placeholder="!labelPlaceholder ? placeholder : ''"
+      />
+      <slot></slot>
+    </template>
+    <select v-else class="na-select__input">
+      <slot native></slot>
+    </select>
   </div>
 </template>
 
@@ -25,7 +30,23 @@ import { defineComponent, ref } from "vue";
 export default defineComponent({
   name: "NaSelect",
   props: {
+    native: {
+      type: Boolean,
+      default: false,
+    },
+    filter: {
+      type: Boolean,
+      default: true,
+    },
+    multiselect: {
+      type: Boolean,
+      default: false,
+    },
     label: {
+      type: String,
+      default: null,
+    },
+    helper: {
       type: String,
       default: null,
     },
@@ -39,9 +60,9 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const input = ref<HTMLInputElement>(null);
-    const selectLabel = ref<HTMLElement>(null);
-    const displayLabel: string = props.labelPlaceholder
+    const input = ref<HTMLInputElement>();
+    const selectLabel = ref<HTMLElement>();
+    const displayLabel = props.labelPlaceholder
       ? ref(props.labelPlaceholder)
       : props.label
       ? ref(props.label)
@@ -52,13 +73,19 @@ export default defineComponent({
     ]);
 
     const placeholderToLabel = () => {
-      if (!props.labelPlaceholder) return;
+      if (!selectLabel.value || !props.labelPlaceholder) return;
 
       selectLabel.value.classList.remove("na-select__label_placeholder");
     };
 
     const labelToPlaceholder = () => {
-      if (!props.labelPlaceholder || input.value.value) return;
+      if (
+        !selectLabel.value ||
+        !input.value ||
+        !props.labelPlaceholder ||
+        input.value.value
+      )
+        return;
 
       selectLabel.value.classList.add("na-select__label_placeholder");
     };

@@ -1,4 +1,4 @@
 import "./styles/main.scss";
 
-export { default as NaButton } from "./na-button";
-export { default as NaButtonGroup } from "./na-button-group";
+export { default as NaButton } from "./na-button.vue";
+export { default as NaButtonGroup } from "./na-button-group.vue";
