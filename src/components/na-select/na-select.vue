@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="na-select">
+  <div ref="root" class="na-select" @click="focus">
     <span
       ref="selectLabel"
       v-if="displayLabel"
@@ -101,7 +101,8 @@ export default defineComponent({
     ]);
 
     const focus = (): void => {
-      icon.value?.classList.add("focused");
+      input.value?.focus();
+      root.value?.classList.add("na-select_focused");
 
       if (!props.labelPlaceholder) return;
 
@@ -110,6 +111,7 @@ export default defineComponent({
 
     const blur = (): void => {
       icon.value?.classList.remove("focused");
+      root.value?.classList.remove("na-select_focused");
       if (!props.labelPlaceholder || input.value?.value) return;
 
       selectLabel.value?.classList.add("na-select__label_placeholder");

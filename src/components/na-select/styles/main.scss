@@ -26,34 +26,43 @@
   &::before {
     position: relative;
     width: max-content;
-    color: var(--color-dark-200);
+    color: var(--color-text-secondary);
     content: var(--placeholder);
     line-height: 0;
 
-    padding-left: calc(var(--padding) + 1px);
+    padding-left: calc(var(--padding) + 2px);
 
-    top: calc((2 * var(--font-size) + (var(--height) - var(--font-size)) / 2));
+    top: calc(
+      (2 * var(--font-size) + (var(--height) - var(--font-size)) / 2 - 1px)
+    );
 
     pointer-events: none;
   }
 
   & > i {
-    color: var(--color-primary);
     --font-size: 20px;
+    color: var(--color-text-secondary);
     font-size: var(--font-size);
     position: absolute;
     right: calc(var(--padding) + 1px);
-    top: calc(var(--font-size) + (var(--height) - var(--font-size)) / 2 + 1px);
+    top: calc(var(--font-size) + (var(--height) - var(--font-size)) / 2);
     pointer-events: none;
     transition: 0.1s;
+  }
 
-    &.focused {
+  &_focused {
+    & > i {
+      color: var(--color-primary);
       transform: rotate(180deg);
+    }
+
+    & .na-select__label {
+      color: var(--color-primary);
     }
   }
 
   &__input {
-    box-sizing: content-box;
+    box-sizing: border-box;
     min-width: 10px;
     height: var(--height);
     border-radius: calc(var(--height) / 3);
@@ -62,12 +71,12 @@
     -webkit-appearance: none;
 
     &::placeholder {
-      color: var(--color-dark-200);
+      color: var(--color-text-secondary);
     }
 
     &__placeholder {
       display: none;
-      color: var(--color-dark-200);
+      color: var(--color-text-secondary);
     }
 
     font: {
@@ -91,7 +100,7 @@
   }
 
   &__label {
-    color: var(--color-primary);
+    color: var(--color-text-regular);
     width: max-content;
     position: relative;
     top: 0;
@@ -113,14 +122,15 @@
       position: relative;
       pointer-events: none;
       font-size: 14px;
-      color: var(--color-dark-200);
+      line-height: 13px;
+      color: var(--color-text-secondary);
 
-      padding-left: calc(var(--padding) + 1px);
+      padding-left: calc(var(--padding) + 2px);
       padding-right: calc(var(--padding) + 1px + 20px + 8px);
 
       top: calc(
         var(--label-margin-bottom) + var(--font-size) +
-          (var(--height) - var(--font-size)) / 2 + 1px
+          (var(--height) - var(--font-size)) / 2
       );
     }
   }
