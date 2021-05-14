@@ -98,7 +98,7 @@ export default {
       }
     });
 
-    const classes = [
+    const classes = ref([
       `na-button_size_${button.size}`,
       `na-button_type_${button.type}`,
       `na-button_style_${button.buttonStyle}`,
@@ -107,7 +107,7 @@ export default {
       { "na-button_active": button.active },
       { "na-button_equal": button.equal },
       { "na-button_block": button.block },
-    ];
+    ]);
 
     return { button, root, classes };
   },

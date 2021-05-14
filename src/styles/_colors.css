@@ -87,4 +87,8 @@
   --color-dark-700: #1F1C26;
   --color-dark-800: #1A1820;
   --color-dark-900: #15131B;
+
+  --color-text-primary: #201F22;
+  --color-text-regular: #3C3942;
+  --color-text-secondary: #9D9CA3;
 }

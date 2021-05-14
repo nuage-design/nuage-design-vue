@@ -1,20 +1,23 @@
 <template>
-  <h1>Hello</h1>
-  <na-button-group vertical>
-    <na-button buttonStyle="border"><span>Button</span></na-button>
-    <na-button><span>Button</span></na-button>
-    <na-button buttonStyle="border"><span>Button</span></na-button>
-  </na-button-group>
+  <na-select native>
+    <na-option>123</na-option>
+    <na-option>123</na-option>
+    <na-option>123</na-option>
+    <na-option>123</na-option>
+    <na-option>123</na-option>
+  </na-select>
 </template>
 
-<script>
-import "./styles/_fonts.css";
-import "./styles/_colors.css";
+<script lang="ts">
+// fast tests
+import { defineComponent } from "vue";
+import { NaSelect, NaOption } from "./components/na-select";
 
-import { NaButton, NaButtonGroup } from "./components/na-button";
-
-export default {
-  components: { NaButton, NaButtonGroup },
+export default defineComponent({
   name: "App",
-};
+  components: {
+    NaSelect,
+    NaOption,
+  },
+});
 </script>
