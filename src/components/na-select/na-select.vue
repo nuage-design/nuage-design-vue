@@ -16,7 +16,9 @@
         class="na-select__input"
         :placeholder="!labelPlaceholder ? placeholder : ''"
       />
-      <slot></slot>
+      <na-select-list>
+        <slot></slot>
+      </na-select-list>
     </template>
     <select
       v-else
@@ -39,9 +41,11 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
+import NaSelectList from "./na-select-list";
 
 export default defineComponent({
   name: "NaSelect",
+  components: { NaSelectList },
   props: {
     native: {
       type: Boolean,

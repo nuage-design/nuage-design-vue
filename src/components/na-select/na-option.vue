@@ -1,7 +1,7 @@
 <template>
-  <option class="na-option">
+  <li class="na-option">
     <slot></slot>
-  </option>
+  </li>
 </template>
 
 <script lang="ts">
