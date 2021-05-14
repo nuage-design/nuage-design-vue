@@ -11,8 +11,8 @@
     <template v-if="filter && !native">
       <input
         ref="input"
-        @focus="placeholderToLabel"
-        @blur="labelToPlaceholder"
+        @focus="focus"
+        @blur="blur"
         class="na-select__input"
         :placeholder="!labelPlaceholder ? placeholder : ''"
       />
@@ -21,8 +21,8 @@
     <select
       v-else
       ref="input"
-      @focus="placeholderToLabel"
-      @blur="labelToPlaceholder"
+      @focus="focus"
+      @blur="blur"
       @change="clearPlaceholder"
       class="na-select__input"
     >
@@ -33,6 +33,7 @@
       ></option>
       <slot></slot>
     </select>
+    <i ref="icon" class="bx bxs-chevron-down"></i>
   </div>
 </template>
 
@@ -75,6 +76,7 @@ export default defineComponent({
     const root = ref<HTMLElement>();
     const input = ref<HTMLInputElement>();
     const selectLabel = ref<HTMLElement>();
+    const icon = ref<HTMLElement>();
     const displayLabel = props.labelPlaceholder
       ? ref(props.labelPlaceholder)
       : props.label
@@ -98,13 +100,16 @@ export default defineComponent({
       },
     ]);
 
-    const placeholderToLabel = (): void => {
+    const focus = (): void => {
+      icon.value?.classList.add("focused");
+
       if (!props.labelPlaceholder) return;
 
       selectLabel.value?.classList.remove("na-select__label_placeholder");
     };
 
-    const labelToPlaceholder = (): void => {
+    const blur = (): void => {
+      icon.value?.classList.remove("focused");
       if (!props.labelPlaceholder || input.value?.value) return;
 
       selectLabel.value?.classList.add("na-select__label_placeholder");
@@ -117,12 +122,13 @@ export default defineComponent({
     return {
       displayLabel,
       classes,
-      placeholderToLabel,
-      labelToPlaceholder,
+      focus,
+      blur,
       clearPlaceholder,
       input,
       selectLabel,
       root,
+      icon,
     };
   },
 });

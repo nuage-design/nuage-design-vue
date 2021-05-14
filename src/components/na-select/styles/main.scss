@@ -22,20 +22,34 @@
     cursor: pointer;
   }
 
-  &::after {
+  // placeholder for native select
+  &::before {
     position: relative;
     width: max-content;
     color: var(--color-dark-200);
     content: var(--placeholder);
-    line-height: 100%;
+    line-height: 0;
 
-    padding: 0 calc(var(--padding) + 1px);
+    padding-left: calc(var(--padding) + 1px);
 
-    top: calc(
-      -1 * (var(--font-size) + (var(--height) - var(--font-size)) / 2 + 1px)
-    );
+    top: calc((2 * var(--font-size) + (var(--height) - var(--font-size)) / 2));
 
     pointer-events: none;
+  }
+
+  & > i {
+    color: var(--color-primary);
+    --font-size: 20px;
+    font-size: var(--font-size);
+    position: absolute;
+    right: calc(var(--padding) + 1px);
+    top: calc(var(--font-size) + (var(--height) - var(--font-size)) / 2 + 1px);
+    pointer-events: none;
+    transition: 0.1s;
+
+    &.focused {
+      transform: rotate(180deg);
+    }
   }
 
   &__input {
@@ -45,6 +59,7 @@
     border-radius: calc(var(--height) / 3);
     background: none;
     appearance: none;
+    -webkit-appearance: none;
 
     &::placeholder {
       color: var(--color-dark-200);
@@ -63,7 +78,8 @@
     }
 
     line-height: 100%;
-    padding: 0 var(--padding);
+    padding-left: var(--padding);
+    padding-right: calc(var(--padding) + 1px + 20px + 8px);
     border: 1px solid var(--color-dark-100);
 
     &:focus {
@@ -99,7 +115,8 @@
       font-size: 14px;
       color: var(--color-dark-200);
 
-      padding: 0 calc(var(--padding) + 1px);
+      padding-left: calc(var(--padding) + 1px);
+      padding-right: calc(var(--padding) + 1px + 20px + 8px);
 
       top: calc(
         var(--label-margin-bottom) + var(--font-size) +

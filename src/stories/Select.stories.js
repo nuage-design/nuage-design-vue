@@ -12,7 +12,7 @@ const Template = (args) => ({
   },
   template: `
   <na-select v-bind='args'>
-    <na-option value="Option 1">Option 1</na-option>
+    <na-option value="Option 1">Option 1111</na-option>
     <na-option value="Option 2">Option 22</na-option>
     <na-option value="Option 3">Option 333</na-option>
     <na-option value="Option 4">Option 4444</na-option>
