@@ -1,6 +1,7 @@
 <template>
-  <div ref="root" class="na-select" @click="focus">
+  <div ref="root" class="na-select">
     <span
+      @click="focus"
       ref="selectLabel"
       v-if="displayLabel"
       class="na-select__label"
@@ -16,7 +17,7 @@
         class="na-select__input"
         :placeholder="!labelPlaceholder ? placeholder : ''"
       />
-      <na-select-list>
+      <na-select-list :opened="opened" :style="`display: ${display}`">
         <slot></slot>
       </na-select-list>
     </template>
@@ -41,7 +42,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
-import NaSelectList from "./na-select-list";
+import NaSelectList from "./na-select-list.vue";
 
 export default defineComponent({
   name: "NaSelect",
@@ -90,6 +91,9 @@ export default defineComponent({
       ? ref("")
       : ref(props.placeholder);
 
+    const opened = ref(false);
+    const display = ref("none");
+
     onMounted((): void => {
       if (displayPlaceholder.value && props.native)
         root.value?.style.setProperty(
@@ -105,6 +109,11 @@ export default defineComponent({
     ]);
 
     const focus = (): void => {
+      display.value = "block";
+      setTimeout(() => {
+        opened.value = true;
+      });
+
       input.value?.focus();
       root.value?.classList.add("na-select_focused");
 
@@ -114,6 +123,10 @@ export default defineComponent({
     };
 
     const blur = (): void => {
+      setTimeout(() => {
+        display.value = "none";
+      }, 200);
+      opened.value = false;
       icon.value?.classList.remove("focused");
       root.value?.classList.remove("na-select_focused");
       if (!props.labelPlaceholder || input.value?.value) return;
@@ -135,6 +148,8 @@ export default defineComponent({
       selectLabel,
       root,
       icon,
+      opened,
+      display,
     };
   },
 });

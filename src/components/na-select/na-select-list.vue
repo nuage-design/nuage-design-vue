@@ -1,7 +1,7 @@
 <template>
-  <ul class="na-select__list">
+  <div class="na-select__list" :class="{ 'na-select__list_opened': opened }">
     <slot></slot>
-  </ul>
+  </div>
 </template>
 
 <script lang="ts">
@@ -9,7 +9,12 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "NaSelectList",
-  props: {},
+  props: {
+    opened: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup() {
     return {};
   },
