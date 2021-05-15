@@ -16,9 +16,9 @@ const Template = (args) => ({
     <na-option value="Option 2">Option 22</na-option>
     <na-option value="Option 3">Option 333</na-option>
     <na-option value="Option 4">Option 4444</na-option>
-    <na-option value="Option 5">Option 555555</na-option>
+    <na-option value="Option 5">Option 555 </na-option>
   </na-select>
-  <p>Text</p>
+  <br/>
   `,
 });
 

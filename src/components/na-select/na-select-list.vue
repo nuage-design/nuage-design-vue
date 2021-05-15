@@ -1,11 +1,16 @@
 <template>
-  <div class="na-select__list" :class="{ 'na-select__list_opened': opened }">
+  <div
+    ref="root"
+    class="na-select__list"
+    :class="{ 'na-select__list_opened': opened }"
+    :style="styles"
+  >
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
   name: "NaSelectList",
@@ -16,7 +21,14 @@ export default defineComponent({
     },
   },
   setup() {
-    return {};
+    const root = ref<HTMLElement>();
+    const styles = ref("");
+    onMounted(() => {
+      const width = root.value?.offsetWidth;
+      console.log(width);
+      if (width) styles.value += `min-width: ${width + 33}px;`;
+    });
+    return { root, styles };
   },
 });
 </script>

@@ -1,9 +1,15 @@
 <template>
-  <div ref="root" class="na-select">
+  <div
+    ref="root"
+    class="na-select"
+    @click="focus"
+    v-outside="blur"
+    :style="styles"
+  >
     <span
-      @click="focus"
-      ref="selectLabel"
       v-if="displayLabel"
+      @mousedown.prevent
+      ref="selectLabel"
       class="na-select__label"
       :class="classes"
     >
@@ -12,12 +18,12 @@
     <template v-if="filter && !native">
       <input
         ref="input"
-        @focus="focus"
         @blur="blur"
+        @focus="focus"
         class="na-select__input"
         :placeholder="!labelPlaceholder ? placeholder : ''"
       />
-      <na-select-list :opened="opened" :style="`display: ${display}`">
+      <na-select-list @mousedown.prevent :opened="opened">
         <slot></slot>
       </na-select-list>
     </template>
@@ -47,6 +53,17 @@ import NaSelectList from "./na-select-list.vue";
 export default defineComponent({
   name: "NaSelect",
   components: { NaSelectList },
+  directives: {
+    outside: {
+      mounted(el: HTMLElement, binding) {
+        el.addEventListener("click", (e) => e.stopPropagation());
+        document.addEventListener("click", binding.value);
+      },
+      unmounted(el: HTMLElement, binding) {
+        document.removeEventListener("click", binding.value);
+      },
+    },
+  },
   props: {
     native: {
       type: Boolean,
@@ -82,11 +99,15 @@ export default defineComponent({
     const input = ref<HTMLInputElement>();
     const selectLabel = ref<HTMLElement>();
     const icon = ref<HTMLElement>();
+    const selectList = ref<HTMLElement>();
+    const styles = ref("");
+
     const displayLabel = props.labelPlaceholder
       ? ref(props.labelPlaceholder)
       : props.label
       ? ref(props.label)
       : null;
+
     const displayPlaceholder = props.labelPlaceholder
       ? ref("")
       : ref(props.placeholder);
@@ -94,12 +115,44 @@ export default defineComponent({
     const opened = ref(false);
     const display = ref("none");
 
-    onMounted((): void => {
+    // eslint-disable-next-line no-unused-vars
+    let focusButton = (ev: KeyboardEvent) => {};
+
+    onMounted(() => {
       if (displayPlaceholder.value && props.native)
         root.value?.style.setProperty(
           "--placeholder",
           `'${displayPlaceholder.value}'`
         );
+
+      const list = root.value?.querySelector(".na-select__list");
+      let firstButton = list?.firstElementChild;
+      let lastButton = list?.lastElementChild;
+      let currentButton = firstButton;
+      currentButton?.classList.add("na-option_focused");
+
+      const width = list?.clientWidth;
+      if (width) styles.value += `width: ${width + 33}px;`;
+
+      focusButton = (ev: KeyboardEvent) => {
+        if (ev.key === "ArrowDown") {
+          currentButton?.classList.remove("na-option_focused");
+          if (currentButton === lastButton) {
+            currentButton = firstButton;
+          } else {
+            currentButton = currentButton?.nextElementSibling;
+          }
+          currentButton?.classList.add("na-option_focused");
+        } else if (ev.key === "ArrowUp") {
+          currentButton?.classList.remove("na-option_focused");
+          if (currentButton === firstButton) {
+            currentButton = lastButton;
+          } else {
+            currentButton = currentButton?.previousElementSibling;
+          }
+          currentButton?.classList.add("na-option_focused");
+        }
+      };
     });
 
     const classes = ref([
@@ -109,6 +162,8 @@ export default defineComponent({
     ]);
 
     const focus = (): void => {
+      document.addEventListener("keydown", focusButton);
+
       display.value = "block";
       setTimeout(() => {
         opened.value = true;
@@ -123,9 +178,9 @@ export default defineComponent({
     };
 
     const blur = (): void => {
-      setTimeout(() => {
-        display.value = "none";
-      }, 200);
+      document.removeEventListener("keydown", focusButton);
+
+      display.value = "none";
       opened.value = false;
       icon.value?.classList.remove("focused");
       root.value?.classList.remove("na-select_focused");
@@ -150,6 +205,8 @@ export default defineComponent({
       icon,
       opened,
       display,
+      selectList,
+      styles,
     };
   },
 });

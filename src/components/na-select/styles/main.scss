@@ -7,7 +7,8 @@
 
   display: flex;
   flex-direction: column;
-  width: max-content;
+  min-width: 45px;
+  width: 45px;
 
   position: relative;
 
@@ -64,7 +65,7 @@
 
   &__input {
     box-sizing: border-box;
-    min-width: 10px;
+    width: 100%;
     height: var(--height);
     border-radius: calc(var(--height) / 3);
     background: none;
@@ -102,7 +103,7 @@
 
   &__label {
     color: var(--color-text-regular);
-    width: max-content;
+    width: 100%;
     position: relative;
     top: 0;
     left: 0;
@@ -144,12 +145,15 @@
     border-radius: 12px;
     background: white;
     box-shadow: var(--block-drop-shadow);
-    transition: 0.1s;
+    transition: top 0.1s;
     position: absolute;
     opacity: 0;
     width: 100%;
+    min-width: max-content;
+
     box-sizing: border-box;
     top: 100%;
+    z-index: 100;
 
     &_opened {
       top: calc(100% + 10px);
@@ -163,11 +167,52 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      padding: 0px 13px;
+      padding-left: 13px;
       height: 33px;
       border-radius: 11px;
       width: 100%;
       margin-bottom: 3px;
+      justify-content: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: padding 0.1s;
+      background: transparent;
+      box-sizing: border-box;
+
+      &:hover {
+        padding-left: 23px;
+        color: var(--color-primary);
+      }
+
+      &_focused {
+        padding-left: 22px;
+        box-shadow: inset -4px 0px 0px var(--color-primary);
+        border: 1px solid var(--color-primary);
+        color: var(--color-primary);
+
+        &:hover {
+          padding-left: 22px;
+          transition: 0s;
+        }
+      }
+
+      &_active {
+        padding-left: 23px;
+        box-shadow: inset -5px 0px 0px var(--color-primary);
+        color: var(--color-primary);
+        background: var(--color-primary-transparent-light);
+        transition: 0s;
+
+        &:hover {
+          padding-left: 23px;
+        }
+
+        &.na-option_focused {
+          padding-left: 22px;
+          box-shadow: inset -4px 0px 0px var(--color-primary);
+        }
+      }
 
       &:nth-last-child(1) {
         margin-bottom: 0;
