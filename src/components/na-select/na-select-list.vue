@@ -1,10 +1,5 @@
 <template>
-  <div
-    ref="root"
-    class="na-select__list"
-    :class="{ 'na-select__list_opened': opened }"
-    :style="styles"
-  >
+  <div ref="root" class="na-select__list" :class="classes" :style="styles">
     <slot></slot>
   </div>
 </template>
@@ -19,16 +14,20 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    activeItem: {
+      type: Number,
+      default: null,
+    },
   },
-  setup() {
+  setup(props) {
     const root = ref<HTMLElement>();
+    const classes = ref({ "na-select__list_opened": props.opened });
     const styles = ref("");
     onMounted(() => {
       const width = root.value?.offsetWidth;
-      console.log(width);
-      if (width) styles.value += `min-width: ${width + 33}px;`;
+      if (width) styles.value += `min-width: ${width + 40}px;`;
     });
-    return { root, styles };
+    return { root, styles, classes };
   },
 });
 </script>
