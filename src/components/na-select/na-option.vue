@@ -6,7 +6,6 @@
     :class="{ 'na-option_active': active }"
     @keydown.enter="activate"
     @click="activate"
-    :active="mutableActive"
   >
     <span class="na-option__left-side">
       <slot name="left-side"></slot>
@@ -25,7 +24,7 @@ import { ref, onMounted } from "vue";
 
 export default {
   name: "NaOption",
-  emits: ["logActivate"],
+  emits: ["activate"],
   props: {
     active: {
       type: Boolean,
@@ -38,24 +37,18 @@ export default {
   },
   setup(props, { slots, emit }) {
     const root = ref<HTMLButtonElement>();
-    const mutableActive = ref(false);
 
     onMounted(() => {});
 
     const hasRightSlot = () => slots["right-side"];
 
     const activate = () => {
-      emit("logActivate");
-
-      // const list = root.value?.parentNode?.children;
-
-      // for (let i of list) {
-      //   i.setAttribute("active", false);
-      // }
-
-      mutableActive.value = true;
+      emit("activate");
+      setTimeout(() => {
+        document.body.click();
+      }, 100);
     };
-    return { activate, root, hasRightSlot, mutableActive };
+    return { activate, root, hasRightSlot };
   },
 };
 </script>
