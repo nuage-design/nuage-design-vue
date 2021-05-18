@@ -22,7 +22,11 @@
         class="na-select__input"
         :placeholder="!labelPlaceholder ? placeholder : ''"
       />
-      <na-select-list ref="selectList" class="na-select__list_opened">
+      <na-select-list
+        ref="selectList"
+        class="na-select__list"
+        :class="{ 'na-select__list_opened': opened }"
+      >
         <slot></slot>
       </na-select-list>
     </template>
@@ -100,6 +104,10 @@ export default defineComponent({
       type: Number,
       default: null,
     },
+    opened: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props) {
     const root = ref<HTMLElement>();
@@ -121,7 +129,6 @@ export default defineComponent({
       ? ref("")
       : ref(props.placeholder);
 
-    const opened = ref(false);
     const display = ref("none");
 
     // eslint-disable-next-line no-unused-vars
@@ -148,7 +155,6 @@ export default defineComponent({
       }
 
       if (width) styles.value += `min-width: ${width + 40}px;`;
-      list?.classList.remove("na-select__list_opened");
       setTimeout(() => {
         if (list) list.style.display = "none";
       }, 200);
@@ -176,18 +182,14 @@ export default defineComponent({
           buttonsArray[currentButton].focus();
         } else if (ev.key === "ArrowUp") {
           ev.preventDefault();
-          if (currentButton === -1) {
-            blur();
-            return;
-          }
-          if (currentButton === firstButton) {
+          if (currentButton === firstButton || currentButton === -1) {
             currentButton = lastButton;
           } else {
             currentButton--;
           }
           buttonsArray[currentButton].focus();
         } else {
-          // ev.stopPropagation();
+          ev.stopPropagation();
           focus();
         }
       };
@@ -254,7 +256,6 @@ export default defineComponent({
       selectLabel,
       root,
       icon,
-      opened,
       display,
       selectList,
       styles,
