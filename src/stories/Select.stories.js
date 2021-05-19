@@ -6,6 +6,14 @@ import { ref } from "vue";
 export default {
   title: "Components/Select",
   component: NaSelect,
+  argTypes: {
+    state: {
+      control: {
+        type: "radio",
+        options: ["success", "warning", "default", "danger"],
+      },
+    },
+  },
 };
 
 const Template = (args) => ({
@@ -35,6 +43,10 @@ const Template = (args) => ({
   },
   template: `
   <na-select v-bind='args' :inputValue="activeItemValue" :opened="opened">
+    <template #helper-default>Help me please</template>
+    <template #helper-success>You are good man!</template>
+    <template #helper-warning>Don't worry, be happy!</template>
+    <template #helper-danger>Fuck!</template>
     <na-option :value="items[0].value" @activate="activate(0)" :active="items[0].active" >
     </na-option>
     <na-option :active="items[1].active" :value="items[1].value" @activate="activate(1)">
@@ -68,4 +80,5 @@ export const Select = Template.bind({});
 
 Select.args = {
   label: "Label",
+  size: 3,
 };

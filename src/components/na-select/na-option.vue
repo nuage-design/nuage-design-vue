@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 
 export default {
   name: "NaOption",
@@ -37,8 +37,6 @@ export default {
   },
   setup(props, { slots, emit }) {
     const root = ref<HTMLButtonElement>();
-
-    onMounted(() => {});
 
     const hasRightSlot = () => slots["right-side"];
 

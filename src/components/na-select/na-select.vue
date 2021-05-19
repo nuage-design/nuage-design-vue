@@ -5,12 +5,13 @@
     @click="focus"
     v-outside="blur"
     :style="styles"
+    :class="`na-select_state_${state}`"
   >
     <span
       v-if="displayLabel"
       ref="selectLabel"
       class="na-select__label"
-      :class="classes"
+      :class="{ 'na-select__label_placeholder': labelPlaceholder }"
     >
       {{ displayLabel }}
     </span>
@@ -46,6 +47,27 @@
       <slot></slot>
     </select>
     <i ref="icon" class="bx bxs-chevron-down"></i>
+    <span v-if="state === 'success'" class="na-select__helper">
+      <i class="bx bxs-check-circle"></i>
+      <slot name="helper-success"></slot>
+    </span>
+    <span
+      v-else-if="state === 'warning'"
+      class="na-select__helper na-select__helper_warning"
+    >
+      <i class="bx bxs-info-circle"></i>
+      <slot name="helper-warning"></slot>
+    </span>
+    <span
+      v-else-if="state === 'danger'"
+      class="na-select__helper na-select__helper_danger"
+    >
+      <i class="bx bxs-x-circle"></i>
+      <slot name="helper-danger"></slot>
+    </span>
+    <span v-else class="na-select__helper">
+      <slot name="helper-default"></slot>
+    </span>
   </div>
 </template>
 
@@ -68,6 +90,10 @@ export default defineComponent({
     },
   },
   props: {
+    state: {
+      type: String,
+      default: "default",
+    },
     inputValue: {
       type: String,
       default: null,

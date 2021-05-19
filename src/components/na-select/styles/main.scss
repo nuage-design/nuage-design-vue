@@ -63,6 +63,10 @@
       color: var(--color-primary);
     }
 
+    & .na-select__helper {
+      opacity: 0;
+    }
+
     & .na-select__input {
       box-shadow: 0 0 0 5px var(--color-primary-transparent);
       border-color: var(--color-primary);
@@ -76,6 +80,8 @@
     border-radius: calc(var(--height) / 3);
     background: none;
     appearance: none;
+
+    transition: 0.1s;
     -webkit-appearance: none;
 
     &::placeholder {
@@ -98,12 +104,13 @@
     padding-left: var(--padding);
     padding-right: calc(var(--padding) + 1px + 20px + 8px);
     border: 1px solid var(--color-dark-100);
+    position: relative;
+    left: 0;
 
     &:focus {
       outline: none;
       box-shadow: 0 0 0 5px var(--color-primary-transparent);
       border-color: var(--color-primary);
-      transition: 0.1s;
     }
   }
 
@@ -186,11 +193,11 @@
     );
 
     box-sizing: border-box;
-    top: 100%;
+    top: 50px;
     z-index: 100;
 
     &_opened {
-      top: calc(100% + 10px);
+      top: 60px;
       opacity: 1;
     }
 
@@ -305,6 +312,51 @@
 
       &:nth-last-child(1) {
         margin-bottom: 0;
+      }
+    }
+  }
+
+  &__helper {
+    color: var(--color-text-secondary);
+    width: 100%;
+    font-size: 13px;
+    line-height: 18px;
+    margin-top: 7px;
+    opacity: 1;
+    transition: 0.1s;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+
+    > i {
+      font-size: 18px;
+      margin-right: 5px;
+    }
+  }
+
+  &:not(.na-select_focused).na-select_state {
+    &_success .na-select {
+      &__input {
+        border-color: var(--color-success);
+      }
+      &__helper {
+        color: var(--color-success);
+      }
+    }
+    &_warning .na-select {
+      &__input {
+        border-color: var(--color-warning);
+      }
+      &__helper {
+        color: var(--color-warning);
+      }
+    }
+    &_danger .na-select {
+      &__input {
+        border-color: var(--color-danger);
+      }
+      &__helper {
+        color: var(--color-danger);
       }
     }
   }
