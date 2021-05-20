@@ -3,6 +3,8 @@ import NaBadge from "../components/na-badge";
 import "boxicons";
 import { ref } from "vue";
 
+const states = ["default", "success", "warning", "danger"];
+
 export default {
   title: "Components/Select",
   component: NaSelect,
@@ -10,7 +12,7 @@ export default {
     state: {
       control: {
         type: "radio",
-        options: ["success", "warning", "default", "danger"],
+        options: states,
       },
     },
   },
@@ -30,6 +32,8 @@ const Template = (args) => ({
 
     const opened = ref(false);
 
+    const states = ["default", "success", "warning", "danger"];
+
     const activate = (id) => {
       items.value.forEach((item) => {
         item.active = false;
@@ -39,14 +43,13 @@ const Template = (args) => ({
       opened.value = false;
     };
 
-    return { args, items, activate, activeItemValue, opened };
+    return { args, items, activate, activeItemValue, opened, states };
   },
   template: `
-  <na-select v-bind='args' :inputValue="activeItemValue" :opened="opened">
-    <template #helper-default>Help me please</template>
+  <na-select v-for="state in states" key="state.id" v-bind='args' :inputValue="activeItemValue" :opened="opened" :state="state">
     <template #helper-success>You are good man!</template>
-    <template #helper-warning>Don't worry, be happy!</template>
-    <template #helper-danger>Fuck!</template>
+    <template #helper-warning>Don't worry, be happy! Don't worry, be happy!</template>
+    <template #helper-danger>Блять!</template>
     <na-option :value="items[0].value" @activate="activate(0)" :active="items[0].active" >
     </na-option>
     <na-option :active="items[1].active" :value="items[1].value" @activate="activate(1)">
@@ -80,5 +83,5 @@ export const Select = Template.bind({});
 
 Select.args = {
   label: "Label",
-  size: 3,
+  placeholder: "Select item",
 };

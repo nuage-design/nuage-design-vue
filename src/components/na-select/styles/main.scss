@@ -5,11 +5,13 @@
   --font-size: 14px;
   --label-margin-bottom: 7px;
   --label-font-size: 13px;
+  --helper-height: 0px;
 
   display: flex;
   flex-direction: column;
   min-width: 45px;
-  width: 45px;
+  width: max-content;
+  margin: 15px 10px 10px;
 
   position: relative;
 
@@ -42,23 +44,27 @@
     pointer-events: none;
   }
 
-  & > i {
+  &__input__chevron {
+    display: inline-block;
+    height: 0;
     --font-size: 20px;
     color: var(--color-text-secondary);
     font-size: var(--font-size);
-    position: absolute;
+    text-align: right;
+    position: relative;
+    // margin-top: -20px;
     right: calc(var(--padding) + 1px);
-    top: calc(var(--font-size) + (var(--height) - var(--font-size)) / 2);
+    // top: calc((var(--height) - var(--font-size)) / 2);
+    top: calc((var(--height) - var(--font-size)) / 2);
     pointer-events: none;
     transition: 0.1s;
+
+    i {
+      transition: 0.1s;
+    }
   }
 
   &_focused {
-    & > i {
-      color: var(--color-primary);
-      transform: rotate(180deg);
-    }
-
     & .na-select__label {
       color: var(--color-primary);
     }
@@ -70,6 +76,14 @@
     & .na-select__input {
       box-shadow: 0 0 0 5px var(--color-primary-transparent);
       border-color: var(--color-primary);
+
+      &__chevron {
+        color: var(--color-primary);
+
+        i {
+          transform: rotate(180deg);
+        }
+      }
     }
   }
 
@@ -116,15 +130,12 @@
 
   &__label {
     color: var(--color-text-regular);
-    width: 100%;
-    position: relative;
+    width: max-content;
+    // position: relative;
     top: 0;
     left: 0;
     line-height: 13px;
-
-    + .na-select__input {
-      margin-top: var(--label-margin-bottom);
-    }
+    margin-bottom: var(--label-margin-bottom);
 
     font: {
       weight: 500;
@@ -155,6 +166,15 @@
     --padding: 10px;
     --option-height: 33px;
     --margin-bottom: 3px;
+
+    box-sizing: border-box;
+    top: calc(100% - 10px - var(--helper-height));
+    z-index: 100;
+
+    &_opened {
+      top: calc(100% + 3px - var(--helper-height));
+      opacity: 1;
+    }
 
     &::-webkit-scrollbar {
       width: 16px;
@@ -191,15 +211,6 @@
       (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
         var(--margin-bottom) + 2 * var(--padding)
     );
-
-    box-sizing: border-box;
-    top: 50px;
-    z-index: 100;
-
-    &_opened {
-      top: 60px;
-      opacity: 1;
-    }
 
     .na-option {
       font-size: var(--font-size);

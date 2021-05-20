@@ -15,6 +15,10 @@
     >
       {{ displayLabel }}
     </span>
+    <div class="na-select__input__chevron">
+      <i ref="icon" class="bx bxs-chevron-down"></i>
+    </div>
+
     <template v-if="filter && !native">
       <input
         :value="inputValue"
@@ -46,12 +50,16 @@
       ></option>
       <slot></slot>
     </select>
-    <i ref="icon" class="bx bxs-chevron-down"></i>
-    <span v-if="state === 'success'" class="na-select__helper">
+    <span
+      ref="heplerElement"
+      v-if="state === 'success'"
+      class="na-select__helper"
+    >
       <i class="bx bxs-check-circle"></i>
       <slot name="helper-success"></slot>
     </span>
     <span
+      ref="heplerElement"
       v-else-if="state === 'warning'"
       class="na-select__helper na-select__helper_warning"
     >
@@ -59,13 +67,14 @@
       <slot name="helper-warning"></slot>
     </span>
     <span
+      ref="heplerElement"
       v-else-if="state === 'danger'"
       class="na-select__helper na-select__helper_danger"
     >
       <i class="bx bxs-x-circle"></i>
       <slot name="helper-danger"></slot>
     </span>
-    <span v-else class="na-select__helper">
+    <span ref="heplerElement" v-else class="na-select__helper">
       <slot name="helper-default"></slot>
     </span>
   </div>
@@ -77,6 +86,7 @@ import NaSelectList from "./na-select-list.vue";
 
 export default defineComponent({
   name: "NaSelect",
+  emits: ["unfocus"],
   components: { NaSelectList },
   directives: {
     outside: {
@@ -141,9 +151,8 @@ export default defineComponent({
     const selectLabel = ref<HTMLElement>();
     const icon = ref<HTMLElement>();
     const selectList = ref<HTMLElement>();
+    const heplerElement = ref<HTMLElement>();
     const styles = ref("");
-
-    const val = ref(props.inputValue);
 
     const displayLabel = props.labelPlaceholder
       ? ref(props.labelPlaceholder)
@@ -162,6 +171,16 @@ export default defineComponent({
     let currentButton = -1;
 
     onMounted(() => {
+      setTimeout(() => {
+        const helperHeight = heplerElement.value?.offsetHeight;
+        styles.value += `--helper-height: ${helperHeight}px;`;
+
+        const list: HTMLElement | null | undefined = root.value?.querySelector(
+          ".na-select__list"
+        );
+        if (list) list.style.display = "none";
+      });
+
       if (props.size) styles.value += `--max-size:${props.size};`;
       if (displayPlaceholder.value && props.native) {
         styles.value += `--placeholder:'${displayPlaceholder.value}';`;
@@ -180,10 +199,7 @@ export default defineComponent({
         if (width) styles.value += `--padding-right: 0px;`;
       }
 
-      if (width) styles.value += `min-width: ${width + 40}px;`;
-      setTimeout(() => {
-        if (list) list.style.display = "none";
-      }, 200);
+      if (width) styles.value += `width: ${width + 40}px;`;
 
       const buttons = list?.querySelectorAll("button");
 
@@ -285,7 +301,7 @@ export default defineComponent({
       display,
       selectList,
       styles,
-      val,
+      heplerElement,
     };
   },
 });
