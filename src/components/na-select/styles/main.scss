@@ -89,14 +89,21 @@
 
   &__input {
     box-sizing: border-box;
-    width: 100%;
     height: var(--height);
     border-radius: calc(var(--height) / 3);
     background: none;
     appearance: none;
+    -webkit-appearance: none;
+    width: auto;
+
+    line-height: 100%;
+    padding-left: var(--padding);
+    padding-right: calc(var(--padding) + 1px + 20px + 8px);
+    border: 1px solid var(--color-dark-100);
+    position: relative;
+    left: 0;
 
     transition: 0.1s;
-    -webkit-appearance: none;
 
     &::placeholder {
       color: var(--color-text-secondary);
@@ -114,13 +121,6 @@
       size: var(--font-size);
     }
 
-    line-height: 100%;
-    padding-left: var(--padding);
-    padding-right: calc(var(--padding) + 1px + 20px + 8px);
-    border: 1px solid var(--color-dark-100);
-    position: relative;
-    left: 0;
-
     &:focus {
       outline: none;
       box-shadow: 0 0 0 5px var(--color-primary-transparent);
@@ -131,18 +131,18 @@
   &__label {
     color: var(--color-text-regular);
     width: max-content;
-    // position: relative;
+    position: relative;
     top: 0;
     left: 0;
     line-height: 13px;
     margin-bottom: var(--label-margin-bottom);
 
+    transition: 0.1s;
+
     font: {
       weight: 500;
       size: var(--label-font-size);
     }
-
-    transition: 0.1s;
 
     &_placeholder {
       position: relative;
@@ -168,13 +168,21 @@
     --margin-bottom: 3px;
 
     box-sizing: border-box;
-    top: calc(100% - 10px - var(--helper-height));
+    top: calc(100% - var(--helper-height));
     z-index: 100;
 
-    &_opened {
-      top: calc(100% + 3px - var(--helper-height));
-      opacity: 1;
-    }
+    padding: var(--padding);
+
+    padding-right: var(--padding-right);
+    border-radius: 12px;
+    background: white;
+    box-shadow: var(--block-drop-shadow);
+    position: relative;
+    overflow-y: auto;
+    max-height: calc(
+      (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
+        var(--margin-bottom) + 2 * var(--padding)
+    );
 
     &::-webkit-scrollbar {
       width: 16px;
@@ -195,61 +203,47 @@
       background-color: transparent;
     }
 
-    list-style: none;
-    padding: var(--padding);
-
-    padding-right: var(--padding-right);
-    border-radius: 12px;
-    background: white;
-    box-shadow: var(--block-drop-shadow);
-    transition: 0.1s;
-    position: absolute;
-    opacity: 0;
-    min-width: max-content;
-    overflow-y: auto;
-    max-height: calc(
-      (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
-        var(--margin-bottom) + 2 * var(--padding)
-    );
-
     .na-option {
+      margin: 0;
+      margin-bottom: var(--margin-bottom);
+      padding: 0 13px;
+
+      width: 100%;
+      min-height: var(--option-height);
+
       font-size: var(--font-size);
       font-weight: 500;
+
       color: var(--color-text-regular);
+      background: none;
+
+      border: none;
+      border-radius: 11px;
+
       display: flex;
       flex-direction: row;
       align-items: center;
-      padding-left: 13px;
-      min-height: var(--option-height);
-      border-radius: 11px;
-      width: 100%;
-      margin-bottom: var(--margin-bottom);
       justify-content: space-between;
-      background: none;
-      border: none;
+
       cursor: pointer;
-      transition: padding-left 0.1s, color 0.1s;
-      background: transparent;
-      box-sizing: border-box;
 
-      & > * {
-        margin-left: 4px;
-        margin-right: 4px;
+      i {
+        font-size: 20px;
+      }
 
-        &:nth-child(1) {
-          margin-left: 0;
-        }
-
-        &:nth-last-child(1) {
-          margin-right: 0;
-        }
+      &:nth-last-child(1) {
+        margin-bottom: 0;
       }
 
       &__left-side {
         display: flex;
         flex-direction: row;
         align-items: center;
+        min-width: max-content;
 
+        transition: 0.1s;
+
+        // space
         & > * {
           margin-left: 4px;
           margin-right: 4px;
@@ -264,72 +258,79 @@
         }
       }
 
+      &__space {
+        width: 30px;
+        transition: 0.1s;
+      }
+
       &__right-side {
         display: flex;
         flex-direction: row;
         align-items: center;
-        padding-right: 13px;
-        width: fit-content;
-        margin: auto;
-      }
 
-      & i {
-        font-size: 20px;
+        // space
+        & > * {
+          margin-left: 4px;
+          margin-right: 4px;
+
+          &:nth-child(1) {
+            margin-left: 0;
+          }
+
+          &:nth-last-child(1) {
+            margin-right: 0;
+          }
+        }
       }
 
       &:hover {
-        padding-left: 23px;
         color: var(--color-primary);
+
+        .na-option__left-side {
+          padding-left: 10px;
+        }
+
+        .na-option__space {
+          width: 20px;
+        }
       }
 
       &:focus {
         outline: none;
-        padding-left: 22px;
         box-shadow: inset -4px 0px 0px var(--color-primary);
         border: 1px solid var(--color-primary);
         color: var(--color-primary);
 
-        > * {
-          margin-top: -1px;
-          margin-bottom: -1px;
+        padding: 0 12px;
+
+        .na-option__left-side {
+          padding-left: 10px;
         }
 
-        &:hover {
-          padding-left: 22px;
-          transition: 0s;
-        }
-
-        & .na-option__right-side {
-          padding-right: 12px;
+        .na-option__space {
+          width: 20px;
         }
       }
 
       &_active {
-        padding-left: 23px;
         box-shadow: inset -5px 0px 0px var(--color-primary);
         color: var(--color-primary);
         background: var(--color-primary-transparent-light);
-        transition: 0s;
 
-        &:hover {
-          padding-left: 23px;
+        .na-option__left-side {
+          padding-left: 10px;
         }
 
-        &.na-option_focused {
-          padding-left: 22px;
-          box-shadow: inset -4px 0px 0px var(--color-primary);
+        .na-option__space {
+          width: 20px;
         }
-      }
-
-      &:nth-last-child(1) {
-        margin-bottom: 0;
       }
     }
   }
 
   &__helper {
     color: var(--color-text-secondary);
-    width: 100%;
+    width: max-content;
     font-size: 13px;
     line-height: 18px;
     margin-top: 7px;

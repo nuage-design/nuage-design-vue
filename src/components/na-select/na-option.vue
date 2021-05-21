@@ -13,6 +13,7 @@
         <slot>{{ value }}</slot>
       </span>
     </span>
+    <div class="na-option__space"></div>
     <span v-if="hasRightSlot()" class="na-option__right-side">
       <slot name="right-side"></slot>
     </span>
@@ -35,16 +36,14 @@ export default {
       default: null,
     },
   },
-  setup(props, { slots, emit }) {
+  setup(_props: any, ctx: any) {
     const root = ref<HTMLButtonElement>();
 
-    const hasRightSlot = () => slots["right-side"];
+    const hasRightSlot = () => ctx.slots["right-side"];
 
     const activate = () => {
-      emit("activate");
-      setTimeout(() => {
-        document.body.click();
-      }, 100);
+      ctx.emit("activate");
+      document.body.click();
     };
     return { activate, root, hasRightSlot };
   },

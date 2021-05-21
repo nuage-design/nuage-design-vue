@@ -3,7 +3,6 @@
     ref="root"
     class="na-select"
     @click="focus"
-    v-outside="blur"
     :style="styles"
     :class="`na-select_state_${state}`"
   >
@@ -19,21 +18,21 @@
       <i ref="icon" class="bx bxs-chevron-down"></i>
     </div>
 
-    <template v-if="filter && !native">
+    <template v-if="!native">
       <input
-        :value="inputValue"
+        :value="value"
         ref="input"
         @focus="focus"
         class="na-select__input"
         :placeholder="!labelPlaceholder ? placeholder : ''"
       />
-      <na-select-list
-        ref="selectList"
-        class="na-select__list"
-        :class="{ 'na-select__list_opened': opened }"
-      >
-        <slot></slot>
-      </na-select-list>
+      <div class="na-select__list__container">
+        <transition appear name="slide-fade">
+          <na-select-list v-if="focused" ref="selectList">
+            <slot></slot>
+          </na-select-list>
+        </transition>
+      </div>
     </template>
     <select
       v-else
@@ -88,23 +87,12 @@ export default defineComponent({
   name: "NaSelect",
   emits: ["unfocus"],
   components: { NaSelectList },
-  directives: {
-    outside: {
-      mounted(el: HTMLElement, binding) {
-        el.addEventListener("click", (e) => e.stopPropagation());
-        document.addEventListener("click", binding.value);
-      },
-      unmounted(el: HTMLElement, binding) {
-        document.removeEventListener("click", binding.value);
-      },
-    },
-  },
   props: {
     state: {
       type: String,
       default: "default",
     },
-    inputValue: {
+    value: {
       type: String,
       default: null,
     },
@@ -114,17 +102,13 @@ export default defineComponent({
     },
     filter: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     multiselect: {
       type: Boolean,
       default: false,
     },
     label: {
-      type: String,
-      default: null,
-    },
-    helper: {
       type: String,
       default: null,
     },
@@ -140,10 +124,6 @@ export default defineComponent({
       type: Number,
       default: null,
     },
-    opened: {
-      type: Boolean,
-      default: false,
-    },
   },
   setup(props) {
     const root = ref<HTMLElement>();
@@ -153,6 +133,7 @@ export default defineComponent({
     const selectList = ref<HTMLElement>();
     const heplerElement = ref<HTMLElement>();
     const styles = ref("");
+    const focused = ref(false);
 
     const displayLabel = props.labelPlaceholder
       ? ref(props.labelPlaceholder)
@@ -164,97 +145,70 @@ export default defineComponent({
       ? ref("")
       : ref(props.placeholder);
 
-    const display = ref("none");
-
     // eslint-disable-next-line no-unused-vars
     let focusButton = (ev: KeyboardEvent) => {};
     let currentButton = -1;
 
     onMounted(() => {
-      setTimeout(() => {
-        const helperHeight = heplerElement.value?.offsetHeight;
-        styles.value += `--helper-height: ${helperHeight}px;`;
-
-        const list: HTMLElement | null | undefined = root.value?.querySelector(
-          ".na-select__list"
-        );
-        if (list) list.style.display = "none";
-      });
-
-      if (props.size) styles.value += `--max-size:${props.size};`;
-      if (displayPlaceholder.value && props.native) {
-        styles.value += `--placeholder:'${displayPlaceholder.value}';`;
-      }
-
       const list: HTMLElement | null | undefined = root.value?.querySelector(
         ".na-select__list"
       );
 
-      const width = list?.clientWidth;
-      if (
-        props.size &&
-        list?.children.length &&
-        list?.children.length > props.size
-      ) {
-        if (width) styles.value += `--padding-right: 0px;`;
+      if (list) {
+        const buttons = list?.querySelectorAll("button");
+        const buttonsArray = Array.prototype.slice.call(buttons);
+        let firstButton = 0;
+        let lastButton = buttonsArray.length - 1;
+
+        focusButton = (ev: KeyboardEvent) => {
+          if (currentButton === lastButton && ev.key === "Tab") {
+            currentButton = -1;
+            blur();
+            return;
+          }
+          if (ev.key === "ArrowDown" || ev.key === "Tab") {
+            ev.preventDefault();
+            if (currentButton === lastButton) {
+              currentButton = firstButton;
+            } else {
+              currentButton++;
+            }
+            buttonsArray[currentButton].focus();
+          } else if (ev.key === "ArrowUp") {
+            ev.preventDefault();
+            if (currentButton === firstButton || currentButton === -1) {
+              currentButton = lastButton;
+            } else {
+              currentButton--;
+            }
+            buttonsArray[currentButton].focus();
+          } else {
+            ev.stopPropagation();
+            focus();
+          }
+        };
       }
-
-      if (width) styles.value += `width: ${width + 40}px;`;
-
-      const buttons = list?.querySelectorAll("button");
-
-      const buttonsArray = Array.prototype.slice.call(buttons);
-
-      let firstButton = 0;
-      let lastButton = buttonsArray.length - 1;
-
-      focusButton = (ev: KeyboardEvent) => {
-        if (currentButton === lastButton && ev.key === "Tab") {
-          currentButton = -1;
-          blur();
-          return;
-        }
-        if (ev.key === "ArrowDown" || ev.key === "Tab") {
-          ev.preventDefault();
-          if (currentButton === lastButton) {
-            currentButton = firstButton;
-          } else {
-            currentButton++;
-          }
-          buttonsArray[currentButton].focus();
-        } else if (ev.key === "ArrowUp") {
-          ev.preventDefault();
-          if (currentButton === firstButton || currentButton === -1) {
-            currentButton = lastButton;
-          } else {
-            currentButton--;
-          }
-          buttonsArray[currentButton].focus();
-        } else {
-          ev.stopPropagation();
-          focus();
-        }
-      };
     });
 
-    const classes = ref([
-      {
-        "na-select__label_placeholder": props.labelPlaceholder,
-      },
-    ]);
+    const clickOut = (e: Event) => {
+      if (e.target === root.value) return;
+
+      if (root.value?.children) {
+        for (let child of root.value.children) {
+          if (child && e.target === child) return;
+        }
+      }
+
+      blur();
+    };
 
     const focus = (): void => {
+      focused.value = true;
+
+      document.addEventListener("click", clickOut);
+
       currentButton = -1;
       document.addEventListener("keydown", focusButton);
-
-      const list: HTMLElement | null | undefined = root.value?.querySelector(
-        ".na-select__list"
-      );
-      if (list) list.style.display = "block";
-
-      setTimeout(() => {
-        list?.classList.add("na-select__list_opened");
-      });
 
       input.value?.focus();
       root.value?.classList.add("na-select_focused");
@@ -265,20 +219,16 @@ export default defineComponent({
     };
 
     const blur = (): void => {
-      document.removeEventListener("keydown", focusButton);
+      focused.value = false;
 
-      const list: HTMLElement | null | undefined = root.value?.querySelector(
-        ".na-select__list"
-      );
-      list?.classList.remove("na-select__list_opened");
-      setTimeout(() => {
-        if (list) list.style.display = "none";
-      }, 100);
+      document.removeEventListener("keydown", focusButton);
+      document.removeEventListener("click", clickOut);
 
       icon.value?.classList.remove("focused");
       root.value?.classList.remove("na-select_focused");
       input.value?.blur();
       currentButton = -1;
+
       if (!props.labelPlaceholder || input.value?.value) return;
 
       selectLabel.value?.classList.add("na-select__label_placeholder");
@@ -290,7 +240,6 @@ export default defineComponent({
 
     return {
       displayLabel,
-      classes,
       focus,
       blur,
       clearPlaceholder,
@@ -298,11 +247,20 @@ export default defineComponent({
       selectLabel,
       root,
       icon,
-      display,
       selectList,
       styles,
       heplerElement,
+      focused,
     };
   },
 });
 </script>
+
+<style lang="scss">
+.na-select__list__container {
+  position: relative;
+  top: 8px;
+  height: 0;
+  width: max-content;
+}
+</style>
