@@ -26,8 +26,8 @@ const Template = (args) => ({
       { value: "Option 1", active: false },
       { value: "Option 2", active: false },
       { value: "Option 3", active: false },
-      { value: "Option 4sssssssssssssssss", active: false },
-      { value: "Option 5", active: false },
+      { value: `Optio`, active: false },
+      { value: "sdafsdfsdsdssdasdsa", active: false },
     ]);
 
     const activate = (id) => {
@@ -41,7 +41,7 @@ const Template = (args) => ({
     return { args, items, activate, value };
   },
   template: `
-  <na-select v-bind='args' :value="value" >
+  <na-select v-bind='args' :value="value" style="width: 300px">
     <template #helper-default>Help me</template>
     <template #helper-success>You are good man!</template>
     <template #helper-warning>Don't worry, be happy! Don't worry, be happy!</template>
@@ -69,39 +69,7 @@ const Template = (args) => ({
     </na-option>
     <na-option :active="items[4].active" :value="items[4].value" @activate="activate(4)">
       <template v-slot:right-side>
-        <na-badge :value="100" />
-      </template>
-    </na-option>
-  </na-select>
-  <na-select v-bind='args' :value="value" >
-    <template #helper-default>Help me</template>
-    <template #helper-success>You are good man!</template>
-    <template #helper-warning>Don't worry, be happy! Don't worry, be happy!</template>
-    <template #helper-danger>Блять!</template>
-
-    <na-option :value="items[0].value" @activate="activate(0)" :active="items[0].active" >
-    </na-option>
-    <na-option :active="items[1].active" :value="items[1].value" @activate="activate(1)">
-      <template v-slot:left-side>
         <i class='bx bxs-heart'/>
-      </template>
-    </na-option>
-    <na-option :active="items[2].active" :value="items[2].value" @activate="activate(2)">
-      <template v-slot:right-side>
-        <i class='bx bxs-heart'/>
-      </template>
-    </na-option>
-    <na-option :active="items[3].active" :value="items[3].value" @activate="activate(3)">
-      <template v-slot:left-side>
-        <i class='bx bxs-heart'/>
-      </template> 
-      <template v-slot:right-side>
-        <i class='bx bxs-heart'/>
-      </template>
-    </na-option>
-    <na-option :active="items[4].active" :value="items[4].value" @activate="activate(4)">
-      <template v-slot:right-side>
-        <na-badge :value="100" />
       </template>
     </na-option>
   </na-select>
@@ -111,6 +79,7 @@ const Template = (args) => ({
 export const Select = Template.bind({});
 
 Select.args = {
+  size: 3,
   filter: true,
   label: "Label",
   placeholder: "Select item",

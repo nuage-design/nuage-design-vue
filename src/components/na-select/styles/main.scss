@@ -1,7 +1,7 @@
 .na-select {
   --height: 33px;
   --padding: 13px;
-  --padding-right: 10px;
+  --padding-right: 14px;
   --font-size: 14px;
   --label-margin-bottom: 7px;
   --label-font-size: 13px;
@@ -9,8 +9,6 @@
 
   display: flex;
   flex-direction: column;
-  min-width: 45px;
-  width: max-content;
   margin: 15px 10px 10px;
 
   position: relative;
@@ -52,9 +50,7 @@
     font-size: var(--font-size);
     text-align: right;
     position: relative;
-    // margin-top: -20px;
     right: calc(var(--padding) + 1px);
-    // top: calc((var(--height) - var(--font-size)) / 2);
     top: calc((var(--height) - var(--font-size)) / 2);
     pointer-events: none;
     transition: 0.1s;
@@ -94,14 +90,11 @@
     background: none;
     appearance: none;
     -webkit-appearance: none;
-    width: auto;
 
     line-height: 100%;
     padding-left: var(--padding);
     padding-right: calc(var(--padding) + 1px + 20px + 8px);
     border: 1px solid var(--color-dark-100);
-    position: relative;
-    left: 0;
 
     transition: 0.1s;
 
@@ -130,7 +123,6 @@
 
   &__label {
     color: var(--color-text-regular);
-    width: max-content;
     position: relative;
     top: 0;
     left: 0;
@@ -167,22 +159,27 @@
     --option-height: 33px;
     --margin-bottom: 3px;
 
+    position: relative;
+    min-width: max-content;
     box-sizing: border-box;
     top: calc(100% - var(--helper-height));
     z-index: 100;
 
     padding: var(--padding);
+    padding-bottom: 0;
 
     padding-right: var(--padding-right);
     border-radius: 12px;
     background: white;
     box-shadow: var(--block-drop-shadow);
-    position: relative;
     overflow-y: auto;
     max-height: calc(
       (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
         var(--margin-bottom) + 2 * var(--padding)
     );
+
+    // scrollbar-width: none;
+    scrollbar-color: var(--color-primary-transparent) transparent;
 
     &::-webkit-scrollbar {
       width: 16px;
@@ -208,7 +205,8 @@
       margin-bottom: var(--margin-bottom);
       padding: 0 13px;
 
-      width: 100%;
+      min-width: 100%;
+      max-width: 100%;
       min-height: var(--option-height);
 
       font-size: var(--font-size);
@@ -232,7 +230,7 @@
       }
 
       &:nth-last-child(1) {
-        margin-bottom: 0;
+        margin-bottom: 10px;
       }
 
       &__left-side {
@@ -240,6 +238,9 @@
         flex-direction: row;
         align-items: center;
         min-width: max-content;
+
+        position: relative;
+        left: 0;
 
         transition: 0.1s;
 
@@ -258,15 +259,14 @@
         }
       }
 
-      &__space {
-        width: 30px;
-        transition: 0.1s;
-      }
-
       &__right-side {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: right;
+        padding-left: 30px;
+        transition: 0.1s;
+
+        position: relative;
 
         // space
         & > * {
@@ -287,11 +287,7 @@
         color: var(--color-primary);
 
         .na-option__left-side {
-          padding-left: 10px;
-        }
-
-        .na-option__space {
-          width: 20px;
+          left: 10px;
         }
       }
 
@@ -304,11 +300,7 @@
         padding: 0 12px;
 
         .na-option__left-side {
-          padding-left: 10px;
-        }
-
-        .na-option__space {
-          width: 20px;
+          left: 10px;
         }
       }
 
@@ -318,11 +310,7 @@
         background: var(--color-primary-transparent-light);
 
         .na-option__left-side {
-          padding-left: 10px;
-        }
-
-        .na-option__space {
-          width: 20px;
+          left: 10px;
         }
       }
     }
@@ -330,7 +318,6 @@
 
   &__helper {
     color: var(--color-text-secondary);
-    width: max-content;
     font-size: 13px;
     line-height: 18px;
     margin-top: 7px;

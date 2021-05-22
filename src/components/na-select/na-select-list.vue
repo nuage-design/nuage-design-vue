@@ -1,11 +1,20 @@
 <template>
-  <div ref="root" class="na-select__list" :class="classes" :style="styles">
+  <div
+    data-simplebar
+    data-simplebar-auto-hide="false"
+    ref="root"
+    class="na-select__list"
+    :class="classes"
+    :style="styles"
+  >
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
+import "simplebar";
+import "simplebar/dist/simplebar.css";
 
 export default defineComponent({
   name: "NaSelectList",
@@ -23,14 +32,24 @@ export default defineComponent({
     const root = ref<HTMLElement>();
     const classes = ref({ "na-select__list_opened": props.opened });
     const styles = ref("");
-    onMounted(() => {
-      // const width = root.value?.offsetWidth;
-      // if (width) styles.value += `min-width: ${width + 40}px;`;
-    });
     return { root, styles, classes };
   },
 });
 </script>
 
 <style lang="scss">
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  top: 8px;
+  bottom: 8px;
+}
+
+.simplebar-scrollbar.simplebar-visible:before {
+  opacity: 1;
+}
+
+.simplebar-scrollbar::before {
+  background: var(--color-primary-transparent);
+  left: 0px;
+  right: 4px;
+}
 </style>

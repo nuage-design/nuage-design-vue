@@ -13,7 +13,6 @@
         <slot>{{ value }}</slot>
       </span>
     </span>
-    <div class="na-option__space"></div>
     <span v-if="hasRightSlot()" class="na-option__right-side">
       <slot name="right-side"></slot>
     </span>

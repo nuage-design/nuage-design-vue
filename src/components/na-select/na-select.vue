@@ -3,7 +3,6 @@
     ref="root"
     class="na-select"
     @click="focus"
-    :style="styles"
     :class="`na-select_state_${state}`"
   >
     <span
@@ -26,13 +25,16 @@
         class="na-select__input"
         :placeholder="!labelPlaceholder ? placeholder : ''"
       />
-      <div class="na-select__list__container">
-        <transition appear name="slide-fade">
-          <na-select-list v-if="focused" ref="selectList">
+      <transition name="slide-fade">
+        <div ref="selectList" class="na-select__list__container">
+          <na-select-list
+            v-show="focused"
+            :style="`--max-size:${size};--padding-right:${paddingRight}px`"
+          >
             <slot></slot>
           </na-select-list>
-        </transition>
-      </div>
+        </div>
+      </transition>
     </template>
     <select
       v-else
@@ -49,33 +51,29 @@
       ></option>
       <slot></slot>
     </select>
-    <span
-      ref="heplerElement"
-      v-if="state === 'success'"
-      class="na-select__helper"
-    >
-      <i class="bx bxs-check-circle"></i>
-      <slot name="helper-success"></slot>
-    </span>
-    <span
-      ref="heplerElement"
-      v-else-if="state === 'warning'"
-      class="na-select__helper na-select__helper_warning"
-    >
-      <i class="bx bxs-info-circle"></i>
-      <slot name="helper-warning"></slot>
-    </span>
-    <span
-      ref="heplerElement"
-      v-else-if="state === 'danger'"
-      class="na-select__helper na-select__helper_danger"
-    >
-      <i class="bx bxs-x-circle"></i>
-      <slot name="helper-danger"></slot>
-    </span>
-    <span ref="heplerElement" v-else class="na-select__helper">
-      <slot name="helper-default"></slot>
-    </span>
+    <div @click.stop>
+      <span v-if="state === 'success'" class="na-select__helper">
+        <i class="bx bxs-check-circle"></i>
+        <slot name="helper-success"></slot>
+      </span>
+      <span
+        v-else-if="state === 'warning'"
+        class="na-select__helper na-select__helper_warning"
+      >
+        <i class="bx bxs-info-circle"></i>
+        <slot name="helper-warning"></slot>
+      </span>
+      <span
+        v-else-if="state === 'danger'"
+        class="na-select__helper na-select__helper_danger"
+      >
+        <i class="bx bxs-x-circle"></i>
+        <slot name="helper-danger"></slot>
+      </span>
+      <span v-else class="na-select__helper">
+        <slot name="helper-default"></slot>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -131,9 +129,8 @@ export default defineComponent({
     const selectLabel = ref<HTMLElement>();
     const icon = ref<HTMLElement>();
     const selectList = ref<HTMLElement>();
-    const heplerElement = ref<HTMLElement>();
-    const styles = ref("");
     const focused = ref(false);
+    const paddingRight = ref(10);
 
     const displayLabel = props.labelPlaceholder
       ? ref(props.labelPlaceholder)
@@ -141,53 +138,51 @@ export default defineComponent({
       ? ref(props.label)
       : null;
 
-    const displayPlaceholder = props.labelPlaceholder
-      ? ref("")
-      : ref(props.placeholder);
-
     // eslint-disable-next-line no-unused-vars
     let focusButton = (ev: KeyboardEvent) => {};
     let currentButton = -1;
 
     onMounted(() => {
-      const list: HTMLElement | null | undefined = root.value?.querySelector(
-        ".na-select__list"
-      );
+      const buttons = selectList.value?.querySelectorAll("button");
+      console.log(buttons);
+      const buttonsArray = Array.prototype.slice.call(buttons);
 
-      if (list) {
-        const buttons = list?.querySelectorAll("button");
-        const buttonsArray = Array.prototype.slice.call(buttons);
-        let firstButton = 0;
-        let lastButton = buttonsArray.length - 1;
-
-        focusButton = (ev: KeyboardEvent) => {
-          if (currentButton === lastButton && ev.key === "Tab") {
-            currentButton = -1;
-            blur();
-            return;
-          }
-          if (ev.key === "ArrowDown" || ev.key === "Tab") {
-            ev.preventDefault();
-            if (currentButton === lastButton) {
-              currentButton = firstButton;
-            } else {
-              currentButton++;
-            }
-            buttonsArray[currentButton].focus();
-          } else if (ev.key === "ArrowUp") {
-            ev.preventDefault();
-            if (currentButton === firstButton || currentButton === -1) {
-              currentButton = lastButton;
-            } else {
-              currentButton--;
-            }
-            buttonsArray[currentButton].focus();
-          } else {
-            ev.stopPropagation();
-            focus();
-          }
-        };
+      if (props.size >= buttonsArray.length || !props.size) {
+        paddingRight.value = 10;
+      } else {
+        paddingRight.value = 5;
       }
+
+      let firstButton = 0;
+      let lastButton = buttonsArray.length - 1;
+
+      focusButton = (ev: KeyboardEvent) => {
+        if (currentButton === lastButton && ev.key === "Tab") {
+          currentButton = -1;
+          blur();
+          return;
+        }
+        if (ev.key === "ArrowDown" || ev.key === "Tab") {
+          ev.preventDefault();
+          if (currentButton === lastButton) {
+            currentButton = firstButton;
+          } else {
+            currentButton++;
+          }
+          buttonsArray[currentButton].focus();
+        } else if (ev.key === "ArrowUp") {
+          ev.preventDefault();
+          if (currentButton === firstButton || currentButton === -1) {
+            currentButton = lastButton;
+          } else {
+            currentButton--;
+          }
+          buttonsArray[currentButton].focus();
+        } else {
+          ev.stopPropagation();
+          focus();
+        }
+      };
     });
 
     const clickOut = (e: Event) => {
@@ -224,8 +219,8 @@ export default defineComponent({
       document.removeEventListener("keydown", focusButton);
       document.removeEventListener("click", clickOut);
 
-      icon.value?.classList.remove("focused");
       root.value?.classList.remove("na-select_focused");
+
       input.value?.blur();
       currentButton = -1;
 
@@ -248,9 +243,8 @@ export default defineComponent({
       root,
       icon,
       selectList,
-      styles,
-      heplerElement,
       focused,
+      paddingRight,
     };
   },
 });
@@ -261,6 +255,14 @@ export default defineComponent({
   position: relative;
   top: 8px;
   height: 0;
-  width: max-content;
+
+  .slide-fade-enter-active {
+    transition: all 0.3s ease;
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active до версии 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
+  }
 }
 </style>
