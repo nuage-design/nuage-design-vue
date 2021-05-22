@@ -30,6 +30,14 @@ const Template = (args) => ({
       { value: "sdafsdfsdsdssdasdsa", active: false },
     ]);
 
+    const nativeItems = [
+      "option 1",
+      "option 2",
+      "option 3",
+      "option 4",
+      "option 5",
+    ];
+
     const activate = (id) => {
       items.value.forEach((item) => {
         item.active = false;
@@ -38,10 +46,13 @@ const Template = (args) => ({
       value.value = items.value[id].value;
     };
 
-    return { args, items, activate, value };
+    return { args, items, activate, value, nativeItems };
   },
   template: `
-  <na-select v-bind='args' :value="value" style="width: 300px">
+  <na-select v-bind='args' :value="value" style="width: 200px">
+    <option v-for="item in items" value="item.value">{{ item.value }}</option>
+  </na-select>
+  <!-- <na-select v-bind='args' :value="value" list style="width: 300px">
     <template #helper-default>Help me</template>
     <template #helper-success>You are good man!</template>
     <template #helper-warning>Don't worry, be happy! Don't worry, be happy!</template>
@@ -72,14 +83,13 @@ const Template = (args) => ({
         <i class='bx bxs-heart'/>
       </template>
     </na-option>
-  </na-select>
+  </na-select> -->
   `,
 });
 
 export const Select = Template.bind({});
 
 Select.args = {
-  size: 3,
   filter: true,
   label: "Label",
   placeholder: "Select item",

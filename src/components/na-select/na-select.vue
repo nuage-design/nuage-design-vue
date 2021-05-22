@@ -17,19 +17,20 @@
       <i ref="icon" class="bx bxs-chevron-down"></i>
     </div>
 
-    <template v-if="!native">
+    <template v-if="list">
       <input
         :value="value"
         ref="input"
         @focus="focus"
-        class="na-select__input"
+        class="na-select__input na-select__input_filtered"
         :placeholder="!labelPlaceholder ? placeholder : ''"
       />
       <transition name="slide-fade">
         <div ref="selectList" class="na-select__list__container">
           <na-select-list
             v-show="focused"
-            :style="`--max-size:${size};--padding-right:${paddingRight}px`"
+            :style="`--max-size:${size};
+            --padding-right:${paddingRight}px`"
           >
             <slot></slot>
           </na-select-list>
@@ -41,7 +42,7 @@
       ref="input"
       @focus="focus"
       @blur="blur"
-      @change="clearPlaceholder"
+      @change="setPlaceholder"
       class="na-select__input"
     >
       <option
@@ -94,7 +95,7 @@ export default defineComponent({
       type: String,
       default: null,
     },
-    native: {
+    list: {
       type: Boolean,
       default: false,
     },
@@ -143,46 +144,54 @@ export default defineComponent({
     let currentButton = -1;
 
     onMounted(() => {
-      const buttons = selectList.value?.querySelectorAll("button");
-      console.log(buttons);
-      const buttonsArray = Array.prototype.slice.call(buttons);
+      if (props.list) {
+        const buttons = selectList.value?.querySelectorAll("button");
+        console.log(buttons);
+        const buttonsArray = Array.prototype.slice.call(buttons);
 
-      if (props.size >= buttonsArray.length || !props.size) {
-        paddingRight.value = 10;
-      } else {
-        paddingRight.value = 5;
-      }
-
-      let firstButton = 0;
-      let lastButton = buttonsArray.length - 1;
-
-      focusButton = (ev: KeyboardEvent) => {
-        if (currentButton === lastButton && ev.key === "Tab") {
-          currentButton = -1;
-          blur();
-          return;
-        }
-        if (ev.key === "ArrowDown" || ev.key === "Tab") {
-          ev.preventDefault();
-          if (currentButton === lastButton) {
-            currentButton = firstButton;
-          } else {
-            currentButton++;
-          }
-          buttonsArray[currentButton].focus();
-        } else if (ev.key === "ArrowUp") {
-          ev.preventDefault();
-          if (currentButton === firstButton || currentButton === -1) {
-            currentButton = lastButton;
-          } else {
-            currentButton--;
-          }
-          buttonsArray[currentButton].focus();
+        if (props.size >= buttonsArray.length || !props.size) {
+          paddingRight.value = 10;
         } else {
-          ev.stopPropagation();
-          focus();
+          paddingRight.value = 5;
         }
-      };
+
+        let firstButton = 0;
+        let lastButton = buttonsArray.length - 1;
+
+        focusButton = (ev: KeyboardEvent) => {
+          if (currentButton === lastButton && ev.key === "Tab") {
+            currentButton = -1;
+            blur();
+            return;
+          }
+          if (ev.key === "ArrowDown" || ev.key === "Tab") {
+            ev.preventDefault();
+            if (currentButton === lastButton) {
+              currentButton = firstButton;
+            } else {
+              currentButton++;
+            }
+            buttonsArray[currentButton].focus();
+          } else if (ev.key === "ArrowUp") {
+            ev.preventDefault();
+            if (currentButton === firstButton || currentButton === -1) {
+              currentButton = lastButton;
+            } else {
+              currentButton--;
+            }
+            buttonsArray[currentButton].focus();
+          } else {
+            ev.stopPropagation();
+            focus();
+          }
+        };
+      } else {
+        if (!props.labelPlaceholder)
+          root.value?.style.setProperty(
+            "--placeholder",
+            `"${props.placeholder}"`
+          );
+      }
     });
 
     const clickOut = (e: Event) => {
@@ -229,15 +238,22 @@ export default defineComponent({
       selectLabel.value?.classList.add("na-select__label_placeholder");
     };
 
-    const clearPlaceholder = (): void => {
-      root.value?.style.setProperty("--placeholder", "");
+    const setPlaceholder = (): void => {
+      if (input.value?.value) {
+        root.value?.style.setProperty("--placeholder", "");
+      } else if (!props.labelPlaceholder) {
+        root.value?.style.setProperty(
+          "--placeholder",
+          `"${props.placeholder}"`
+        );
+      }
     };
 
     return {
       displayLabel,
       focus,
       blur,
-      clearPlaceholder,
+      setPlaceholder,
       input,
       selectLabel,
       root,

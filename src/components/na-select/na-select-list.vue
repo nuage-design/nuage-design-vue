@@ -1,12 +1,5 @@
 <template>
-  <div
-    data-simplebar
-    data-simplebar-auto-hide="false"
-    ref="root"
-    class="na-select__list"
-    :class="classes"
-    :style="styles"
-  >
+  <div data-simplebar ref="root" class="na-select__list" :style="styles">
     <slot></slot>
   </div>
 </template>
@@ -19,20 +12,15 @@ import "simplebar/dist/simplebar.css";
 export default defineComponent({
   name: "NaSelectList",
   props: {
-    opened: {
-      type: Boolean,
-      default: false,
-    },
     activeItem: {
       type: Number,
       default: null,
     },
   },
-  setup(props) {
+  setup() {
     const root = ref<HTMLElement>();
-    const classes = ref({ "na-select__list_opened": props.opened });
     const styles = ref("");
-    return { root, styles, classes };
+    return { root, styles };
   },
 });
 </script>

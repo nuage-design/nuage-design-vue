@@ -65,19 +65,19 @@
       color: var(--color-primary);
     }
 
-    & .na-select__helper {
-      opacity: 0;
-    }
-
     & .na-select__input {
       box-shadow: 0 0 0 5px var(--color-primary-transparent);
       border-color: var(--color-primary);
 
       &__chevron {
         color: var(--color-primary);
+      }
 
-        i {
-          transform: rotate(180deg);
+      &_filtered {
+        .na-select__input__chevron {
+          i {
+            transform: rotate(180deg);
+          }
         }
       }
     }
