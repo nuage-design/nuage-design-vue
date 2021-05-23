@@ -5,12 +5,12 @@
     placeholder="Select item"
     state="success"
   >
-    <template #helper-default>Help me</template>
-    <template #helper-success>You are good man!</template>
-    <template #helper-warning
+    <template #message-default>Help me</template>
+    <template #message-success>You are good man!</template>
+    <template #message-warning
       >Don't worry, be happy! Don't worry, be happy!</template
     >
-    <template #helper-danger>Блять!</template>
+    <template #message-danger>Блять!</template>
     <na-option>123</na-option>
     <na-option>123</na-option>
     <na-option>123</na-option>

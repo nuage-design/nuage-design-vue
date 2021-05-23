@@ -1,11 +1,11 @@
 .na-select {
   --height: 33px;
   --padding: 13px;
-  --padding-right: 14px;
+  --padding-right: 10px;
   --font-size: 14px;
   --label-margin-bottom: 7px;
   --label-font-size: 13px;
-  --helper-height: 0px;
+  --message-height: 0px;
 
   display: flex;
   flex-direction: column;
@@ -20,7 +20,17 @@
     size: var(--font-size);
   }
 
-  select {
+  &_native.na-select_filter {
+    .na-select__input {
+      padding-right: 13px;
+      &__chevron {
+        display: none;
+      }
+    }
+  }
+
+  select,
+  input[readonly] {
     cursor: pointer;
   }
 
@@ -43,21 +53,16 @@
   }
 
   &__input__chevron {
-    display: inline-block;
     height: 0;
     --font-size: 20px;
     color: var(--color-text-secondary);
     font-size: var(--font-size);
-    text-align: right;
     position: relative;
-    right: calc(var(--padding) + 1px);
-    top: calc((var(--height) - var(--font-size)) / 2);
     pointer-events: none;
-    transition: 0.1s;
+    text-align: right;
 
-    i {
-      transition: 0.1s;
-    }
+    top: calc((var(--height) - var(--font-size)) / 2);
+    left: -13px;
   }
 
   &_focused {
@@ -71,14 +76,6 @@
 
       &__chevron {
         color: var(--color-primary);
-      }
-
-      &_filtered {
-        .na-select__input__chevron {
-          i {
-            transform: rotate(180deg);
-          }
-        }
       }
     }
   }
@@ -159,46 +156,24 @@
     --option-height: 33px;
     --margin-bottom: 3px;
 
-    position: relative;
-    min-width: max-content;
+    position: absolute;
+    min-width: 100%;
     box-sizing: border-box;
-    top: calc(100% - var(--helper-height));
+    flex: 0 0 auto;
+    top: calc(100% - var(--message-height) + 5px);
     z-index: 100;
+    overflow-y: auto;
 
     padding: var(--padding);
     padding-bottom: 0;
 
-    padding-right: var(--padding-right);
     border-radius: 12px;
     background: white;
     box-shadow: var(--block-drop-shadow);
-    overflow-y: auto;
     max-height: calc(
       (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
         var(--margin-bottom) + 2 * var(--padding)
     );
-
-    // scrollbar-width: none;
-    scrollbar-color: var(--color-primary-transparent) transparent;
-
-    &::-webkit-scrollbar {
-      width: 16px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border: 5px solid rgba(0, 0, 0, 0);
-      background-clip: padding-box;
-      border-radius: 8px;
-      background-color: var(--color-primary-transparent);
-    }
-
-    &::-webkit-scrollbar-button {
-      height: 5px;
-    }
-
-    &::-webkit-scrollbar-corner {
-      background-color: transparent;
-    }
 
     .na-option {
       margin: 0;
@@ -283,7 +258,7 @@
         }
       }
 
-      &:hover {
+      &:not([disabled]):hover {
         color: var(--color-primary);
 
         .na-option__left-side {
@@ -304,7 +279,7 @@
         }
       }
 
-      &_active {
+      &_active:not([disabled]) {
         box-shadow: inset -5px 0px 0px var(--color-primary);
         color: var(--color-primary);
         background: var(--color-primary-transparent-light);
@@ -313,10 +288,15 @@
           left: 10px;
         }
       }
+
+      &[disabled] {
+        opacity: 0.2;
+        cursor: not-allowed;
+      }
     }
   }
 
-  &__helper {
+  &__message {
     color: var(--color-text-secondary);
     font-size: 13px;
     line-height: 18px;
@@ -338,7 +318,7 @@
       &__input {
         border-color: var(--color-success);
       }
-      &__helper {
+      &__message {
         color: var(--color-success);
       }
     }
@@ -346,7 +326,7 @@
       &__input {
         border-color: var(--color-warning);
       }
-      &__helper {
+      &__message {
         color: var(--color-warning);
       }
     }
@@ -354,7 +334,7 @@
       &__input {
         border-color: var(--color-danger);
       }
-      &__helper {
+      &__message {
         color: var(--color-danger);
       }
     }

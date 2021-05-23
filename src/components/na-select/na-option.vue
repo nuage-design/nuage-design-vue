@@ -1,8 +1,9 @@
 <template>
   <button
-    :value="value"
+    v-if="!native"
     ref="root"
     class="na-option"
+    :value="value"
     :class="{ 'na-option_active': active }"
     @keydown.enter="activate"
     @click="activate"
@@ -17,10 +18,13 @@
       <slot name="right-side"></slot>
     </span>
   </button>
+  <option v-else :value="value">
+    <slot>{{ value }}</slot>
+  </option>
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 export default {
   name: "NaOption",
@@ -35,16 +39,22 @@ export default {
       default: null,
     },
   },
-  setup(_props: any, ctx: any) {
+  setup(props, { slots, emit }) {
     const root = ref<HTMLButtonElement>();
+    const native = ref(false);
 
-    const hasRightSlot = () => ctx.slots["right-side"];
+    const hasRightSlot = () => slots["right-side"];
 
     const activate = () => {
-      ctx.emit("activate");
-      document.body.click();
+      emit("activate");
     };
-    return { activate, root, hasRightSlot };
+
+    onMounted(() => {
+      native.value =
+        root.value?.parentElement?.tagName === "SELECT" ||
+        root.value?.parentElement?.tagName === "DATALIST";
+    });
+    return { activate, root, hasRightSlot, native };
   },
 };
 </script>

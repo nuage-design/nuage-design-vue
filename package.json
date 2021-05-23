@@ -13,7 +13,6 @@
     "boxicons": "^2.0.7",
     "core-js": "^3.6.5",
     "postcss": "^8.2.13",
-    "simplebar": "^5.3.3",
     "vue": "^3.0.0"
   },
   "devDependencies": {

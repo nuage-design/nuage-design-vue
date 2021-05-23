@@ -1,10 +1,6 @@
 <template>
-  <div
-    ref="root"
-    class="na-select"
-    @click="focus"
-    :class="`na-select_state_${state}`"
-  >
+  <div ref="root" @click="focus" :class="classes">
+    <!-- label -->
     <span
       v-if="displayLabel"
       ref="selectLabel"
@@ -13,79 +9,98 @@
     >
       {{ displayLabel }}
     </span>
-    <div class="na-select__input__chevron">
-      <i ref="icon" class="bx bxs-chevron-down"></i>
-    </div>
 
-    <template v-if="list">
+    <!-- chevron -->
+    <i ref="icon" class="bx bxs-chevron-down na-select__input__chevron"></i>
+
+    <template v-if="native">
+      <template v-if="filter">
+        <input
+          ref="input"
+          class="na-select__input"
+          :value="value"
+          :placeholder="!labelPlaceholder ? placeholder : ''"
+          :list="id"
+          @focus="focus"
+          @blur="blur"
+        />
+        <datalist :id="id">
+          <slot></slot>
+        </datalist>
+      </template>
+      <template v-else>
+        <select
+          ref="input"
+          class="na-select__input"
+          @focus="focus"
+          @blur="blur"
+          @change="setPlaceholder"
+        >
+          <!-- placeholder -->
+          <option
+            v-if="placeholder || labelPlaceholder"
+            class="na-select__input__placeholder"
+            value=""
+          ></option>
+          <slot></slot>
+        </select>
+      </template>
+    </template>
+
+    <template v-else>
       <input
-        :value="value"
         ref="input"
-        @focus="focus"
-        class="na-select__input na-select__input_filtered"
+        class="na-select__input"
+        :value="value"
         :placeholder="!labelPlaceholder ? placeholder : ''"
+        @focus="focus"
+        :readonly="!filter"
       />
-      <transition name="slide-fade">
-        <div ref="selectList" class="na-select__list__container">
-          <na-select-list
-            v-show="focused"
-            :style="`--max-size:${size};
-            --padding-right:${paddingRight}px`"
-          >
-            <slot></slot>
-          </na-select-list>
+      <transition name="fade">
+        <div
+          ref="selectList"
+          class="na-select__list"
+          v-show="focused"
+          :style="listStyles"
+        >
+          <slot></slot>
         </div>
       </transition>
     </template>
-    <select
-      v-else
-      ref="input"
-      @focus="focus"
-      @blur="blur"
-      @change="setPlaceholder"
-      class="na-select__input"
-    >
-      <option
-        v-if="placeholder || labelPlaceholder"
-        value=""
-        class="na-select__input__placeholder"
-      ></option>
-      <slot></slot>
-    </select>
-    <div @click.stop>
-      <span v-if="state === 'success'" class="na-select__helper">
+
+    <!-- message -->
+    <div ref="message" @click.stop>
+      <span v-if="state === 'success'" class="na-select__message">
         <i class="bx bxs-check-circle"></i>
-        <slot name="helper-success"></slot>
+        <slot name="message-success"></slot>
       </span>
       <span
         v-else-if="state === 'warning'"
-        class="na-select__helper na-select__helper_warning"
+        class="na-select__message na-select__message_warning"
       >
         <i class="bx bxs-info-circle"></i>
-        <slot name="helper-warning"></slot>
+        <slot name="message-warning"></slot>
       </span>
       <span
         v-else-if="state === 'danger'"
-        class="na-select__helper na-select__helper_danger"
+        class="na-select__message na-select__message_danger"
       >
         <i class="bx bxs-x-circle"></i>
-        <slot name="helper-danger"></slot>
+        <slot name="message-danger"></slot>
       </span>
-      <span v-else class="na-select__helper">
-        <slot name="helper-default"></slot>
+      <span v-else class="na-select__message">
+        <slot name="message-default"></slot>
       </span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
-import NaSelectList from "./na-select-list.vue";
+import { defineComponent, onMounted, ref, getCurrentInstance } from "vue";
 
 export default defineComponent({
   name: "NaSelect",
   emits: ["unfocus"],
-  components: { NaSelectList },
   props: {
     state: {
       type: String,
@@ -95,15 +110,11 @@ export default defineComponent({
       type: String,
       default: null,
     },
-    list: {
+    native: {
       type: Boolean,
       default: false,
     },
     filter: {
-      type: Boolean,
-      default: false,
-    },
-    multiselect: {
       type: Boolean,
       default: false,
     },
@@ -130,8 +141,25 @@ export default defineComponent({
     const selectLabel = ref<HTMLElement>();
     const icon = ref<HTMLElement>();
     const selectList = ref<HTMLElement>();
+    const message = ref<HTMLElement>();
     const focused = ref(false);
-    const paddingRight = ref(10);
+
+    let paddingRight = 10;
+
+    const id = "_na-component-" + getCurrentInstance()?.uid;
+
+    const classes = [
+      "na-select",
+      `na-select_state_${props.state}`,
+      { "na-select_native": props.native },
+      { "na-select_filter": props.filter },
+    ];
+
+    const listStyles = ref({
+      "--max-size": props.size,
+      "--message-height": 0 + "px",
+      "--padding-right": paddingRight + "px",
+    });
 
     const displayLabel = props.labelPlaceholder
       ? ref(props.labelPlaceholder)
@@ -144,49 +172,74 @@ export default defineComponent({
     let currentButton = -1;
 
     onMounted(() => {
-      if (props.list) {
+      const messageHeight = message.value?.offsetHeight;
+      listStyles.value["--message-height"] = messageHeight + "px";
+
+      if (!props.native) {
         const buttons = selectList.value?.querySelectorAll("button");
-        console.log(buttons);
         const buttonsArray = Array.prototype.slice.call(buttons);
 
-        if (props.size >= buttonsArray.length || !props.size) {
-          paddingRight.value = 10;
+        if (!props.size || props.size >= buttonsArray.length) {
+          paddingRight = 10;
         } else {
-          paddingRight.value = 5;
+          paddingRight = 15;
         }
+
+        listStyles.value["--padding-right"] = paddingRight + "px";
 
         let firstButton = 0;
         let lastButton = buttonsArray.length - 1;
 
         focusButton = (ev: KeyboardEvent) => {
+          const nextButton = () => {
+            currentButton =
+              currentButton === lastButton ? firstButton : currentButton + 1;
+
+            let disabled = buttonsArray[currentButton].hasAttribute("disabled");
+            if (disabled) nextButton();
+            buttonsArray[currentButton].focus();
+          };
+
+          const prevButton = () => {
+            currentButton =
+              currentButton === firstButton || currentButton === -1
+                ? lastButton
+                : currentButton - 1;
+
+            let disabled = buttonsArray[currentButton].hasAttribute("disabled");
+            if (disabled) prevButton();
+            buttonsArray[currentButton].focus();
+          };
+
           if (currentButton === lastButton && ev.key === "Tab") {
             currentButton = -1;
             blur();
             return;
           }
+
+          if (ev.key === "Enter" && currentButton !== -1) {
+            currentButton = -1;
+            blur();
+            return;
+          }
+
           if (ev.key === "ArrowDown" || ev.key === "Tab") {
             ev.preventDefault();
-            if (currentButton === lastButton) {
-              currentButton = firstButton;
-            } else {
-              currentButton++;
-            }
-            buttonsArray[currentButton].focus();
-          } else if (ev.key === "ArrowUp") {
-            ev.preventDefault();
-            if (currentButton === firstButton || currentButton === -1) {
-              currentButton = lastButton;
-            } else {
-              currentButton--;
-            }
-            buttonsArray[currentButton].focus();
-          } else {
-            ev.stopPropagation();
-            focus();
+            nextButton();
+            return;
           }
+
+          if (ev.key === "ArrowUp") {
+            ev.preventDefault();
+            prevButton();
+            return;
+          }
+
+          ev.stopPropagation();
+          focus();
         };
       } else {
-        if (!props.labelPlaceholder)
+        if (!props.labelPlaceholder && !props.filter)
           root.value?.style.setProperty(
             "--placeholder",
             `"${props.placeholder}"`
@@ -208,13 +261,13 @@ export default defineComponent({
 
     const focus = (): void => {
       focused.value = true;
-
-      document.addEventListener("click", clickOut);
-
       currentButton = -1;
-      document.addEventListener("keydown", focusButton);
 
       input.value?.focus();
+
+      document.addEventListener("keydown", focusButton);
+      document.addEventListener("click", clickOut);
+
       root.value?.classList.add("na-select_focused");
 
       if (!props.labelPlaceholder) return;
@@ -224,14 +277,14 @@ export default defineComponent({
 
     const blur = (): void => {
       focused.value = false;
+      currentButton = -1;
+
+      input.value?.blur();
 
       document.removeEventListener("keydown", focusButton);
       document.removeEventListener("click", clickOut);
 
       root.value?.classList.remove("na-select_focused");
-
-      input.value?.blur();
-      currentButton = -1;
 
       if (!props.labelPlaceholder || input.value?.value) return;
 
@@ -250,6 +303,8 @@ export default defineComponent({
     };
 
     return {
+      id,
+      classes,
       displayLabel,
       focus,
       blur,
@@ -261,24 +316,22 @@ export default defineComponent({
       selectList,
       focused,
       paddingRight,
+      message,
+      listStyles,
     };
   },
 });
 </script>
 
-<style lang="scss">
-.na-select__list__container {
-  position: relative;
-  top: 8px;
-  height: 0;
+<style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.1s ease;
+}
 
-  .slide-fade-enter-active {
-    transition: all 0.3s ease;
-  }
-  .slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active до версии 2.1.8 */ {
-    transform: translateX(10px);
-    opacity: 0;
-  }
+.fade-enter-from,
+.fade-leave-to {
+  top: calc(100% - var(--message-height) - 5px);
+  opacity: 0;
 }
 </style>
