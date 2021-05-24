@@ -53,8 +53,8 @@
         class="na-select__input"
         :value="value"
         :placeholder="!labelPlaceholder ? placeholder : ''"
-        @focus="focus"
         :readonly="!filter"
+        @focus="focus"
       />
       <transition name="fade">
         <div
@@ -63,7 +63,9 @@
           v-show="focused"
           :style="listStyles"
         >
-          <slot></slot>
+          <div ref="listContainer" class="na-select__list__container">
+            <slot></slot>
+          </div>
         </div>
       </transition>
     </template>
@@ -104,36 +106,36 @@ export default defineComponent({
   props: {
     state: {
       type: String,
-      default: "default",
+      default: "default"
     },
     value: {
       type: String,
-      default: null,
+      default: null
     },
     native: {
       type: Boolean,
-      default: false,
+      default: false
     },
     filter: {
       type: Boolean,
-      default: false,
+      default: false
     },
     label: {
       type: String,
-      default: null,
+      default: null
     },
     placeholder: {
       type: String,
-      default: null,
+      default: null
     },
     labelPlaceholder: {
       type: String,
-      default: null,
+      default: null
     },
     size: {
       type: Number,
-      default: null,
-    },
+      default: null
+    }
   },
   setup(props) {
     const root = ref<HTMLElement>();
@@ -144,21 +146,18 @@ export default defineComponent({
     const message = ref<HTMLElement>();
     const focused = ref(false);
 
-    let paddingRight = 10;
-
     const id = "_na-component-" + getCurrentInstance()?.uid;
 
     const classes = [
       "na-select",
       `na-select_state_${props.state}`,
       { "na-select_native": props.native },
-      { "na-select_filter": props.filter },
+      { "na-select_filter": props.filter }
     ];
 
     const listStyles = ref({
       "--max-size": props.size,
-      "--message-height": 0 + "px",
-      "--padding-right": paddingRight + "px",
+      "--message-height": 0 + "px"
     });
 
     const displayLabel = props.labelPlaceholder
@@ -176,27 +175,33 @@ export default defineComponent({
       listStyles.value["--message-height"] = messageHeight + "px";
 
       if (!props.native) {
-        const buttons = selectList.value?.querySelectorAll("button");
-        const buttonsArray = Array.prototype.slice.call(buttons);
-
-        if (!props.size || props.size >= buttonsArray.length) {
-          paddingRight = 10;
-        } else {
-          paddingRight = 15;
-        }
-
-        listStyles.value["--padding-right"] = paddingRight + "px";
+        let buttons = selectList.value?.querySelectorAll("button");
+        let buttonsArray = Array.prototype.slice.call(buttons);
 
         let firstButton = 0;
         let lastButton = buttonsArray.length - 1;
+
+        const reset = () => {
+          buttons = selectList.value?.querySelectorAll("button");
+          if (buttons) buttonsArray = Array.prototype.slice.call(buttons);
+
+          firstButton = 0;
+          lastButton = buttonsArray?.length - 1;
+        };
 
         focusButton = (ev: KeyboardEvent) => {
           const nextButton = () => {
             currentButton =
               currentButton === lastButton ? firstButton : currentButton + 1;
 
-            let disabled = buttonsArray[currentButton].hasAttribute("disabled");
-            if (disabled) nextButton();
+            const disabled = buttonsArray[currentButton].classList.contains(
+              "na-option_disabled"
+            );
+
+            const displayed = buttonsArray[currentButton].classList.contains(
+              "na-option_displayed"
+            );
+            if (disabled || !displayed) nextButton();
             buttonsArray[currentButton].focus();
           };
 
@@ -206,8 +211,14 @@ export default defineComponent({
                 ? lastButton
                 : currentButton - 1;
 
-            let disabled = buttonsArray[currentButton].hasAttribute("disabled");
-            if (disabled) prevButton();
+            let disabled = buttonsArray[currentButton].classList.contains(
+              "na-option_disabled"
+            );
+
+            const displayed = buttonsArray[currentButton].classList.contains(
+              "na-option_displayed"
+            );
+            if (disabled || !displayed) prevButton();
             buttonsArray[currentButton].focus();
           };
 
@@ -237,6 +248,8 @@ export default defineComponent({
 
           ev.stopPropagation();
           focus();
+
+          setTimeout(() => reset());
         };
       } else {
         if (!props.labelPlaceholder && !props.filter)
@@ -247,12 +260,15 @@ export default defineComponent({
       }
     });
 
-    const clickOut = (e: Event) => {
-      if (e.target === root.value) return;
+    const clickOut = (e: Event): void => {
+      if (e.target instanceof HTMLElement) {
+        if (e.target.classList.contains("na-select__list__container")) return;
+        if (e.target === root.value) return;
 
-      if (root.value?.children) {
-        for (let child of root.value.children) {
-          if (child && e.target === child) return;
+        if (root.value?.children) {
+          for (let child of root.value.children) {
+            if (child && e.target === child) return;
+          }
         }
       }
 
@@ -315,11 +331,10 @@ export default defineComponent({
       icon,
       selectList,
       focused,
-      paddingRight,
       message,
-      listStyles,
+      listStyles
     };
-  },
+  }
 });
 </script>
 
@@ -327,6 +342,7 @@ export default defineComponent({
 .fade-enter-active,
 .fade-leave-active {
   transition: 0.1s ease;
+  top: calc(100% - var(--message-height) + 5px);
 }
 
 .fade-enter-from,

@@ -66,6 +66,9 @@
   }
 
   &_focused {
+    .na-select__message {
+      opacity: 0;
+    }
     & .na-select__label {
       color: var(--color-primary);
     }
@@ -164,8 +167,9 @@
     z-index: 100;
     overflow-y: auto;
 
-    padding: var(--padding);
+    padding: 0;
     padding-bottom: 0;
+    // min-height: calc(var(--option-height) + var(--padding) * 2);
 
     border-radius: 12px;
     background: white;
@@ -175,10 +179,14 @@
         var(--margin-bottom) + 2 * var(--padding)
     );
 
+    &__container {
+      padding: 10px 10px 7px;
+    }
+
     .na-option {
       margin: 0;
       margin-bottom: var(--margin-bottom);
-      padding: 0 13px;
+      padding: 0 18px 0 13px;
 
       min-width: 100%;
       max-width: 100%;
@@ -198,14 +206,12 @@
       align-items: center;
       justify-content: space-between;
 
+      transition: background 0.1s, box-shadow 0.1s;
+
       cursor: pointer;
 
       i {
         font-size: 20px;
-      }
-
-      &:nth-last-child(1) {
-        margin-bottom: 10px;
       }
 
       &__left-side {
@@ -258,7 +264,7 @@
         }
       }
 
-      &:not([disabled]):hover {
+      &:not(&_disabled):hover {
         color: var(--color-primary);
 
         .na-option__left-side {
@@ -266,20 +272,20 @@
         }
       }
 
-      &:focus {
+      &:not(&_disabled):focus {
         outline: none;
         box-shadow: inset -4px 0px 0px var(--color-primary);
         border: 1px solid var(--color-primary);
         color: var(--color-primary);
 
-        padding: 0 12px;
+        padding: 0 17px 0 12px;
 
         .na-option__left-side {
           left: 10px;
         }
       }
 
-      &_active:not([disabled]) {
+      &_active:not(&_disabled) {
         box-shadow: inset -5px 0px 0px var(--color-primary);
         color: var(--color-primary);
         background: var(--color-primary-transparent-light);
@@ -289,7 +295,7 @@
         }
       }
 
-      &[disabled] {
+      &_disabled {
         opacity: 0.2;
         cursor: not-allowed;
       }
