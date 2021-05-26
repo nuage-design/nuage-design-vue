@@ -11,12 +11,13 @@
         { 'na-option_disabled': disabled },
         { 'na-option_displayed': show }
       ]"
+      :style="styles"
       @keydown.enter="activate"
       @click="activate"
     >
       <span class="na-option__left-side">
         <slot name="left-side"></slot>
-        <span class="na-option__left-side__text"
+        <span ref="text" class="na-option__left-side__text"
           ><slot>{{ value }}</slot></span
         >
       </span>
@@ -33,7 +34,15 @@
 
 <script lang="ts">
 import { Emitter } from "mitt";
-import { onMounted, ref, defineComponent, onUnmounted, inject } from "vue";
+import {
+  onMounted,
+  ref,
+  defineComponent,
+  onUnmounted,
+  inject,
+  nextTick,
+  getCurrentInstance
+} from "vue";
 
 export default defineComponent({
   name: "NaOption",
@@ -52,8 +61,11 @@ export default defineComponent({
     const native = ref(false);
     const show = ref(true);
     const selected = ref(false);
+    const text = ref<HTMLElement>();
 
     const title = ref(props.value);
+
+    const _uid = getCurrentInstance()?.uid;
 
     const emitter = inject<Emitter>("emitter")!;
 
@@ -61,13 +73,29 @@ export default defineComponent({
 
     const activate = () => {
       if (!props.disabled) {
-        emitter.emit("activate", props.value);
+        emitter.emit("activate", _uid);
       }
     };
 
+    const styles = ref({
+      "--padding-right": "38px"
+    });
+
     let filter = () => {};
 
+    nextTick(() => {
+      emitter.emit("add-item", {
+        id: _uid,
+        title: title.value,
+        value: props.value,
+        selected: selected
+      });
+    });
+
     onMounted(() => {
+      if (slots["default"]) title.value = text.value?.innerText!;
+      if (slots["right-side"]) styles.value["--padding-right"] = "18px";
+
       const parentElement = option.value?.parentElement;
       const input = parentElement?.parentElement?.previousSibling;
 
@@ -82,10 +110,10 @@ export default defineComponent({
         input.classList.contains("na-select__input_filter")
       ) {
         filter = () => {
-          const optionValue = option.value?.innerText.toLowerCase();
+          const titleValue = title.value?.toLowerCase();
           const inputValue = input.value.toLowerCase();
 
-          show.value = optionValue?.indexOf(inputValue) !== -1;
+          show.value = titleValue?.indexOf(inputValue) !== -1;
         };
 
         input?.addEventListener("input", filter);
@@ -109,7 +137,17 @@ export default defineComponent({
         input?.removeEventListener("focus", filter);
       }
     });
-    return { activate, option, hasRightSlot, native, show, selected, title };
+    return {
+      activate,
+      option,
+      hasRightSlot,
+      native,
+      show,
+      selected,
+      title,
+      text,
+      styles
+    };
   }
 });
 </script>

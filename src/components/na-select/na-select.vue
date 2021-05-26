@@ -18,6 +18,7 @@
         <input
           ref="input"
           class="na-select__input"
+          v-model.lazy="inputValue"
           :placeholder="!labelPlaceholder ? placeholder : ''"
           :list="id"
           @focus="focus"
@@ -50,6 +51,7 @@
       <input
         ref="input"
         class="na-select__input"
+        :value="inputValue"
         :class="{ 'na-select__input_filter': filter }"
         :placeholder="!labelPlaceholder ? placeholder : ''"
         :readonly="!filter"
@@ -110,14 +112,20 @@ import {
   ref,
   getCurrentInstance,
   provide,
-  nextTick
+  nextTick,
+  Ref
 } from "vue";
 
 import mitt from "mitt";
 
 export default defineComponent({
   name: "NaSelect",
+  emits: ["update:modelValue"],
   props: {
+    modelValue: {
+      type: String,
+      default: null
+    },
     state: {
       type: String,
       default: "default"
@@ -147,7 +155,7 @@ export default defineComponent({
       default: null
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const root = ref<HTMLElement>();
     const input = ref<HTMLInputElement>();
     const selectLabel = ref<HTMLElement>();
@@ -168,7 +176,19 @@ export default defineComponent({
       { "na-select_filter": props.filter }
     ];
 
+    const inputValue = ref("");
+
     const noData = ref(false);
+
+    interface Option {
+      id?: number;
+      title?: string;
+      value?: string;
+      selected?: Ref;
+    }
+
+    let prevOption: Option = {};
+    const options: Option[] = [];
 
     const listStyles = ref({
       "--max-size": props.size,
@@ -186,8 +206,17 @@ export default defineComponent({
     let currentButton = -1;
 
     nextTick(() => {
-      emitter.on("activate", value => {
-        console.log(value);
+      emitter.on("add-item", option => options.push(option));
+
+      emitter.on("activate", id => {
+        const currentOption = options.find(option => option.id === id)!;
+        if (currentOption !== prevOption) {
+          if (prevOption.selected) prevOption.selected.value = false;
+          currentOption.selected!.value = true;
+          inputValue.value = currentOption.title!.trim();
+          emit("update:modelValue", currentOption.value!);
+          prevOption = currentOption;
+        }
       });
     });
 
@@ -371,7 +400,8 @@ export default defineComponent({
       focused,
       message,
       listStyles,
-      noData
+      noData,
+      inputValue
     };
   }
 });

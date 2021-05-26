@@ -20,11 +20,6 @@ export default {
 
 const Template = (args) => ({
   components: { NaSelect, NaOption, NaBadge },
-  data() {
-    return {
-      text: "dddsss",
-    };
-  },
   setup() {
     const value = ref("");
     const items = ref([
@@ -38,6 +33,7 @@ const Template = (args) => ({
     return { args, items, value };
   },
   template: `
+  {{ value }}
   <na-select v-bind='args' v-model="value" style="width: 200px">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
@@ -49,6 +45,9 @@ const Template = (args) => ({
         <i :class='item.icon'/>
       </template>
       {{ item.value }} (select 1)
+      <template v-slot:right-side>
+        <i :class='item.icon'/>
+      </template>
     </na-option>
   </na-select>
   <na-select v-bind='args' v-model="value" style="width: 200px">

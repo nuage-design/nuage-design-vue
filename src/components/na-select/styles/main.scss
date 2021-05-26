@@ -181,6 +181,7 @@
 
     &__container {
       padding: 10px 10px 7px;
+      transition: 0.1s;
     }
 
     &__no-data {
@@ -202,9 +203,10 @@
   }
 
   .na-option {
+    --padding-right: 38px;
     margin: 0;
     margin-bottom: var(--margin-bottom);
-    padding: 0 33px 0 13px;
+    padding: 0 var(--padding-right) 0 13px;
 
     min-width: 100%;
     max-width: 100%;
@@ -296,7 +298,7 @@
       border: 1px solid var(--color-primary);
       color: var(--color-primary);
 
-      padding: 0 32px 0 12px;
+      padding: 0 calc(var(--padding-right) - 1px) 0 12px;
 
       .na-option__left-side {
         left: 10px;
