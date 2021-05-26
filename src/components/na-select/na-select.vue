@@ -18,7 +18,6 @@
         <input
           ref="input"
           class="na-select__input"
-          :value="value"
           :placeholder="!labelPlaceholder ? placeholder : ''"
           :list="id"
           @focus="focus"
@@ -51,7 +50,7 @@
       <input
         ref="input"
         class="na-select__input"
-        :value="value"
+        :class="{ 'na-select__input_filter': filter }"
         :placeholder="!labelPlaceholder ? placeholder : ''"
         :readonly="!filter"
         @focus="focus"
@@ -65,6 +64,13 @@
         >
           <div ref="listContainer" class="na-select__list__container">
             <slot></slot>
+
+            <transition name="no-data-fade">
+              <div class="na-select__list__no-data" v-show="noData">
+                <i class="bx bxs-inbox"></i>
+                No data
+              </div>
+            </transition>
           </div>
         </div>
       </transition>
@@ -98,19 +104,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, getCurrentInstance } from "vue";
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  getCurrentInstance,
+  provide,
+  nextTick
+} from "vue";
+
+import mitt from "mitt";
 
 export default defineComponent({
   name: "NaSelect",
-  emits: ["unfocus"],
   props: {
     state: {
       type: String,
       default: "default"
-    },
-    value: {
-      type: String,
-      default: null
     },
     native: {
       type: Boolean,
@@ -146,6 +156,9 @@ export default defineComponent({
     const message = ref<HTMLElement>();
     const focused = ref(false);
 
+    const emitter = mitt();
+    provide("emitter", emitter);
+
     const id = "_na-component-" + getCurrentInstance()?.uid;
 
     const classes = [
@@ -154,6 +167,8 @@ export default defineComponent({
       { "na-select_native": props.native },
       { "na-select_filter": props.filter }
     ];
+
+    const noData = ref(false);
 
     const listStyles = ref({
       "--max-size": props.size,
@@ -170,6 +185,12 @@ export default defineComponent({
     let focusButton = (ev: KeyboardEvent) => {};
     let currentButton = -1;
 
+    nextTick(() => {
+      emitter.on("activate", value => {
+        console.log(value);
+      });
+    });
+
     onMounted(() => {
       const messageHeight = message.value?.offsetHeight;
       listStyles.value["--message-height"] = messageHeight + "px";
@@ -177,6 +198,23 @@ export default defineComponent({
       if (!props.native) {
         let buttons = selectList.value?.querySelectorAll("button");
         let buttonsArray = Array.prototype.slice.call(buttons);
+
+        noData.value = true;
+        buttonsArray.forEach(button => {
+          if (button.classList.contains("na-option_displayed")) {
+            noData.value = false;
+          }
+        });
+
+        input.value?.addEventListener("input", () => {
+          noData.value = true;
+          buttonsArray.forEach(button => {
+            if (button.classList.contains("na-option_displayed")) {
+              noData.value = false;
+              return;
+            }
+          });
+        });
 
         let firstButton = 0;
         let lastButton = buttonsArray.length - 1;
@@ -332,7 +370,8 @@ export default defineComponent({
       selectList,
       focused,
       message,
-      listStyles
+      listStyles,
+      noData
     };
   }
 });
@@ -349,5 +388,26 @@ export default defineComponent({
 .fade-leave-to {
   top: calc(100% - var(--message-height) - 5px);
   opacity: 0;
+}
+
+.no-data-fade-enter-active,
+.no-data-fade-leave-active {
+  transition: 0.2s ease-in;
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 0;
+  overflow-y: hidden;
+}
+
+.no-data-fade-enter-from,
+.no-data-fade-leave-to {
+  transition: 0.1s ease-out;
+  min-height: 0;
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  opacity: 0;
+  overflow-y: hidden;
 }
 </style>

@@ -1,4 +1,4 @@
-<template>
+<template >
   <transition name="fade">
     <button
       v-if="!native"
@@ -7,7 +7,7 @@
       class="na-option"
       :value="value"
       :class="[
-        { 'na-option_active': active },
+        { 'na-option_selected': selected },
         { 'na-option_disabled': disabled },
         { 'na-option_displayed': show }
       ]"
@@ -16,9 +16,9 @@
     >
       <span class="na-option__left-side">
         <slot name="left-side"></slot>
-        <span>
-          <slot>{{ value }}</slot>
-        </span>
+        <span class="na-option__left-side__text"
+          ><slot>{{ value }}</slot></span
+        >
       </span>
       <span v-if="hasRightSlot()" class="na-option__right-side">
         <slot name="right-side"></slot>
@@ -32,16 +32,12 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref, defineComponent, onUnmounted } from "vue";
+import { Emitter } from "mitt";
+import { onMounted, ref, defineComponent, onUnmounted, inject } from "vue";
 
 export default defineComponent({
   name: "NaOption",
-  emits: ["activate"],
   props: {
-    active: {
-      type: Boolean,
-      default: false
-    },
     value: {
       type: String,
       default: null
@@ -51,15 +47,22 @@ export default defineComponent({
       default: false
     }
   },
-  setup(props, { slots, emit }) {
+  setup(props, { slots }) {
     const option = ref<HTMLButtonElement>();
     const native = ref(false);
     const show = ref(true);
+    const selected = ref(false);
+
+    const title = ref(props.value);
+
+    const emitter = inject<Emitter>("emitter")!;
 
     const hasRightSlot = () => slots["right-side"];
 
     const activate = () => {
-      if (!props.disabled) emit("activate");
+      if (!props.disabled) {
+        emitter.emit("activate", props.value);
+      }
     };
 
     let filter = () => {};
@@ -74,17 +77,20 @@ export default defineComponent({
         });
       }
 
-      filter = () => {
-        if (input instanceof HTMLInputElement) {
+      if (
+        input instanceof HTMLInputElement &&
+        input.classList.contains("na-select__input_filter")
+      ) {
+        filter = () => {
           const optionValue = option.value?.innerText.toLowerCase();
           const inputValue = input.value.toLowerCase();
 
           show.value = optionValue?.indexOf(inputValue) !== -1;
-        }
-      };
+        };
 
-      input?.addEventListener("input", filter);
-      input?.addEventListener("focus", filter);
+        input?.addEventListener("input", filter);
+        input?.addEventListener("focus", filter);
+      }
 
       native.value =
         parentElement?.tagName === "SELECT" ||
@@ -95,10 +101,15 @@ export default defineComponent({
       const parentElement = option.value?.parentElement;
       const input = parentElement?.parentElement?.previousSibling;
 
-      input?.removeEventListener("input", filter);
-      input?.removeEventListener("focus", filter);
+      if (
+        input instanceof HTMLInputElement &&
+        input.classList.contains("na-select__input_filter")
+      ) {
+        input?.removeEventListener("input", filter);
+        input?.removeEventListener("focus", filter);
+      }
     });
-    return { activate, option, hasRightSlot, native, show };
+    return { activate, option, hasRightSlot, native, show, selected, title };
   }
 });
 </script>
