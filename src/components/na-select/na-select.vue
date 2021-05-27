@@ -18,9 +18,14 @@
         <input
           ref="input"
           class="na-select__input"
-          v-model.lazy="inputValue"
+          onchange="this.blur();"
           :placeholder="!labelPlaceholder ? placeholder : ''"
           :list="id"
+          :value="modelValue"
+          @change="
+            $emit('update:modelValue', $event.target.value);
+            setPlaceholder();
+          "
           @focus="focus"
           @blur="blur"
         />
@@ -32,9 +37,13 @@
         <select
           ref="input"
           class="na-select__input"
+          :value="modelValue"
+          @change="
+            $emit('update:modelValue', $event.target.value);
+            setPlaceholder();
+          "
           @focus="focus"
           @blur="blur"
-          @change="setPlaceholder"
         >
           <!-- placeholder -->
           <option
@@ -176,7 +185,7 @@ export default defineComponent({
       { "na-select_filter": props.filter }
     ];
 
-    const inputValue = ref("");
+    const inputValue = ref(props.modelValue);
 
     const noData = ref(false);
 
@@ -375,7 +384,7 @@ export default defineComponent({
     };
 
     const setPlaceholder = (): void => {
-      if (input.value?.value) {
+      if (input.value?.value || props.modelValue) {
         root.value?.style.setProperty("--placeholder", "");
       } else if (!props.labelPlaceholder) {
         root.value?.style.setProperty(
