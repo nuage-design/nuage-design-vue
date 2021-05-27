@@ -1,13 +1,8 @@
 <template>
   <div ref="root" @click="focus" :class="classes">
     <!-- label -->
-    <span
-      v-if="displayLabel"
-      ref="selectLabel"
-      class="na-select__label"
-      :class="{ 'na-select__label_placeholder': labelPlaceholder }"
-    >
-      {{ displayLabel }}
+    <span v-if="label" ref="selectLabel" class="na-select__label">
+      {{ label }}
     </span>
 
     <!-- chevron -->
@@ -19,7 +14,7 @@
           ref="input"
           class="na-select__input"
           onchange="this.blur();"
-          :placeholder="!labelPlaceholder ? placeholder : ''"
+          :placeholder="placeholder"
           :list="id"
           :value="modelValue"
           @change="
@@ -47,10 +42,11 @@
         >
           <!-- placeholder -->
           <option
-            v-if="placeholder || labelPlaceholder"
+            v-if="placeholder"
             class="na-select__input__placeholder"
             value=""
-          ></option>
+            >{{ placeholder }}</option
+          >
           <slot></slot>
         </select>
       </template>
@@ -62,7 +58,7 @@
         class="na-select__input"
         :value="inputValue"
         :class="{ 'na-select__input_filter': filter }"
-        :placeholder="!labelPlaceholder ? placeholder : ''"
+        :placeholder="placeholder"
         :readonly="!filter"
         @focus="focus"
       />
@@ -155,10 +151,6 @@ export default defineComponent({
       type: String,
       default: null
     },
-    labelPlaceholder: {
-      type: String,
-      default: null
-    },
     size: {
       type: Number,
       default: null
@@ -203,13 +195,6 @@ export default defineComponent({
       "--max-size": props.size,
       "--message-height": 0 + "px"
     });
-
-    const displayLabel = props.labelPlaceholder
-      ? ref(props.labelPlaceholder)
-      : props.label
-      ? ref(props.label)
-      : null;
-
     // eslint-disable-next-line no-unused-vars
     let focusButton = (ev: KeyboardEvent) => {};
     let currentButton = -1;
@@ -328,7 +313,7 @@ export default defineComponent({
           setTimeout(() => reset());
         };
       } else {
-        if (!props.labelPlaceholder && !props.filter)
+        if (!props.filter && !props.native)
           root.value?.style.setProperty(
             "--placeholder",
             `"${props.placeholder}"`
@@ -362,7 +347,12 @@ export default defineComponent({
       input.value?.click();
       input.value?.focus();
 
-      if (props.modelValue && input.value && input.value.value) {
+      if (
+        props.modelValue &&
+        input.value &&
+        input.value.value &&
+        !props.native
+      ) {
         shadowValue = inputValue.value;
         input.value.value = "";
       }
@@ -371,20 +361,16 @@ export default defineComponent({
       document.addEventListener("click", clickOut);
 
       root.value?.classList.add("na-select_focused");
-
-      if (!props.labelPlaceholder) return;
-
-      selectLabel.value?.classList.remove("na-select__label_placeholder");
     };
 
     const blur = (): void => {
       focused.value = false;
       currentButton = -1;
 
-      input.value!.value = shadowValue;
+      if (!props.native) input.value!.value = shadowValue;
 
       input.value?.blur();
-      if (input.value && shadowValue) {
+      if (input.value && shadowValue && !props.native) {
         input.value.value = inputValue.value;
       }
 
@@ -394,16 +380,12 @@ export default defineComponent({
       document.removeEventListener("click", clickOut);
 
       root.value?.classList.remove("na-select_focused");
-
-      if (!props.labelPlaceholder || input.value?.value) return;
-
-      selectLabel.value?.classList.add("na-select__label_placeholder");
     };
 
     const setPlaceholder = (): void => {
-      if (input.value?.value || props.modelValue) {
+      if (input.value?.value || props.modelValue || props.native) {
         root.value?.style.setProperty("--placeholder", "");
-      } else if (!props.labelPlaceholder) {
+      } else {
         root.value?.style.setProperty(
           "--placeholder",
           `"${props.placeholder}"`
@@ -414,7 +396,6 @@ export default defineComponent({
     return {
       id,
       classes,
-      displayLabel,
       focus,
       blur,
       setPlaceholder,
