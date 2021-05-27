@@ -33,7 +33,7 @@ const Template = (args) => ({
     return { args, items, value };
   },
   template: `
-  {{ value }}
+  <span>Value: {{ value }}</span>
   <na-select v-bind='args' v-model="value" style="width: 200px">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>

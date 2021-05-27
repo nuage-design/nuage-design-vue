@@ -166,7 +166,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const root = ref<HTMLElement>();
-    const input = ref<HTMLInputElement>();
+    const input = ref<HTMLInputElement | HTMLSelectElement>();
     const selectLabel = ref<HTMLElement>();
     const icon = ref<HTMLElement>();
     const selectList = ref<HTMLElement>();
@@ -323,7 +323,7 @@ export default defineComponent({
           }
 
           ev.stopPropagation();
-          focus();
+          if (currentButton !== -1) focus();
 
           setTimeout(() => reset());
         };
@@ -351,11 +351,21 @@ export default defineComponent({
       blur();
     };
 
+    let shadowValue = "";
+
     const focus = (): void => {
       focused.value = true;
       currentButton = -1;
 
+      console.log("focus");
+
+      input.value?.click();
       input.value?.focus();
+
+      if (props.modelValue && input.value && input.value.value) {
+        shadowValue = inputValue.value;
+        input.value.value = "";
+      }
 
       document.addEventListener("keydown", focusButton);
       document.addEventListener("click", clickOut);
@@ -371,7 +381,14 @@ export default defineComponent({
       focused.value = false;
       currentButton = -1;
 
+      input.value!.value = shadowValue;
+
       input.value?.blur();
+      if (input.value && shadowValue) {
+        input.value.value = inputValue.value;
+      }
+
+      noData.value = false;
 
       document.removeEventListener("keydown", focusButton);
       document.removeEventListener("click", clickOut);
