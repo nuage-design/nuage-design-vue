@@ -9,6 +9,7 @@
 
   /* transparent */
   --color-primary-transparent: #5c5cfd4d;
+  --color-primary-transparent-light: #5d5dfd1a;
   --color-success-transparent: #4DC74B4d;
   --color-info-transparent   : #0AA5FF4d;
   --color-warning-transparent: #FF9A0C4d;
@@ -33,7 +34,6 @@
   --color-success-200: #B6E8B5;
   --color-success-300: #93DD92;
   --color-success-400: #71D26F;
-  --color-success-500: #4DC74B;
   --color-success-500: #4DC74B;
   --color-success-600: #3AB338;
   --color-success-700: #30942E;

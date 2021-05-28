@@ -1,13 +1,15 @@
 .na-select {
   --height: 33px;
   --padding: 13px;
+  --padding-right: 10px;
   --font-size: 14px;
   --label-margin-bottom: 7px;
   --label-font-size: 13px;
+  --message-height: 0px;
 
   display: flex;
   flex-direction: column;
-  width: max-content;
+  margin: 15px 10px 10px;
 
   position: relative;
 
@@ -18,7 +20,17 @@
     size: var(--font-size);
   }
 
-  select {
+  &_native.na-select_filter {
+    .na-select__input {
+      padding-right: 13px;
+      &__chevron {
+        display: none;
+      }
+    }
+  }
+
+  select,
+  input[readonly] {
     cursor: pointer;
   }
 
@@ -40,43 +52,79 @@
     pointer-events: none;
   }
 
-  & > i {
+  &__input__chevron {
+    height: 0;
     --font-size: 20px;
     color: var(--color-text-secondary);
     font-size: var(--font-size);
-    position: absolute;
-    right: calc(var(--padding) + 1px);
-    top: calc(var(--font-size) + (var(--height) - var(--font-size)) / 2);
+    position: relative;
     pointer-events: none;
-    transition: 0.1s;
+    text-align: right;
+
+    top: calc((var(--height) - var(--font-size)) / 2);
+    left: -13px;
+  }
+
+  &.na-select_state {
+    &_success .na-select {
+      &__input {
+        border-color: var(--color-success);
+      }
+      &__message {
+        color: var(--color-success);
+      }
+    }
+    &_warning .na-select {
+      &__input {
+        border-color: var(--color-warning);
+      }
+      &__message {
+        color: var(--color-warning);
+      }
+    }
+    &_danger .na-select {
+      &__input {
+        border-color: var(--color-danger);
+      }
+      &__message {
+        color: var(--color-danger);
+      }
+    }
   }
 
   &_focused {
-    & > i {
-      color: var(--color-primary);
-      transform: rotate(180deg);
-    }
+    & .na-select {
+      &__label {
+        color: var(--color-primary);
+      }
 
-    & .na-select__label {
-      color: var(--color-primary);
+      &__input {
+        box-shadow: 0 0 0 5px var(--color-primary-transparent);
+        border-color: var(--color-primary) !important;
+
+        &__chevron {
+          color: var(--color-primary);
+        }
+      }
     }
   }
 
   &__input {
     box-sizing: border-box;
-    min-width: 10px;
     height: var(--height);
     border-radius: calc(var(--height) / 3);
     background: none;
     appearance: none;
     -webkit-appearance: none;
 
-    &::placeholder {
-      color: var(--color-text-secondary);
-    }
+    line-height: 100%;
+    padding-left: var(--padding);
+    padding-right: calc(var(--padding) + 1px + 20px + 8px);
+    border: 1px solid var(--color-dark-100);
 
-    &__placeholder {
-      display: none;
+    transition: 0.1s;
+
+    &::placeholder {
       color: var(--color-text-secondary);
     }
 
@@ -87,78 +135,212 @@
       size: var(--font-size);
     }
 
-    line-height: 100%;
-    padding-left: var(--padding);
-    padding-right: calc(var(--padding) + 1px + 20px + 8px);
-    border: 1px solid var(--color-dark-100);
-
     &:focus {
       outline: none;
       box-shadow: 0 0 0 5px var(--color-primary-transparent);
       border-color: var(--color-primary);
-      transition: 0.1s;
     }
   }
 
   &__label {
     color: var(--color-text-regular);
-    width: max-content;
     position: relative;
     top: 0;
     left: 0;
     line-height: 13px;
+    margin-bottom: var(--label-margin-bottom);
 
-    + .na-select__input {
-      margin-top: var(--label-margin-bottom);
-    }
+    transition: 0.1s;
 
     font: {
       weight: 500;
       size: var(--label-font-size);
     }
-
-    transition: 0.1s;
-
-    &_placeholder {
-      position: relative;
-      pointer-events: none;
-      font-size: 14px;
-      line-height: 13px;
-      color: var(--color-text-secondary);
-
-      padding-left: calc(var(--padding) + 1px);
-      padding-right: calc(var(--padding) + 1px + 20px + 8px);
-
-      top: calc(
-        var(--label-margin-bottom) + var(--font-size) +
-          (var(--height) - var(--font-size)) / 2
-      );
-    }
   }
 
   &__list {
     --block-drop-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    list-style: none;
-    padding: 10px;
-    margin: 0;
+    --padding: 10px;
+    --option-height: 33px;
+    --margin-bottom: 3px;
+
+    position: absolute;
+    min-width: 100%;
+    width: max-content;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    top: calc(100% - var(--message-height) + 5px);
+    z-index: 100;
+    overflow-y: auto;
+
+    padding: 0;
+    padding-bottom: 0;
+    min-height: calc(var(--option-height) + var(--padding) * 2);
+
     border-radius: 12px;
     background: white;
     box-shadow: var(--block-drop-shadow);
-    transition: 0.1s;
-    position: relative;
-    top: 10px;
-    display: none;
+    max-height: calc(
+      (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
+        var(--margin-bottom) + 2 * var(--padding)
+    );
 
-    .na-option {
-      font-size: var(--font-size);
-      font-weight: 500;
-      color: var(--color-text-regular);
+    &__container {
+      padding: 10px 10px 7px;
+      transition: 0.1s;
+    }
+
+    &__no-data {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-secondary);
+      margin: 0;
+      margin-bottom: var(--margin-bottom);
+      padding: 0;
+      min-height: var(--option-height);
+
+      i {
+        padding-right: 8px;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .na-option {
+    --padding-right: 38px;
+    margin: 0;
+    margin-bottom: var(--margin-bottom);
+    padding: 0 var(--padding-right) 0 13px;
+
+    min-width: 100%;
+    max-width: 100%;
+    min-height: var(--option-height);
+
+    font-size: var(--font-size);
+    font-weight: 500;
+
+    color: var(--color-text-regular);
+    background: none;
+
+    border: none;
+    border-radius: 11px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    transition: background 0.1s, box-shadow 0.1s;
+
+    cursor: pointer;
+
+    i {
+      font-size: 20px;
+    }
+
+    &__left-side {
       display: flex;
       flex-direction: row;
       align-items: center;
-      padding: 0px 13px;
-      height: 33px;
-      border-radius: 11px;
+      min-width: max-content;
+
+      position: relative;
+      left: 0;
+
+      transition: 0.1s;
+
+      // space
+      & > * {
+        margin-left: 4px;
+        margin-right: 4px;
+
+        &:nth-child(1) {
+          margin-left: 0;
+        }
+
+        &:nth-last-child(1) {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &__right-side {
+      display: flex;
+      flex-direction: row;
+      align-items: right;
+      padding-left: 30px;
+      transition: 0.1s;
+
+      position: relative;
+
+      // space
+      & > * {
+        margin-left: 4px;
+        margin-right: 4px;
+
+        &:nth-child(1) {
+          margin-left: 0;
+        }
+
+        &:nth-last-child(1) {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &:not(&_disabled):hover {
+      color: var(--color-primary);
+
+      .na-option__left-side {
+        left: 10px;
+      }
+    }
+
+    &:not(&_disabled):focus {
+      outline: none;
+      box-shadow: inset -4px 0px 0px var(--color-primary);
+      border: 1px solid var(--color-primary);
+      color: var(--color-primary);
+
+      padding: 0 calc(var(--padding-right) - 1px) 0 12px;
+
+      .na-option__left-side {
+        left: 10px;
+      }
+    }
+
+    &_selected:not(&_disabled) {
+      box-shadow: inset -5px 0px 0px var(--color-primary);
+      color: var(--color-primary);
+      background: var(--color-primary-transparent-light);
+
+      .na-option__left-side {
+        left: 10px;
+      }
+    }
+
+    &_disabled {
+      opacity: 0.2;
+      cursor: not-allowed;
+    }
+  }
+
+  &__message {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    line-height: 18px;
+    margin-top: 7px;
+    opacity: 1;
+    transition: 0.1s;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+
+    > i {
+      font-size: 18px;
+      margin-right: 5px;
     }
   }
 }
