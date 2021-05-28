@@ -86,7 +86,7 @@ export default defineComponent({
     nextTick(() => {
       emitter.emit("add-item", {
         id: _uid,
-        title: title.value,
+        title: title.value.trim(),
         value: props.value,
         selected: selected
       });

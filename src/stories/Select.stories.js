@@ -10,9 +10,9 @@ export default {
   component: NaSelect,
   argTypes: {
     state: {
+      options: states,
       control: {
         type: "radio",
-        options: states,
       },
     },
   },
@@ -30,11 +30,19 @@ const Template = (args) => ({
       { icon: "bx bxl-sass", value: "SCSS" },
     ]);
 
-    return { args, items, value };
+    const options = ref([
+      { leftIcon: "bx bxl-html5", value: "HTML" },
+      { leftIcon: "bx bxl-css3", value: "CSS", disabled: true },
+      { leftIcon: "bx bxl-javascript", value: "JavaScript" },
+      { leftIcon: "bx bxl-vuejs", value: "Vue" },
+      { leftIcon: "bx bxl-sass", value: "SCSS", title: "Класс!" },
+    ]);
+
+    return { args, items, value, options };
   },
   template: `
   <span>Value: {{ value }}</span>
-  <na-select v-bind='args' v-model="value" style="width: 200px">
+  <na-select v-bind='args' v-model="value" style="width: 200px" :options="options">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
