@@ -1,7 +1,6 @@
 <template>
   <div
-    ref="root"
-    @click="focus"
+    ref="select"
     :class="[
       'na-select',
       `na-select_state_${state}`,
@@ -16,28 +15,47 @@
     </span>
 
     <!-- chevron -->
-    <i ref="icon" class="bx bxs-chevron-down na-select__input__chevron"></i>
+    <i class="bx bxs-chevron-down na-select__input__chevron"></i>
 
+    <!-- native select -->
     <template v-if="native">
+      <!-- filter -->
       <template v-if="filter">
         <input
-          ref="input"
+          ref="selectInput"
           class="na-select__input"
           onchange="this.blur();"
           :placeholder="placeholder"
-          :list="id"
+          :list="`_na-select-${uid}`"
           :value="modelValue"
-          @change="changeSelect($event.target.value)"
+          @change="selectOption($event.target.value)"
           @focus="focus"
           @blur="blur"
         />
-        <datalist :id="id">
+        <datalist :id="`na-select_filter__datalist-${uid}`">
           <slot></slot>
+          <template v-if="options">
+            <option
+              v-for="(option, index) in options"
+              :key="index"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              <template v-if="option.title">
+                {{ option.title }}
+              </template>
+              <template v-else>
+                {{ option.value }}
+              </template>
+            </option>
+          </template>
         </datalist>
       </template>
+
+      <!-- no filter -->
       <template v-else>
         <select
-          ref="input"
+          ref="selectInput"
           class="na-select__input"
           :value="modelValue"
           @change="$emit('update:modelValue', $event.target.value)"
@@ -45,27 +63,41 @@
           @blur="blur"
         >
           <!-- placeholder -->
-          <option
-            v-if="placeholder"
-            class="na-select__input__placeholder"
-            value=""
-            >{{ placeholder }}</option
-          >
+          <option v-if="placeholder" value="">
+            {{ placeholder }}
+          </option>
+
           <slot></slot>
+
+          <template v-if="options">
+            <option
+              v-for="(option, index) in options"
+              :key="index"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              <template v-if="option.title">
+                {{ option.title }}
+              </template>
+              <template v-else>
+                {{ option.value }}
+              </template>
+            </option>
+          </template>
         </select>
       </template>
     </template>
 
+    <!-- custom select -->
     <template v-else>
       <input
-        ref="input"
+        ref="selectInput"
         class="na-select__input"
         :value="inputValue"
         :class="{ 'na-select__input_filter': filter }"
         :placeholder="placeholder"
         :readonly="!filter"
         @focus="focus"
-        @mousedown="clearInput"
       />
       <transition name="fade">
         <div
@@ -83,21 +115,21 @@
                 :value="option.value"
                 :disabled="option.disabled"
               >
-                <template v-slot:left-side>
+                <template #left-side>
                   <i :class="option.leftIcon" />
                 </template>
-                <template v-if="option.title" v-slot:default>
+                <template #default v-if="option.title">
                   {{ option.title }}
                 </template>
-                <template v-slot:right-side>
+                <template #right-side>
                   <i :class="option.rightIcon" />
                 </template>
               </na-option>
             </template>
             <transition name="no-data-fade">
-              <div class="na-select__list__no-data" v-show="noData">
+              <div v-show="noData" class="na-select__list__no-data">
                 <i class="bx bxs-inbox"></i>
-                No data
+                <span>No data</span>
               </div>
             </transition>
           </div>
@@ -106,7 +138,7 @@
     </template>
 
     <!-- message -->
-    <div ref="message" @click.stop>
+    <div ref="selectMessage" @click.stop>
       <span v-if="state === 'success'" class="na-select__message">
         <i class="bx bxs-check-circle"></i>
         <slot name="message-success"></slot>
@@ -133,16 +165,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  ref,
-  getCurrentInstance,
-  provide,
-  nextTick,
-  Ref,
-  PropType
-} from "vue";
+import { Ref, defineComponent, PropType, ref, provide, onMounted } from "vue";
 
 import NaOption from "./na-option.vue";
 
@@ -156,251 +179,151 @@ interface Option {
   rightIcon: string;
 }
 
+interface RenderedOption {
+  uid: number;
+  title: string;
+  value: string;
+  selected: Ref;
+}
+
+let $_naSelectId = 0;
+
 export default defineComponent({
   name: "NaSelect",
   components: { NaOption },
-  emits: ["update:modelValue"],
   props: {
     modelValue: {
       type: String,
       default: null
     },
+
     state: {
       type: String,
       default: "default"
     },
+
     native: {
       type: Boolean,
       default: false
     },
+
     filter: {
       type: Boolean,
       default: false
     },
+
     label: {
       type: String,
       default: null
     },
+
     placeholder: {
       type: String,
       default: null
     },
+
     size: {
       type: Number,
       default: null
     },
+
     options: {
       type: Array as PropType<Option[]>,
       default: null
     }
   },
+  emits: ["update:modelValue"],
   setup(props, { emit }) {
-    const root = ref<HTMLElement>();
-    const input = ref<HTMLInputElement | HTMLSelectElement>();
+    const uid = ++$_naSelectId;
+
+    // DOM refs
+    const select = ref<HTMLElement>();
     const selectLabel = ref<HTMLElement>();
-    const icon = ref<HTMLElement>();
+    const selectInput = ref<HTMLInputElement | HTMLSelectElement>();
     const selectList = ref<HTMLElement>();
-    const message = ref<HTMLElement>();
-    const focused = ref(false);
+    const selectMessage = ref<HTMLElement>();
 
-    const emitter = mitt();
-    provide("emitter", emitter);
-
-    const id = "_na-component-" + getCurrentInstance()?.uid;
-
+    // Data
     const inputValue = ref(props.modelValue);
-    let selectedOptionTitle = "";
-
-    const noData = ref(false);
-
-    interface RenderedOption {
-      id: number;
-      title: string;
-      value: string;
-      selected: Ref;
-    }
-
-    let prevOption: RenderedOption;
-    const options: RenderedOption[] = [];
-
+    const focused = ref(false);
+    const noData = ref(true);
     const listStyles = ref({
       "--max-size": props.size,
       "--message-height": 0 + "px"
     });
 
-    let focusButton: any;
-    let currentButton = -1;
+    const renderedOptions: RenderedOption[] = [];
+    const emitter = mitt();
 
-    nextTick(() => {
-      emitter.on("add-item", option => options.push(option));
+    let allOptions: HTMLButtonElement[] = [];
+    let displayedOptions: HTMLButtonElement[] = [];
 
-      emitter.on("activate", id => {
-        const currentOption = options.find(option => option.id === id)!;
+    let selectedOptionTitle = "";
+    let prevOption: RenderedOption;
+
+    let firstOption = 0;
+    let lastOption = 0;
+    let currentOption = -1;
+
+    // Provides
+    provide("emitter", emitter);
+    provide("input", selectInput);
+    provide("native", props.native);
+    provide("filter", props.filter);
+
+    // Hooks
+    onMounted(() => {
+      if (props.native) return;
+
+      const messageHeight = selectMessage.value?.offsetHeight;
+      listStyles.value["--message-height"] = messageHeight + "px";
+
+      emitter.on("add-option", option => allOptions.push(option));
+      emitter.on("add-rendered-option", option => renderedOptions.push(option));
+      emitter.on("activate", uid => {
+        const currentOption = renderedOptions.find(
+          option => option.uid === uid
+        )!;
+
         if (currentOption !== prevOption) {
+          emit("update:modelValue", currentOption.value);
+
           if (prevOption) prevOption.selected.value = false;
           currentOption.selected.value = true;
           inputValue.value = currentOption.title;
           selectedOptionTitle = currentOption.title;
-          emit("update:modelValue", currentOption.value);
           prevOption = currentOption;
         }
-        console.log(options);
       });
+
+      reset();
     });
 
-    const changeSelect = (target: string) => {
-      const valid = options.find(option => option.value === target);
-      if (valid) emit("update:modelValue", target);
-      else if (input.value) {
-        input.value.value = "";
-        emit("update:modelValue", "");
-      }
-    };
-
-    onMounted(() => {
-      const messageHeight = message.value?.offsetHeight;
-      listStyles.value["--message-height"] = messageHeight + "px";
-
-      if (!props.native) {
-        let buttons = selectList.value?.querySelectorAll("button");
-        let buttonsArray = Array.prototype.slice.call(buttons);
-
-        noData.value = true;
-        buttonsArray.forEach(button => {
-          if (button.classList.contains("na-option_displayed")) {
-            noData.value = false;
-          }
-        });
-
-        input.value?.addEventListener("input", () => {
-          noData.value = true;
-          buttonsArray.forEach(button => {
-            if (button.classList.contains("na-option_displayed")) {
-              noData.value = false;
-              return;
-            }
-          });
-        });
-
-        let firstButton = 0;
-        let lastButton = buttonsArray.length - 1;
-
-        const reset = () => {
-          buttons = selectList.value?.querySelectorAll("button");
-          if (buttons) buttonsArray = Array.prototype.slice.call(buttons);
-
-          firstButton = 0;
-          lastButton = buttonsArray?.length - 1;
-        };
-
-        focusButton = (ev: KeyboardEvent) => {
-          const nextButton = () => {
-            currentButton =
-              currentButton === lastButton ? firstButton : currentButton + 1;
-
-            const disabled = buttonsArray[currentButton].classList.contains(
-              "na-option_disabled"
-            );
-
-            const displayed = buttonsArray[currentButton].classList.contains(
-              "na-option_displayed"
-            );
-            if (disabled || !displayed) nextButton();
-            buttonsArray[currentButton].focus();
-          };
-
-          const prevButton = () => {
-            currentButton =
-              currentButton === firstButton || currentButton === -1
-                ? lastButton
-                : currentButton - 1;
-
-            let disabled = buttonsArray[currentButton].classList.contains(
-              "na-option_disabled"
-            );
-
-            const displayed = buttonsArray[currentButton].classList.contains(
-              "na-option_displayed"
-            );
-            if (disabled || !displayed) prevButton();
-            buttonsArray[currentButton].focus();
-          };
-
-          if (currentButton === lastButton && ev.key === "Tab") {
-            currentButton = -1;
-            blur();
-            return;
-          }
-
-          if (ev.key === "Enter" && currentButton !== -1) {
-            currentButton = -1;
-            blur();
-            return;
-          }
-
-          if (ev.key === "ArrowDown" || ev.key === "Tab") {
-            ev.preventDefault();
-            nextButton();
-            return;
-          }
-
-          if (ev.key === "ArrowUp") {
-            ev.preventDefault();
-            prevButton();
-            return;
-          }
-
-          ev.stopPropagation();
-          if (currentButton !== -1) focus();
-
-          setTimeout(() => reset());
-        };
-      } else {
-        if (!props.filter && !props.native)
-          root.value?.style.setProperty(
-            "--placeholder",
-            `"${props.placeholder}"`
-          );
-      }
-    });
-
-    const clickOut = (e: Event): void => {
-      if (e.target instanceof HTMLElement) {
-        if (e.target.classList.contains("na-select__list__container")) return;
-        if (e.target === root.value) return;
-
-        if (root.value?.children) {
-          for (let child of root.value.children) {
-            if (child && e.target === child) return;
-          }
-        }
-      }
-
-      blur();
-    };
-
+    // Methods
     const focus = (): void => {
+      clearInput();
+      reset();
+
       focused.value = true;
-      currentButton = -1;
 
-      if (input.value && !props.native) {
-        input.value.focus();
+      if (selectInput.value && !props.native) {
+        selectInput.value.focus();
 
-        document.addEventListener("keydown", focusButton);
+        document.addEventListener("keydown", focusOption);
         document.addEventListener("click", clickOut);
       }
     };
 
     const blur = (): void => {
-      noData.value = false;
+      reset();
       setTimeout(() => (focused.value = false));
-      currentButton = -1;
+      currentOption = -1;
 
-      if (input.value && !props.native) {
-        input.value.blur();
+      if (selectInput.value && !props.native) {
+        selectInput.value.blur();
         inputValue.value = selectedOptionTitle;
 
-        document.removeEventListener("keydown", focusButton);
+        document.removeEventListener("keydown", focusOption);
         document.removeEventListener("click", clickOut);
       }
     };
@@ -409,22 +332,120 @@ export default defineComponent({
       inputValue.value = "";
     };
 
+    const clickOut = (e: Event): void => {
+      if (e.target instanceof HTMLElement) {
+        if (e.target.classList.contains("na-select__list__container")) return;
+        if (e.target === select.value) return;
+
+        if (select.value?.children) {
+          for (let child of select.value.children) {
+            if (child && e.target === child) return;
+          }
+        }
+      }
+
+      blur();
+    };
+
+    const selectOption = (target: string): void => {
+      const valid = renderedOptions.find(option => option.value === target);
+
+      if (valid) {
+        emit("update:modelValue", target);
+      } else if (selectInput.value) {
+        emit("update:modelValue", "");
+        selectInput.value.value = "";
+      }
+    };
+
+    // focus on the next option
+    const next = (e: KeyboardEvent): void => {
+      e.preventDefault();
+      if (!displayedOptions.length) return;
+
+      currentOption =
+        currentOption === lastOption ? firstOption : currentOption + 1;
+
+      displayedOptions[currentOption].focus();
+    };
+
+    // focus on the previous option
+    const prev = (e: KeyboardEvent): void => {
+      e.preventDefault();
+      if (!displayedOptions.length) return;
+
+      currentOption =
+        currentOption === firstOption || currentOption === -1
+          ? lastOption
+          : currentOption - 1;
+
+      displayedOptions[currentOption].focus();
+    };
+
+    const focusOption = (e: KeyboardEvent): void => {
+      switch (e.key) {
+        case "ArrowDown":
+          next(e);
+          break;
+
+        case "ArrowUp":
+          prev(e);
+          break;
+
+        case "Enter":
+          if (currentOption !== -1) blur();
+          break;
+
+        case "Tab":
+          if (currentOption === lastOption) blur();
+          else next(e);
+          break;
+
+        default:
+          reset();
+          e.stopPropagation();
+          if (currentOption !== -1) focus();
+          break;
+      }
+    };
+
+    const reset = (): void => {
+      setTimeout(() => {
+        displayedOptions = allOptions.filter(
+          option =>
+            option.classList.contains("na-option_displayed") &&
+            !option.classList.contains("na-option_disabled")
+        );
+
+        firstOption = 0;
+        lastOption = displayedOptions.length - 1;
+        currentOption = -1;
+
+        noData.value = !displayedOptions.length;
+      });
+    };
+
     return {
-      id,
+      uid,
+
+      // DOM refs
+      select,
+      selectInput,
+      selectLabel,
+      selectList,
+      selectMessage,
+
+      // Data
+      inputValue,
+      noData,
+      focused,
+      listStyles,
+
+      // Methods
       focus,
       blur,
-      input,
-      selectLabel,
-      root,
-      icon,
-      selectList,
-      focused,
-      message,
-      listStyles,
-      noData,
-      inputValue,
-      changeSelect,
-      clearInput
+      clearInput,
+      selectOption
     };
   }
 });

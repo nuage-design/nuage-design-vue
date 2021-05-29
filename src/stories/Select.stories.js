@@ -21,7 +21,8 @@ export default {
 const Template = (args) => ({
   components: { NaSelect, NaOption, NaBadge },
   setup() {
-    const value = ref("");
+    const value1 = ref("");
+    const value2 = ref("");
     const items = ref([
       { icon: "bx bxl-html5", value: "HTML" },
       { icon: "bx bxl-css3", value: "CSS" },
@@ -38,11 +39,12 @@ const Template = (args) => ({
       { leftIcon: "bx bxl-sass", value: "SCSS", title: "Класс!" },
     ]);
 
-    return { args, items, value, options };
+    return { args, items, value1, value2, options };
   },
   template: `
-  <span>Value: {{ value }}</span>
-  <na-select v-bind='args' v-model="value" style="width: 200px" :options="options">
+  <span>Value 1: {{ value1 }}</span><br/>
+  <span>Value 2: {{ value2 }}</span>
+  <na-select v-bind='args' v-model="value1" style="width: 200px" :options="options">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
@@ -58,7 +60,7 @@ const Template = (args) => ({
       </template>
     </na-option>
   </na-select>
-  <na-select v-bind='args' v-model="value" style="width: 200px">
+  <na-select v-bind='args' v-model="value2" style="width: 200px">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
