@@ -44,7 +44,7 @@ const Template = (args) => ({
   template: `
   <span>Value 1: {{ value1 }}</span><br/>
   <span>Value 2: {{ value2 }}</span>
-  <na-select v-bind='args' v-model="value1" style="width: 200px" :options="options">
+  <na-select v-bind='args' v-model="value1" style="width: 300px" :options="options">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
@@ -60,7 +60,7 @@ const Template = (args) => ({
       </template>
     </na-option>
   </na-select>
-  <na-select v-bind='args' v-model="value2" style="width: 200px">
+  <na-select v-bind='args' v-model="value2" style="width: 300px">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>

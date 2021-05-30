@@ -6,7 +6,6 @@
       ref="option"
       class="na-option"
       :value="value"
-      :disabled="disabled"
       :style="optionStyles"
       :class="[
         { 'na-option_selected': selected },
@@ -116,8 +115,9 @@ export default defineComponent({
     });
 
     // Methods
-    const activate = () => {
-      emitter.emit("activate", uid);
+    const activate = (e: Event) => {
+      if (!props.disabled) emitter.emit("activate", uid);
+      else e.stopPropagation();
     };
 
     const filter = () => {

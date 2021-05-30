@@ -138,7 +138,7 @@
     </template>
 
     <!-- message -->
-    <div ref="selectMessage" @click.stop>
+    <div ref="selectMessage">
       <span v-if="state === 'success'" class="na-select__message">
         <i class="bx bxs-check-circle"></i>
         <slot name="message-success"></slot>
@@ -310,7 +310,7 @@ export default defineComponent({
         selectInput.value.focus();
 
         document.addEventListener("keydown", focusOption);
-        document.addEventListener("click", clickOut);
+        document.addEventListener("click", onClickOutside);
       }
     };
 
@@ -324,7 +324,7 @@ export default defineComponent({
         inputValue.value = selectedOptionTitle;
 
         document.removeEventListener("keydown", focusOption);
-        document.removeEventListener("click", clickOut);
+        document.removeEventListener("click", onClickOutside);
       }
     };
 
@@ -332,16 +332,10 @@ export default defineComponent({
       inputValue.value = "";
     };
 
-    const clickOut = (e: Event): void => {
+    const onClickOutside = (e: Event): void => {
       if (e.target instanceof HTMLElement) {
-        if (e.target.classList.contains("na-select__list__container")) return;
-        if (e.target === select.value) return;
-
-        if (select.value?.children) {
-          for (let child of select.value.children) {
-            if (child && e.target === child) return;
-          }
-        }
+        if (e.target.closest(".na-option")) blur();
+        if (e.target.closest(".na-select") === select.value) return;
       }
 
       blur();
