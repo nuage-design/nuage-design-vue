@@ -207,7 +207,10 @@ export default defineComponent({
 
     state: {
       type: String,
-      default: "default"
+      default: "default",
+      validator: (value: string) => {
+        return ["default", "success", "warning", "danger"].includes(value);
+      }
     },
 
     native: {
@@ -244,7 +247,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const uid = ++$_naSelectId;
 
-    // DOM refs
+    // Template refs
     const select = ref<HTMLElement>();
     const selectLabel = ref<HTMLElement>();
     const selectInput = ref<HTMLInputElement | HTMLSelectElement>();
@@ -265,6 +268,7 @@ export default defineComponent({
 
     let allOptions: HTMLButtonElement[] = [];
     let displayedOptions: HTMLButtonElement[] = [];
+    let availableOptions: HTMLButtonElement[] = [];
 
     let selectedOptionTitle = "";
     let prevOption: RenderedOption;
@@ -281,6 +285,8 @@ export default defineComponent({
 
     nextTick(() => {
       emitter.on("add-rendered-option", option => renderedOptions.push(option));
+
+      if (props.native) return;
 
       emitter.on("add-option", option => allOptions.push(option));
       emitter.on("activate", uid => {
@@ -363,28 +369,28 @@ export default defineComponent({
       }
     };
 
-    // focus on the next option
+    /** focus on the next option */
     const next = (e: KeyboardEvent): void => {
       e.preventDefault();
-      if (!displayedOptions.length) return;
+      if (!availableOptions.length) return;
 
       currentOption =
         currentOption === lastOption ? firstOption : currentOption + 1;
 
-      displayedOptions[currentOption].focus();
+      availableOptions[currentOption].focus();
     };
 
-    // focus on the previous option
+    /** focus on the previous option */
     const prev = (e: KeyboardEvent): void => {
       e.preventDefault();
-      if (!displayedOptions.length) return;
+      if (!availableOptions.length) return;
 
       currentOption =
         currentOption === firstOption || currentOption === -1
           ? lastOption
           : currentOption - 1;
 
-      displayedOptions[currentOption].focus();
+      availableOptions[currentOption].focus();
     };
 
     const focusOption = (e: KeyboardEvent): void => {
@@ -416,14 +422,16 @@ export default defineComponent({
 
     const reset = (): void => {
       setTimeout(() => {
-        displayedOptions = allOptions.filter(
-          option =>
-            option.classList.contains("na-option_displayed") &&
-            !option.classList.contains("na-option_disabled")
+        displayedOptions = allOptions.filter(option =>
+          option.classList.contains("na-option_displayed")
+        );
+
+        availableOptions = displayedOptions.filter(
+          option => !option.classList.contains("na-option_disabled")
         );
 
         firstOption = 0;
-        lastOption = displayedOptions.length - 1;
+        lastOption = availableOptions.length - 1;
         currentOption = -1;
 
         noData.value = !displayedOptions.length;
@@ -433,7 +441,7 @@ export default defineComponent({
     return {
       uid,
 
-      // DOM refs
+      // Template refs
       select,
       selectInput,
       selectLabel,
@@ -456,7 +464,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .fade-enter-active,
 .fade-leave-active {
   transition: 0.1s ease;
@@ -471,7 +479,7 @@ export default defineComponent({
 
 .no-data-fade-enter-active,
 .no-data-fade-leave-active {
-  transition: 0.2s ease-in;
+  transition: 0.1s ease-in;
   padding-top: 0;
   padding-bottom: 0;
   height: 0;
@@ -480,7 +488,7 @@ export default defineComponent({
 
 .no-data-fade-enter-from,
 .no-data-fade-leave-to {
-  transition: 0.1s ease-out;
+  transition: 0.2s ease-out;
   min-height: 0;
   height: 0;
   padding-top: 0;

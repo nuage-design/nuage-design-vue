@@ -61,7 +61,7 @@ export default defineComponent({
   setup(props, { slots }) {
     const uid = ++$_naOptionId;
 
-    // DOM refs
+    // Template refs
     const option = ref<HTMLButtonElement>();
     const optionTitle = ref<HTMLElement>();
 
@@ -72,14 +72,14 @@ export default defineComponent({
     const optionStyles = ref({});
 
     // Injects
-    const emitter = inject<Emitter>("emitter")!;
+    const emitter = inject<Emitter>("emitter");
     const input = inject<Ref<HTMLInputElement | HTMLSelectElement>>("input");
-    const isNative = inject<Boolean>("native")!;
-    const isFilter = inject<Boolean>("filter")!;
+    const isNative = inject<Boolean>("native");
+    const isFilter = inject<Boolean>("filter");
 
     nextTick(() => {
-      emitter.emit("add-option", option.value);
-      emitter.emit("add-rendered-option", {
+      emitter?.emit("add-option", option.value);
+      emitter?.emit("add-rendered-option", {
         uid,
         title: title.value ? title.value.trim() : props.value,
         value: props.value,
@@ -116,7 +116,7 @@ export default defineComponent({
 
     // Methods
     const activate = (e: Event) => {
-      if (!props.disabled) emitter.emit("activate", uid);
+      if (!props.disabled) emitter?.emit("activate", uid);
       else e.stopPropagation();
     };
 
@@ -128,7 +128,7 @@ export default defineComponent({
     };
 
     return {
-      // DOM refs
+      // Template refs
       option,
       optionTitle,
 
@@ -158,7 +158,7 @@ export default defineComponent({
 
 .show-enter-from,
 .show-leave-to {
-  transition: 0.2s ease-in;
+  transition: 0.1s ease-in;
   min-height: 0;
   height: 0;
   padding-top: 0;
