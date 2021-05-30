@@ -73,23 +73,23 @@ export default defineComponent({
 
     // Injects
     const emitter = inject<Emitter>("emitter")!;
-    const input = inject<Ref<HTMLInputElement | HTMLSelectElement>>("input")!;
+    const input = inject<Ref<HTMLInputElement | HTMLSelectElement>>("input");
     const isNative = inject<Boolean>("native")!;
     const isFilter = inject<Boolean>("filter")!;
+
+    nextTick(() => {
+      emitter.emit("add-option", option.value);
+      emitter.emit("add-rendered-option", {
+        uid,
+        title: title.value ? title.value.trim() : props.value,
+        value: props.value,
+        selected
+      });
+    });
 
     // Hooks
     onMounted(() => {
       if (isNative) return;
-
-      nextTick(() => {
-        emitter.emit("add-option", option.value);
-        emitter.emit("add-rendered-option", {
-          uid,
-          title: title.value ? title.value.trim() : props.value,
-          value: props.value,
-          selected
-        });
-      });
 
       title.value = slots["default"]
         ? optionTitle.value?.innerText!
@@ -99,7 +99,7 @@ export default defineComponent({
         ? { "--padding-right": "18px" }
         : { "--padding-right": "38px" };
 
-      if (isFilter) {
+      if (input?.value && isFilter) {
         input.value.addEventListener("input", filter);
         input.value.addEventListener("focus", filter);
       }
@@ -108,7 +108,7 @@ export default defineComponent({
     onUnmounted(() => {
       if (isNative) return;
 
-      if (isFilter) {
+      if (input?.value && isFilter) {
         input.value.removeEventListener("input", filter);
         input.value.removeEventListener("focus", filter);
       }
@@ -122,7 +122,7 @@ export default defineComponent({
 
     const filter = () => {
       const titleValue = title.value?.toLowerCase();
-      const inputValue = input.value.value.toLowerCase();
+      const inputValue = input!.value.value.toLowerCase();
 
       show.value = titleValue?.indexOf(inputValue) !== -1;
     };

@@ -32,7 +32,7 @@
           @focus="focus"
           @blur="blur"
         />
-        <datalist :id="`na-select_filter__datalist-${uid}`">
+        <datalist class="na-select_filter__datalist" :id="`_na-select-${uid}`">
           <slot></slot>
           <template v-if="options">
             <option
@@ -165,7 +165,15 @@
 </template>
 
 <script lang="ts">
-import { Ref, defineComponent, PropType, ref, provide, onMounted } from "vue";
+import {
+  Ref,
+  defineComponent,
+  PropType,
+  ref,
+  provide,
+  onMounted,
+  nextTick
+} from "vue";
 
 import NaOption from "./na-option.vue";
 
@@ -271,15 +279,10 @@ export default defineComponent({
     provide("native", props.native);
     provide("filter", props.filter);
 
-    // Hooks
-    onMounted(() => {
-      if (props.native) return;
-
-      const messageHeight = selectMessage.value?.offsetHeight;
-      listStyles.value["--message-height"] = messageHeight + "px";
+    nextTick(() => {
+      emitter.on("add-rendered-option", option => renderedOptions.push(option));
 
       emitter.on("add-option", option => allOptions.push(option));
-      emitter.on("add-rendered-option", option => renderedOptions.push(option));
       emitter.on("activate", uid => {
         const currentOption = renderedOptions.find(
           option => option.uid === uid
@@ -295,7 +298,14 @@ export default defineComponent({
           prevOption = currentOption;
         }
       });
+    });
 
+    // Hooks
+    onMounted(() => {
+      if (props.native) return;
+
+      const messageHeight = selectMessage.value?.offsetHeight;
+      listStyles.value["--message-height"] = messageHeight + "px";
       reset();
     });
 
@@ -317,7 +327,6 @@ export default defineComponent({
     const blur = (): void => {
       reset();
       setTimeout(() => (focused.value = false));
-      currentOption = -1;
 
       if (selectInput.value && !props.native) {
         selectInput.value.blur();
@@ -343,6 +352,8 @@ export default defineComponent({
 
     const selectOption = (target: string): void => {
       const valid = renderedOptions.find(option => option.value === target);
+
+      console.log(renderedOptions);
 
       if (valid) {
         emit("update:modelValue", target);
