@@ -1,33 +1,33 @@
-<template >
-  <transition name="fade">
+<template>
+  <transition name="show">
     <button
-      v-if="!native"
+      v-if="!isNative"
       v-show="show"
       ref="option"
       class="na-option"
       :value="value"
+      :style="optionStyles"
       :class="[
         { 'na-option_selected': selected },
         { 'na-option_disabled': disabled },
         { 'na-option_displayed': show }
       ]"
-      :style="styles"
       @keydown.enter="activate"
       @click="activate"
     >
       <span class="na-option__left-side">
-        <slot name="left-side"></slot>
-        <span ref="text" class="na-option__left-side__text"
-          ><slot>{{ value }}</slot></span
-        >
+        <slot name="left-side" />
+        <span ref="optionTitle" class="na-option__title">
+          <slot>{{ value }}</slot>
+        </span>
       </span>
-      <span v-if="hasRightSlot()" class="na-option__right-side">
-        <slot name="right-side"></slot>
+      <span v-if="$slots['right-side']" class="na-option__right-side">
+        <slot name="right-side" />
       </span>
     </button>
   </transition>
 
-  <option v-if="native" :value="value">
+  <option v-if="isNative" :value="value">
     <slot>{{ value }}</slot>
   </option>
 </template>
@@ -41,8 +41,10 @@ import {
   onUnmounted,
   inject,
   nextTick,
-  getCurrentInstance
+  Ref
 } from "vue";
+
+let $_naOptionId = 0;
 
 export default defineComponent({
   name: "NaOption",
@@ -57,104 +59,96 @@ export default defineComponent({
     }
   },
   setup(props, { slots }) {
+    const uid = ++$_naOptionId;
+
+    // Template refs
     const option = ref<HTMLButtonElement>();
-    const native = ref(false);
+    const optionTitle = ref<HTMLElement>();
+
+    // Data
+    const title = ref("");
     const show = ref(true);
     const selected = ref(false);
-    const text = ref<HTMLElement>();
+    const optionStyles = ref({});
 
-    const title = ref(props.value);
-
-    const _uid = getCurrentInstance()?.uid;
-
-    const emitter = inject<Emitter>("emitter")!;
-
-    const hasRightSlot = () => slots["right-side"];
-
-    const activate = () => {
-      if (!props.disabled) {
-        emitter.emit("activate", _uid);
-      }
-    };
-
-    const styles = ref({
-      "--padding-right": "38px"
-    });
-
-    let filter = () => {};
+    // Injects
+    const emitter = inject<Emitter>("emitter");
+    const input = inject<Ref<HTMLInputElement | HTMLSelectElement>>("input");
+    const isNative = inject<Boolean>("native");
+    const isFilter = inject<Boolean>("filter");
 
     nextTick(() => {
-      emitter.emit("add-item", {
-        id: _uid,
-        title: title.value.trim(),
+      emitter?.emit("add-option", option.value);
+      emitter?.emit("add-rendered-option", {
+        uid,
+        title: title.value ? title.value.trim() : props.value,
         value: props.value,
-        selected: selected
+        selected
       });
     });
 
+    // Hooks
     onMounted(() => {
-      if (slots["default"]) title.value = text.value?.innerText!;
-      if (slots["right-side"]) styles.value["--padding-right"] = "18px";
+      if (isNative) return;
 
-      const parentElement = option.value?.parentElement;
-      const input = parentElement?.parentElement?.previousSibling;
+      title.value = slots["default"]
+        ? optionTitle.value?.innerText!
+        : props.value;
 
-      if (props.disabled) {
-        option.value?.addEventListener("click", ev => {
-          ev.stopPropagation();
-        });
+      optionStyles.value = slots["right-side"]
+        ? { "--padding-right": "18px" }
+        : { "--padding-right": "38px" };
+
+      if (input?.value && isFilter) {
+        input.value.addEventListener("input", filter);
+        input.value.addEventListener("focus", filter);
       }
-
-      if (
-        input instanceof HTMLInputElement &&
-        input.classList.contains("na-select__input_filter")
-      ) {
-        filter = () => {
-          const titleValue = title.value?.toLowerCase();
-          const inputValue = input.value.toLowerCase();
-
-          show.value = titleValue?.indexOf(inputValue) !== -1;
-        };
-
-        input?.addEventListener("input", filter);
-        input?.addEventListener("focus", filter);
-      }
-
-      native.value =
-        parentElement?.tagName === "SELECT" ||
-        parentElement?.tagName === "DATALIST";
     });
 
     onUnmounted(() => {
-      const parentElement = option.value?.parentElement;
-      const input = parentElement?.parentElement?.previousSibling;
+      if (isNative) return;
 
-      if (
-        input instanceof HTMLInputElement &&
-        input.classList.contains("na-select__input_filter")
-      ) {
-        input?.removeEventListener("input", filter);
-        input?.removeEventListener("focus", filter);
+      if (input?.value && isFilter) {
+        input.value.removeEventListener("input", filter);
+        input.value.removeEventListener("focus", filter);
       }
     });
+
+    // Methods
+    const activate = (e: Event) => {
+      if (!props.disabled) emitter?.emit("activate", uid);
+      else e.stopPropagation();
+    };
+
+    const filter = () => {
+      const titleValue = title.value?.toLowerCase();
+      const inputValue = input!.value.value.toLowerCase();
+
+      show.value = titleValue?.indexOf(inputValue) !== -1;
+    };
+
     return {
-      activate,
+      // Template refs
       option,
-      hasRightSlot,
-      native,
+      optionTitle,
+
+      // Data
+      title,
       show,
       selected,
-      title,
-      text,
-      styles
+      optionStyles,
+      isNative,
+
+      // Methods
+      activate
     };
   }
 });
 </script>
 
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
+<style scoped>
+.show-enter-active,
+.show-leave-active {
   transition: 0.1s ease-out;
   padding-top: 0;
   padding-bottom: 0;
@@ -162,9 +156,9 @@ export default defineComponent({
   overflow-y: hidden;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  transition: 0.2s ease-in;
+.show-enter-from,
+.show-leave-to {
+  transition: 0.1s ease-in;
   min-height: 0;
   height: 0;
   padding-top: 0;
