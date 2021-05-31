@@ -166,7 +166,6 @@
 
 <script lang="ts">
 import {
-  Ref,
   defineComponent,
   PropType,
   ref,
@@ -178,21 +177,7 @@ import {
 import NaOption from './na-option.vue'
 
 import mitt from 'mitt'
-
-interface Option {
-  value: string
-  title: string
-  disabled: boolean
-  leftIcon: string
-  rightIcon: string
-}
-
-interface RenderedOption {
-  uid: number
-  title: string
-  value: string
-  selected: Ref
-}
+import { IOption, IRenderedOption } from '@/typings'
 
 let $_naSelectId = 0
 
@@ -239,7 +224,7 @@ export default defineComponent({
     },
 
     options: {
-      type: Array as PropType<Option[]>,
+      type: Array as PropType<IOption[]>,
       default: null,
     },
   },
@@ -263,7 +248,7 @@ export default defineComponent({
       '--message-height': 0 + 'px',
     })
 
-    const renderedOptions: RenderedOption[] = []
+    const renderedOptions: IRenderedOption[] = []
     const emitter = mitt()
 
     let allOptions: HTMLButtonElement[] = []
@@ -271,7 +256,7 @@ export default defineComponent({
     let availableOptions: HTMLButtonElement[] = []
 
     let selectedOptionTitle = ''
-    let prevOption: RenderedOption
+    let prevOption: IRenderedOption
 
     let firstOption = 0
     let lastOption = 0
@@ -284,14 +269,16 @@ export default defineComponent({
     provide('filter', props.filter)
 
     nextTick(() => {
-      emitter.on('add-rendered-option', option => renderedOptions.push(option))
+      emitter.on('add-rendered-option', (option) =>
+        renderedOptions.push(option),
+      )
 
       if (props.native) return
 
-      emitter.on('add-option', option => allOptions.push(option))
-      emitter.on('activate', uid => {
+      emitter.on('add-option', (option) => allOptions.push(option))
+      emitter.on('activate', (uid) => {
         const currentOption = renderedOptions.find(
-          option => option.uid === uid,
+          (option) => option.uid === uid,
         )!
 
         if (currentOption !== prevOption) {
@@ -312,12 +299,13 @@ export default defineComponent({
 
       const messageHeight = selectMessage.value?.offsetHeight
       listStyles.value['--message-height'] = messageHeight + 'px'
+
       reset()
     })
 
     // Methods
     const focus = (): void => {
-      clearInput()
+      inputValue.value = ''
       reset()
 
       focused.value = true
@@ -343,10 +331,6 @@ export default defineComponent({
       }
     }
 
-    const clearInput = (): void => {
-      inputValue.value = ''
-    }
-
     const onClickOutside = (e: Event): void => {
       if (e.target instanceof HTMLElement) {
         if (e.target.closest('.na-option')) blur()
@@ -357,7 +341,7 @@ export default defineComponent({
     }
 
     const selectOption = (target: string): void => {
-      const valid = renderedOptions.find(option => option.value === target)
+      const valid = renderedOptions.find((option) => option.value === target)
 
       console.log(renderedOptions)
 
@@ -422,12 +406,12 @@ export default defineComponent({
 
     const reset = (): void => {
       setTimeout(() => {
-        displayedOptions = allOptions.filter(option =>
+        displayedOptions = allOptions.filter((option) =>
           option.classList.contains('na-option_displayed'),
         )
 
         availableOptions = displayedOptions.filter(
-          option => !option.classList.contains('na-option_disabled'),
+          (option) => !option.classList.contains('na-option_disabled'),
         )
 
         firstOption = 0
@@ -457,7 +441,6 @@ export default defineComponent({
       // Methods
       focus,
       blur,
-      clearInput,
       selectOption,
     }
   },

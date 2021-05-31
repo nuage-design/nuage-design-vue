@@ -6,9 +6,7 @@
       `na-badge_size_${size}`,
       `na-badge_color_${color}`,
       { 'na-badge_inverse': inverse },
-      {
-        'na-badge_dot': dot || !value,
-      },
+      { 'na-badge_dot': dot || !value },
     ]"
     :custom-color="!isColorStyle ? color : null"
   >

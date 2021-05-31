@@ -2,32 +2,37 @@ import { NaButton, NaButtonGroup } from '../components/na-button'
 import NaBadge from '../components/na-badge'
 import 'boxicons'
 
+const types = ['rounded', 'rect', 'circle']
+const styles = ['solid', 'border', 'transparent']
+const colors = ['primary', 'success', 'info', 'warning', 'danger', 'dark']
+const sizes = ['small', 'default', 'large', 'xl']
+
 export default {
   title: 'Components/Button',
   component: NaButton,
   argTypes: {
     type: {
+      options: types,
       control: {
         type: 'radio',
-        options: ['rounded', 'rect', 'circle'],
       },
     },
     buttonStyle: {
+      options: styles,
       control: {
         type: 'radio',
-        options: ['solid', 'border', 'transparent'],
       },
     },
     color: {
+      options: colors,
       control: {
         type: 'select',
-        options: ['primary', 'success', 'info', 'warning', 'danger', 'dark'],
       },
     },
     size: {
+      options: sizes,
       control: {
         type: 'select',
-        options: ['small', 'default', 'large', 'xl'],
       },
     },
   },
@@ -38,7 +43,8 @@ export const Button = (args) => ({
   setup() {
     return { args }
   },
-  template: `<na-button v-bind="args">
+  template: /*html*/ `
+  <na-button v-bind="args">
     <span>${args.text}</span>
   </na-button>
   <br/>
@@ -54,7 +60,8 @@ export const Button = (args) => ({
   <na-button v-bind="args">
     <span>${args.text}</span>
     <na-badge :value="100" :color="args.color" :size="args.size" />
-  </na-button>`,
+  </na-button>
+  `,
 })
 
 Button.args = {
@@ -66,7 +73,7 @@ export const ButtonGroup = (args) => ({
   setup() {
     return { args }
   },
-  template: `
+  template: /*html*/ `
   <na-button-group :vertical="args.vertical">
     <na-button v-bind="args">
       <span>${args.text}</span>
