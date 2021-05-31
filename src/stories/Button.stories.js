@@ -1,42 +1,42 @@
-import { NaButton, NaButtonGroup } from "../components/na-button";
-import NaBadge from "../components/na-badge";
-import "boxicons";
+import { NaButton, NaButtonGroup } from '../components/na-button'
+import NaBadge from '../components/na-badge'
+import 'boxicons'
 
 export default {
-  title: "Components/Button",
+  title: 'Components/Button',
   component: NaButton,
   argTypes: {
     type: {
       control: {
-        type: "radio",
-        options: ["rounded", "rect", "circle"],
+        type: 'radio',
+        options: ['rounded', 'rect', 'circle'],
       },
     },
     buttonStyle: {
       control: {
-        type: "radio",
-        options: ["solid", "border", "transparent"],
+        type: 'radio',
+        options: ['solid', 'border', 'transparent'],
       },
     },
     color: {
       control: {
-        type: "select",
-        options: ["primary", "success", "info", "warning", "danger", "dark"],
+        type: 'select',
+        options: ['primary', 'success', 'info', 'warning', 'danger', 'dark'],
       },
     },
     size: {
       control: {
-        type: "select",
-        options: ["small", "default", "large", "xl"],
+        type: 'select',
+        options: ['small', 'default', 'large', 'xl'],
       },
     },
   },
-};
+}
 
 export const Button = (args) => ({
   components: { NaButton, NaBadge },
   setup() {
-    return { args };
+    return { args }
   },
   template: `<na-button v-bind="args">
     <span>${args.text}</span>
@@ -55,16 +55,16 @@ export const Button = (args) => ({
     <span>${args.text}</span>
     <na-badge :value="100" :color="args.color" :size="args.size" />
   </na-button>`,
-});
+})
 
 Button.args = {
-  text: "Button",
-};
+  text: 'Button',
+}
 
 export const ButtonGroup = (args) => ({
   components: { NaButton, NaButtonGroup, NaBadge },
   setup() {
-    return { args };
+    return { args }
   },
   template: `
   <na-button-group :vertical="args.vertical">
@@ -84,9 +84,9 @@ export const ButtonGroup = (args) => ({
     </na-button>
   </na-button-group>
   `,
-});
+})
 
 ButtonGroup.args = {
-  text: "Button",
+  text: 'Button',
   vertical: false,
-};
+}

@@ -18,7 +18,7 @@ export default {
   },
 }
 
-const Template = args => ({
+const Template = (args) => ({
   components: { NaSelect, NaOption, NaBadge },
   setup() {
     const value1 = ref('')

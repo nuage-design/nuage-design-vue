@@ -1,115 +1,118 @@
 <template>
-  <button ref="root" class="na-button" :class="classes">
+  <button
+    ref="button"
+    :class="[
+      'na-button',
+      `na-button_size_${size}`,
+      `na-button_type_${type}`,
+      `na-button_style_${buttonStyle}`,
+      `na-button_color_${color}`,
+      { 'na-button_light-text': lightText },
+      { 'na-button_active': active },
+      { 'na-button_equal': equal },
+      { 'na-button_block': block },
+    ]"
+  >
     <slot />
   </button>
 </template>
 
-<script>
-import { ref, reactive, onMounted } from "vue";
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
 
-const sizes = ["small", "default", "large", "xl"];
-const types = ["rounded", "rect", "circle"];
-const styles = ["solid", "border", "transparent"];
-
-export default {
-  name: "NaButton",
+export default defineComponent({
+  name: 'NaButton',
   props: {
     size: {
       type: String,
-      default: "default",
-      validator: (value) => {
-        return sizes.includes(value);
+      default: 'default',
+      validator: (value: string) => {
+        return ['small', 'default', 'large', 'xl'].includes(value)
       },
     },
+
     type: {
       type: String,
-      default: "rounded",
-      validator: (value) => {
-        return types.includes(value);
+      default: 'rounded',
+      validator: (value: string) => {
+        return ['rounded', 'rect', 'circle'].includes(value)
       },
     },
+
     buttonStyle: {
       type: String,
-      default: "solid",
-      validator: (value) => {
-        return styles.includes(value);
+      default: 'solid',
+      validator: (value: string) => {
+        return ['solid', 'border', 'transparent'].includes(value)
       },
     },
+
     color: {
       type: String,
-      default: "primary",
+      default: 'primary',
     },
+
     lightText: {
       type: Boolean,
       default: false,
     },
+
     active: {
       type: Boolean,
       default: false,
     },
+
     block: {
       type: Boolean,
       default: false,
     },
+
     equal: {
       type: Boolean,
       default: false,
     },
+
     space: {
-      type: [String, Number],
+      type: Number,
       default: 8,
     },
   },
   setup(props) {
-    const button = reactive(props);
-    const root = ref(null);
+    const button = ref<HTMLButtonElement>()
 
     onMounted(() => {
-      const elem = root.value;
-      const active = elem.classList.contains("na-button_active");
+      button.value?.style.setProperty('--space', props.space + 'px')
 
-      elem.style.setProperty(
-        "--space",
-        +button.space ? button.space + "px" : button.space
-      );
+      if (props.buttonStyle === 'solid' || props.active) {
+        const badges = button.value?.querySelectorAll('.na-badge')
 
-      if (button.buttonStyle === "solid" || active) {
-        const badges = elem.querySelectorAll(".na-badge");
-
-        badges.forEach((badge) => {
-          badge.classList.add("na-badge_inverse");
-        });
+        badges?.forEach((badge) => {
+          badge.classList.add('na-badge_inverse')
+        })
       }
 
-      if (button.equal) {
-        const firstItem = elem.firstElementChild;
-        let text = firstItem.innerText;
+      if (props.equal) {
+        const firstItem = button.value?.firstElementChild
 
-        if (text) firstItem.innerText = text[0];
+        if (firstItem instanceof HTMLElement) {
+          let text = firstItem.innerText
 
-        // badge styling
-        if (firstItem.classList.contains("na-badge")) {
-          firstItem.innerText = "";
-          firstItem.classList.add("na-badge_dot");
+          if (text) firstItem.innerText = text[0]
+
+          if (firstItem.classList.contains('na-badge')) {
+            firstItem.innerText = ''
+            firstItem.classList.add('na-badge_dot')
+          }
+
+          if (button.value) {
+            button.value.innerHTML = ''
+            button.value.append(firstItem)
+          }
         }
-
-        elem.innerHTML = "";
-        elem.append(firstItem);
       }
-    });
+    })
 
-    const classes = ref([
-      `na-button_size_${button.size}`,
-      `na-button_type_${button.type}`,
-      `na-button_style_${button.buttonStyle}`,
-      `na-button_color_${button.color}`,
-      { "na-button_light-text": button.lightText },
-      { "na-button_active": button.active },
-      { "na-button_equal": button.equal },
-      { "na-button_block": button.block },
-    ]);
-
-    return { button, root, classes };
+    return { button }
   },
-};
+})
 </script>

@@ -6,7 +6,7 @@
       `na-select_state_${state}`,
       { 'na-select_native': native },
       { 'na-select_filter': filter },
-      { 'na-select_focused': focused }
+      { 'na-select_focused': focused },
     ]"
   >
     <!-- label -->
@@ -172,271 +172,271 @@ import {
   ref,
   provide,
   onMounted,
-  nextTick
-} from "vue";
+  nextTick,
+} from 'vue'
 
-import NaOption from "./na-option.vue";
+import NaOption from './na-option.vue'
 
-import mitt from "mitt";
+import mitt from 'mitt'
 
 interface Option {
-  value: string;
-  title: string;
-  disabled: boolean;
-  leftIcon: string;
-  rightIcon: string;
+  value: string
+  title: string
+  disabled: boolean
+  leftIcon: string
+  rightIcon: string
 }
 
 interface RenderedOption {
-  uid: number;
-  title: string;
-  value: string;
-  selected: Ref;
+  uid: number
+  title: string
+  value: string
+  selected: Ref
 }
 
-let $_naSelectId = 0;
+let $_naSelectId = 0
 
 export default defineComponent({
-  name: "NaSelect",
+  name: 'NaSelect',
   components: { NaOption },
   props: {
     modelValue: {
       type: String,
-      default: null
+      default: null,
     },
 
     state: {
       type: String,
-      default: "default",
+      default: 'default',
       validator: (value: string) => {
-        return ["default", "success", "warning", "danger"].includes(value);
-      }
+        return ['default', 'success', 'warning', 'danger'].includes(value)
+      },
     },
 
     native: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     filter: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     label: {
       type: String,
-      default: null
+      default: null,
     },
 
     placeholder: {
       type: String,
-      default: null
+      default: null,
     },
 
     size: {
       type: Number,
-      default: null
+      default: null,
     },
 
     options: {
       type: Array as PropType<Option[]>,
-      default: null
-    }
+      default: null,
+    },
   },
-  emits: ["update:modelValue"],
+  emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const uid = ++$_naSelectId;
+    const uid = ++$_naSelectId
 
     // Template refs
-    const select = ref<HTMLElement>();
-    const selectLabel = ref<HTMLElement>();
-    const selectInput = ref<HTMLInputElement | HTMLSelectElement>();
-    const selectList = ref<HTMLElement>();
-    const selectMessage = ref<HTMLElement>();
+    const select = ref<HTMLElement>()
+    const selectLabel = ref<HTMLElement>()
+    const selectInput = ref<HTMLInputElement | HTMLSelectElement>()
+    const selectList = ref<HTMLElement>()
+    const selectMessage = ref<HTMLElement>()
 
     // Data
-    const inputValue = ref(props.modelValue);
-    const focused = ref(false);
-    const noData = ref(true);
+    const inputValue = ref(props.modelValue)
+    const focused = ref(false)
+    const noData = ref(true)
     const listStyles = ref({
-      "--max-size": props.size,
-      "--message-height": 0 + "px"
-    });
+      '--max-size': props.size,
+      '--message-height': 0 + 'px',
+    })
 
-    const renderedOptions: RenderedOption[] = [];
-    const emitter = mitt();
+    const renderedOptions: RenderedOption[] = []
+    const emitter = mitt()
 
-    let allOptions: HTMLButtonElement[] = [];
-    let displayedOptions: HTMLButtonElement[] = [];
-    let availableOptions: HTMLButtonElement[] = [];
+    let allOptions: HTMLButtonElement[] = []
+    let displayedOptions: HTMLButtonElement[] = []
+    let availableOptions: HTMLButtonElement[] = []
 
-    let selectedOptionTitle = "";
-    let prevOption: RenderedOption;
+    let selectedOptionTitle = ''
+    let prevOption: RenderedOption
 
-    let firstOption = 0;
-    let lastOption = 0;
-    let currentOption = -1;
+    let firstOption = 0
+    let lastOption = 0
+    let currentOption = -1
 
     // Provides
-    provide("emitter", emitter);
-    provide("input", selectInput);
-    provide("native", props.native);
-    provide("filter", props.filter);
+    provide('emitter', emitter)
+    provide('input', selectInput)
+    provide('native', props.native)
+    provide('filter', props.filter)
 
     nextTick(() => {
-      emitter.on("add-rendered-option", option => renderedOptions.push(option));
+      emitter.on('add-rendered-option', option => renderedOptions.push(option))
 
-      if (props.native) return;
+      if (props.native) return
 
-      emitter.on("add-option", option => allOptions.push(option));
-      emitter.on("activate", uid => {
+      emitter.on('add-option', option => allOptions.push(option))
+      emitter.on('activate', uid => {
         const currentOption = renderedOptions.find(
-          option => option.uid === uid
-        )!;
+          option => option.uid === uid,
+        )!
 
         if (currentOption !== prevOption) {
-          emit("update:modelValue", currentOption.value);
+          emit('update:modelValue', currentOption.value)
 
-          if (prevOption) prevOption.selected.value = false;
-          currentOption.selected.value = true;
-          inputValue.value = currentOption.title;
-          selectedOptionTitle = currentOption.title;
-          prevOption = currentOption;
+          if (prevOption) prevOption.selected.value = false
+          currentOption.selected.value = true
+          inputValue.value = currentOption.title
+          selectedOptionTitle = currentOption.title
+          prevOption = currentOption
         }
-      });
-    });
+      })
+    })
 
     // Hooks
     onMounted(() => {
-      if (props.native) return;
+      if (props.native) return
 
-      const messageHeight = selectMessage.value?.offsetHeight;
-      listStyles.value["--message-height"] = messageHeight + "px";
-      reset();
-    });
+      const messageHeight = selectMessage.value?.offsetHeight
+      listStyles.value['--message-height'] = messageHeight + 'px'
+      reset()
+    })
 
     // Methods
     const focus = (): void => {
-      clearInput();
-      reset();
+      clearInput()
+      reset()
 
-      focused.value = true;
+      focused.value = true
 
       if (selectInput.value && !props.native) {
-        selectInput.value.focus();
+        selectInput.value.focus()
 
-        document.addEventListener("keydown", focusOption);
-        document.addEventListener("click", onClickOutside);
+        document.addEventListener('keydown', focusOption)
+        document.addEventListener('click', onClickOutside)
       }
-    };
+    }
 
     const blur = (): void => {
-      reset();
-      setTimeout(() => (focused.value = false));
+      reset()
+      setTimeout(() => (focused.value = false))
 
       if (selectInput.value && !props.native) {
-        selectInput.value.blur();
-        inputValue.value = selectedOptionTitle;
+        selectInput.value.blur()
+        inputValue.value = selectedOptionTitle
 
-        document.removeEventListener("keydown", focusOption);
-        document.removeEventListener("click", onClickOutside);
+        document.removeEventListener('keydown', focusOption)
+        document.removeEventListener('click', onClickOutside)
       }
-    };
+    }
 
     const clearInput = (): void => {
-      inputValue.value = "";
-    };
+      inputValue.value = ''
+    }
 
     const onClickOutside = (e: Event): void => {
       if (e.target instanceof HTMLElement) {
-        if (e.target.closest(".na-option")) blur();
-        if (e.target.closest(".na-select") === select.value) return;
+        if (e.target.closest('.na-option')) blur()
+        if (e.target.closest('.na-select') === select.value) return
       }
 
-      blur();
-    };
+      blur()
+    }
 
     const selectOption = (target: string): void => {
-      const valid = renderedOptions.find(option => option.value === target);
+      const valid = renderedOptions.find(option => option.value === target)
 
-      console.log(renderedOptions);
+      console.log(renderedOptions)
 
       if (valid) {
-        emit("update:modelValue", target);
+        emit('update:modelValue', target)
       } else if (selectInput.value) {
-        emit("update:modelValue", "");
-        selectInput.value.value = "";
+        emit('update:modelValue', '')
+        selectInput.value.value = ''
       }
-    };
+    }
 
     /** focus on the next option */
     const next = (e: KeyboardEvent): void => {
-      e.preventDefault();
-      if (!availableOptions.length) return;
+      e.preventDefault()
+      if (!availableOptions.length) return
 
       currentOption =
-        currentOption === lastOption ? firstOption : currentOption + 1;
+        currentOption === lastOption ? firstOption : currentOption + 1
 
-      availableOptions[currentOption].focus();
-    };
+      availableOptions[currentOption].focus()
+    }
 
     /** focus on the previous option */
     const prev = (e: KeyboardEvent): void => {
-      e.preventDefault();
-      if (!availableOptions.length) return;
+      e.preventDefault()
+      if (!availableOptions.length) return
 
       currentOption =
         currentOption === firstOption || currentOption === -1
           ? lastOption
-          : currentOption - 1;
+          : currentOption - 1
 
-      availableOptions[currentOption].focus();
-    };
+      availableOptions[currentOption].focus()
+    }
 
     const focusOption = (e: KeyboardEvent): void => {
       switch (e.key) {
-        case "ArrowDown":
-          next(e);
-          break;
+        case 'ArrowDown':
+          next(e)
+          break
 
-        case "ArrowUp":
-          prev(e);
-          break;
+        case 'ArrowUp':
+          prev(e)
+          break
 
-        case "Enter":
-          if (currentOption !== -1) blur();
-          break;
+        case 'Enter':
+          if (currentOption !== -1) blur()
+          break
 
-        case "Tab":
-          if (currentOption === lastOption) blur();
-          else next(e);
-          break;
+        case 'Tab':
+          if (currentOption === lastOption) blur()
+          else next(e)
+          break
 
         default:
-          reset();
-          e.stopPropagation();
-          if (currentOption !== -1) focus();
-          break;
+          reset()
+          e.stopPropagation()
+          if (currentOption !== -1) focus()
+          break
       }
-    };
+    }
 
     const reset = (): void => {
       setTimeout(() => {
         displayedOptions = allOptions.filter(option =>
-          option.classList.contains("na-option_displayed")
-        );
+          option.classList.contains('na-option_displayed'),
+        )
 
         availableOptions = displayedOptions.filter(
-          option => !option.classList.contains("na-option_disabled")
-        );
+          option => !option.classList.contains('na-option_disabled'),
+        )
 
-        firstOption = 0;
-        lastOption = availableOptions.length - 1;
-        currentOption = -1;
+        firstOption = 0
+        lastOption = availableOptions.length - 1
+        currentOption = -1
 
-        noData.value = !displayedOptions.length;
-      });
-    };
+        noData.value = !displayedOptions.length
+      })
+    }
 
     return {
       uid,
@@ -458,10 +458,10 @@ export default defineComponent({
       focus,
       blur,
       clearInput,
-      selectOption
-    };
-  }
-});
+      selectOption,
+    }
+  },
+})
 </script>
 
 <style scoped>

@@ -1,36 +1,36 @@
-import NaBadge from "../components/na-badge";
+import NaBadge from '../components/na-badge'
 
 export default {
-  title: "Components/Badge",
+  title: 'Components/Badge',
   component: NaBadge,
   argTypes: {
     size: {
       control: {
-        type: "select",
-        options: ["small", "default", "large", "xl"],
+        type: 'select',
+        options: ['small', 'default', 'large', 'xl'],
       },
     },
     color: {
       control: {
-        type: "select",
-        options: ["primary", "success", "info", "warning", "danger", "dark"],
+        type: 'select',
+        options: ['primary', 'success', 'info', 'warning', 'danger', 'dark'],
       },
     },
   },
-};
+}
 
 const Template = (args) => ({
   components: { NaBadge },
   setup() {
-    return { args };
+    return { args }
   },
   template: "<na-badge v-bind='args'></na-badge>",
-});
+})
 
-export const Badge = Template.bind({});
+export const Badge = Template.bind({})
 
 Badge.args = {
   value: 100,
-  color: "primary",
+  color: 'primary',
   inverse: false,
-};
+}

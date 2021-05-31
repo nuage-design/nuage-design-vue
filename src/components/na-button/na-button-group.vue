@@ -1,24 +1,25 @@
 <template>
-  <div class="na-button-group" :class="classes">
+  <div
+    class="na-button-group"
+    :class="{ 'na-button-group_vertical': vertical }"
+  >
     <slot></slot>
   </div>
 </template>
 
-<script>
-import { reactive } from "vue";
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-export default {
-  name: "NaButtonGroup",
+export default defineComponent({
+  name: 'NaButtonGroup',
   props: {
     vertical: {
       type: Boolean,
       default: false,
     },
   },
-  setup(props) {
-    const buttonGroup = reactive(props);
-    const classes = [{ "na-button-group_vertical": buttonGroup.vertical }];
-    return { buttonGroup, classes };
+  setup() {
+    return {}
   },
-};
+})
 </script>

@@ -10,7 +10,7 @@
       :class="[
         { 'na-option_selected': selected },
         { 'na-option_disabled': disabled },
-        { 'na-option_displayed': show }
+        { 'na-option_displayed': show },
       ]"
       @keydown.enter="activate"
       @click="activate"
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Emitter } from "mitt";
+import { Emitter } from 'mitt'
 import {
   onMounted,
   ref,
@@ -41,91 +41,91 @@ import {
   onUnmounted,
   inject,
   nextTick,
-  Ref
-} from "vue";
+  Ref,
+} from 'vue'
 
-let $_naOptionId = 0;
+let $_naOptionId = 0
 
 export default defineComponent({
-  name: "NaOption",
+  name: 'NaOption',
   props: {
     value: {
       type: String,
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   setup(props, { slots }) {
-    const uid = ++$_naOptionId;
+    const uid = ++$_naOptionId
 
     // Template refs
-    const option = ref<HTMLButtonElement>();
-    const optionTitle = ref<HTMLElement>();
+    const option = ref<HTMLButtonElement>()
+    const optionTitle = ref<HTMLElement>()
 
     // Data
-    const title = ref("");
-    const show = ref(true);
-    const selected = ref(false);
-    const optionStyles = ref({});
+    const title = ref('')
+    const show = ref(true)
+    const selected = ref(false)
+    const optionStyles = ref({})
 
     // Injects
-    const emitter = inject<Emitter>("emitter");
-    const input = inject<Ref<HTMLInputElement | HTMLSelectElement>>("input");
-    const isNative = inject<Boolean>("native");
-    const isFilter = inject<Boolean>("filter");
+    const emitter = inject<Emitter>('emitter')
+    const input = inject<Ref<HTMLInputElement | HTMLSelectElement>>('input')
+    const isNative = inject<Boolean>('native')
+    const isFilter = inject<Boolean>('filter')
 
     nextTick(() => {
-      emitter?.emit("add-option", option.value);
-      emitter?.emit("add-rendered-option", {
+      emitter?.emit('add-option', option.value)
+      emitter?.emit('add-rendered-option', {
         uid,
         title: title.value ? title.value.trim() : props.value,
         value: props.value,
-        selected
-      });
-    });
+        selected,
+      })
+    })
 
     // Hooks
     onMounted(() => {
-      if (isNative) return;
+      if (isNative) return
 
-      title.value = slots["default"]
+      title.value = slots['default']
         ? optionTitle.value?.innerText!
-        : props.value;
+        : props.value
 
-      optionStyles.value = slots["right-side"]
-        ? { "--padding-right": "18px" }
-        : { "--padding-right": "38px" };
+      optionStyles.value = slots['right-side']
+        ? { '--padding-right': '18px' }
+        : { '--padding-right': '38px' }
 
       if (input?.value && isFilter) {
-        input.value.addEventListener("input", filter);
-        input.value.addEventListener("focus", filter);
+        input.value.addEventListener('input', filter)
+        input.value.addEventListener('focus', filter)
       }
-    });
+    })
 
     onUnmounted(() => {
-      if (isNative) return;
+      if (isNative) return
 
       if (input?.value && isFilter) {
-        input.value.removeEventListener("input", filter);
-        input.value.removeEventListener("focus", filter);
+        input.value.removeEventListener('input', filter)
+        input.value.removeEventListener('focus', filter)
       }
-    });
+    })
 
     // Methods
     const activate = (e: Event) => {
-      if (!props.disabled) emitter?.emit("activate", uid);
-      else e.stopPropagation();
-    };
+      if (!props.disabled) emitter?.emit('activate', uid)
+      else e.stopPropagation()
+    }
 
     const filter = () => {
-      const titleValue = title.value?.toLowerCase();
-      const inputValue = input!.value.value.toLowerCase();
+      const titleValue = title.value?.toLowerCase()
+      const inputValue = input!.value.value.toLowerCase()
 
-      show.value = titleValue?.indexOf(inputValue) !== -1;
-    };
+      show.value = titleValue?.indexOf(inputValue) !== -1
+    }
 
     return {
       // Template refs
@@ -140,10 +140,10 @@ export default defineComponent({
       isNative,
 
       // Methods
-      activate
-    };
-  }
-});
+      activate,
+    }
+  },
+})
 </script>
 
 <style scoped>

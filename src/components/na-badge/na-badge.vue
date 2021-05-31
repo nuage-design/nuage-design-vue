@@ -1,25 +1,32 @@
 <template>
   <div
-    ref="root"
-    class="na-badge"
-    :class="classes"
+    ref="badge"
+    :class="[
+      'na-badge',
+      `na-badge_size_${size}`,
+      `na-badge_color_${color}`,
+      { 'na-badge_inverse': inverse },
+      {
+        'na-badge_dot': dot || !value,
+      },
+    ]"
     :custom-color="!isColorStyle ? color : null"
   >
     <span class="na-badge__text" v-if="!dot">{{ displayValue }}</span>
   </div>
 </template>
 
-<script>
-import { ref, reactive, onMounted, computed } from "vue";
+<script lang="ts">
+import { defineComponent, ref, onMounted, computed } from 'vue'
 
-import _colors from "../../scripts/colors";
+import _colors from '../../scripts/colors'
 
-export default {
-  name: "NaBadge",
+export default defineComponent({
+  name: 'NaBadge',
   props: {
     size: {
       type: String,
-      default: "default",
+      default: 'default',
     },
     value: {
       type: [String, Number],
@@ -31,7 +38,7 @@ export default {
     },
     color: {
       type: String,
-      default: "primary",
+      default: 'primary',
     },
     inverse: {
       type: Boolean,
@@ -43,39 +50,29 @@ export default {
     },
   },
   setup(props) {
-    const badge = reactive(props);
-    const isColorStyle = ref(_colors.isColorStyle(badge.color));
+    const isColorStyle = ref(_colors.isColorStyle(props.color))
 
-    const root = ref(null);
+    const badge = ref<HTMLDivElement>()
 
     onMounted(() => {
-      const elem = root.value;
-      if (badge.value >= 0 && badge.value < 10) {
-        elem.style.setProperty("--side-space", "0");
+      if (+props.value) {
+        if (props.value >= 0 && props.value < 10) {
+          badge.value?.style.setProperty('--side-space', '0')
+        }
       }
-    });
-
-    const classes = [
-      `na-badge_size_${badge.size}`,
-      `na-badge_color_${badge.color}`,
-      { "na-badge_inverse": badge.inverse },
-      {
-        "na-badge_dot": badge.dot || badge.value === null || badge.value === "",
-      },
-    ];
+    })
 
     const displayValue = computed(() => {
-      let value = badge.value;
-      let maxValue = badge.maxValue;
-
-      if (maxValue) {
-        value = value > maxValue ? maxValue + "+" : value;
+      if (props.maxValue && +props.value) {
+        return +props.value > +props.maxValue
+          ? props.maxValue + '+'
+          : props.value
       }
 
-      return value;
-    });
+      return props.value
+    })
 
-    return { displayValue, isColorStyle, classes, root };
+    return { displayValue, isColorStyle, badge }
   },
-};
+})
 </script>
