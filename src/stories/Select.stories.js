@@ -1,5 +1,4 @@
-import { NaSelect, NaOption } from '../components/na-select'
-import NaBadge from '../components/na-badge'
+import { NaSelect, NaOption, NaOptionGroup } from '../components/na-select'
 import 'boxicons'
 import { ref } from 'vue'
 
@@ -19,7 +18,7 @@ export default {
 }
 
 const Template = (args) => ({
-  components: { NaSelect, NaOption, NaBadge },
+  components: { NaSelect, NaOption, NaOptionGroup },
   setup() {
     const value1 = ref('')
     const value2 = ref('')
@@ -27,7 +26,7 @@ const Template = (args) => ({
       { icon: 'bx bxl-html5', value: 'HTML' },
       { icon: 'bx bxl-css3', value: 'CSS' },
       { icon: 'bx bxl-javascript', value: 'JavaScript' },
-      { icon: 'bx bxl-vuejs', value: 'Vue' },
+      { icon: 'bx bxl-vuejs', value: 'Vue', disabled: true },
       { icon: 'bx bxl-sass', value: 'SCSS' },
     ])
 
@@ -44,24 +43,44 @@ const Template = (args) => ({
   template: /* html */ `
   <span>Value 1: {{ value1 }}</span><br/>
   <span>Value 2: {{ value2 }}</span>
-  <na-select v-bind='args' v-model="value1" style="width: 300px" :options="options">
+  <na-select v-bind='args' v-model="value1" style="width: 270px" :options="options">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
     <template #message-danger>Danger!</template>
   </na-select>
-  <na-select v-bind='args' v-model="value2" style="width: 300px">
+  <na-select v-bind='args' v-model="value2" style="width: 270px">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
     <template #message-danger>Danger!</template>
 
-    <na-option v-for="(item, index) in items" :key="index" :value="item.value">
-      <template v-slot:left-side>
-        <i :class='item.icon'/>
-      </template>
-      {{ item.value }} (select 2)
-    </na-option>
+    <na-option-group label="Группа 1" disabled>
+      <na-option
+        v-for="(item, index) in items"
+        :key="index"
+        :value="item.value"
+        :disabled="item.disabled"
+      >
+        <template v-slot:left-side>
+          <i :class='item.icon'/>
+        </template>
+        {{ item.value }} (Группа 1)
+      </na-option>
+    </na-option-group>
+    <na-option-group label="Группа 2">
+      <na-option
+        v-for="(item, index) in items"
+        :key="index"
+        :value="item.value"
+        :disabled="item.disabled"
+      >
+        <template v-slot:right-side>
+          <i :class='item.icon'/>
+        </template>
+        {{ item.value }} (Группа 2)
+      </na-option>
+    </na-option-group>
   </na-select>
   `,
 })

@@ -10,103 +10,30 @@
     ]"
   >
     <!-- label -->
-    <span v-if="label" ref="selectLabel" class="na-select__label">
-      {{ label }}
-    </span>
+    <label>
+      <span v-if="label" ref="selectLabel" class="na-select__label">{{
+        label
+      }}</span>
 
-    <!-- chevron -->
-    <i class="bx bxs-chevron-down na-select__input__chevron"></i>
-
-    <!-- native select -->
-    <template v-if="native">
-      <!-- filter -->
-      <template v-if="filter">
-        <input
-          ref="selectInput"
-          class="na-select__input"
-          onchange="this.blur();"
-          :placeholder="placeholder"
-          :list="`_na-select-${uid}`"
-          :value="modelValue"
-          @change="selectOption($event.target.value)"
-          @focus="focus"
-          @blur="blur"
-        />
-        <datalist class="na-select_filter__datalist" :id="`_na-select-${uid}`">
-          <slot></slot>
-          <template v-if="options">
-            <option
-              v-for="(option, index) in options"
-              :key="index"
-              :value="option.value"
-              :disabled="option.disabled"
-            >
-              <template v-if="option.title">
-                {{ option.title }}
-              </template>
-              <template v-else>
-                {{ option.value }}
-              </template>
-            </option>
-          </template>
-        </datalist>
-      </template>
-
-      <!-- no filter -->
-      <template v-else>
-        <select
-          ref="selectInput"
-          class="na-select__input"
-          :value="modelValue"
-          @change="$emit('update:modelValue', $event.target.value)"
-          @focus="focus"
-          @blur="blur"
-        >
-          <!-- placeholder -->
-          <option v-if="placeholder" value="">
-            {{ placeholder }}
-          </option>
-
-          <slot></slot>
-
-          <template v-if="options">
-            <option
-              v-for="(option, index) in options"
-              :key="index"
-              :value="option.value"
-              :disabled="option.disabled"
-            >
-              <template v-if="option.title">
-                {{ option.title }}
-              </template>
-              <template v-else>
-                {{ option.value }}
-              </template>
-            </option>
-          </template>
-        </select>
-      </template>
-    </template>
-
-    <!-- custom select -->
-    <template v-else>
-      <input
-        ref="selectInput"
-        class="na-select__input"
-        :value="inputValue"
-        :class="{ 'na-select__input_filter': filter }"
-        :placeholder="placeholder"
-        :readonly="!filter"
-        @focus="focus"
-      />
-      <transition name="fade">
-        <div
-          ref="selectList"
-          class="na-select__list"
-          v-show="focused"
-          :style="listStyles"
-        >
-          <div ref="listContainer" class="na-select__list__container">
+      <!-- native select -->
+      <template v-if="native">
+        <!-- filter -->
+        <template v-if="filter">
+          <input
+            ref="selectInput"
+            class="na-select__input"
+            onchange="this.blur();"
+            :placeholder="placeholder"
+            :list="`_na-select-${uid}`"
+            :value="modelValue"
+            @change="selectOption($event.target.value)"
+            @focus="focus"
+            @blur="blur"
+          />
+          <datalist
+            class="na-select_filter__datalist"
+            :id="`_na-select-${uid}`"
+          >
             <slot></slot>
             <template v-if="options">
               <na-option
@@ -115,52 +42,125 @@
                 :value="option.value"
                 :disabled="option.disabled"
               >
-                <template #left-side>
-                  <i :class="option.leftIcon" />
-                </template>
-                <template #default v-if="option.title">
-                  {{ option.title }}
-                </template>
-                <template #right-side>
-                  <i :class="option.rightIcon" />
-                </template>
+                {{ option.title }}
               </na-option>
             </template>
-            <transition name="no-data-fade">
-              <div v-show="noData" class="na-select__list__no-data">
-                <i class="bx bxs-inbox"></i>
-                <span>No data</span>
-              </div>
-            </transition>
-          </div>
-        </div>
-      </transition>
-    </template>
+          </datalist>
+        </template>
 
-    <!-- message -->
-    <div ref="selectMessage">
-      <span v-if="state === 'success'" class="na-select__message">
-        <i class="bx bxs-check-circle"></i>
-        <slot name="message-success"></slot>
-      </span>
-      <span
-        v-else-if="state === 'warning'"
-        class="na-select__message na-select__message_warning"
-      >
-        <i class="bx bxs-info-circle"></i>
-        <slot name="message-warning"></slot>
-      </span>
-      <span
-        v-else-if="state === 'danger'"
-        class="na-select__message na-select__message_danger"
-      >
-        <i class="bx bxs-x-circle"></i>
-        <slot name="message-danger"></slot>
-      </span>
-      <span v-else class="na-select__message">
-        <slot name="message-default"></slot>
-      </span>
-    </div>
+        <!-- no filter -->
+        <template v-else>
+          <select
+            ref="selectInput"
+            class="na-select__input"
+            :value="modelValue"
+            @change="$emit('update:modelValue', $event.target.value)"
+            @focus="focus"
+            @blur="blur"
+          >
+            <!-- placeholder -->
+            <option disabled v-if="placeholder" value="">
+              {{ placeholder }}
+            </option>
+
+            <slot></slot>
+
+            <template v-if="options">
+              <option
+                v-for="(option, index) in options"
+                :key="index"
+                :value="option.value"
+                :disabled="option.disabled"
+              >
+                <template v-if="option.title">
+                  {{ option.title }}
+                </template>
+                <template v-else>
+                  {{ option.value }}
+                </template>
+              </option>
+            </template>
+          </select>
+        </template>
+      </template>
+
+      <!-- custom select -->
+      <template v-else>
+        <input
+          ref="selectInput"
+          class="na-select__input"
+          :value="inputValue"
+          :class="{ 'na-select__input_filter': filter }"
+          :placeholder="placeholder"
+          :readonly="!filter"
+          @focus="focus"
+        />
+        <transition name="fade">
+          <div
+            ref="selectList"
+            class="na-select__list"
+            v-show="focused"
+            :style="listStyles"
+          >
+            <div ref="listContainer" class="na-select__list__container">
+              <slot></slot>
+              <template v-if="options">
+                <na-option
+                  v-for="(option, index) in options"
+                  :key="index"
+                  :value="option.value"
+                  :disabled="option.disabled"
+                >
+                  <template #left-side>
+                    <i :class="option.leftIcon" />
+                  </template>
+                  <template #default v-if="option.title">
+                    {{ option.title }}
+                  </template>
+                  <template #right-side>
+                    <i :class="option.rightIcon" />
+                  </template>
+                </na-option>
+              </template>
+              <transition name="no-data-fade">
+                <div v-if="noData" class="na-select__list__no-data">
+                  <i class="bx bxs-inbox"></i>
+                  <span>No data</span>
+                </div>
+              </transition>
+            </div>
+          </div>
+        </transition>
+      </template>
+
+      <!-- chevron -->
+      <i class="bx bxs-chevron-down na-select__input__chevron"></i>
+
+      <!-- message -->
+      <div ref="selectMessage">
+        <span v-if="state === 'success'" class="na-select__message">
+          <i class="bx bxs-check-circle"></i>
+          <slot name="message-success"></slot>
+        </span>
+        <span
+          v-else-if="state === 'warning'"
+          class="na-select__message na-select__message_warning"
+        >
+          <i class="bx bxs-info-circle"></i>
+          <slot name="message-warning"></slot>
+        </span>
+        <span
+          v-else-if="state === 'danger'"
+          class="na-select__message na-select__message_danger"
+        >
+          <i class="bx bxs-x-circle"></i>
+          <slot name="message-danger"></slot>
+        </span>
+        <span v-else class="na-select__message">
+          <slot name="message-default"></slot>
+        </span>
+      </div>
+    </label>
   </div>
 </template>
 
@@ -177,7 +177,7 @@ import {
 import NaOption from './na-option.vue'
 
 import mitt from 'mitt'
-import { IOption, IRenderedOption } from '@/typings'
+import { IOption, IRenderedOption, IRenderedOptionGroup } from '@/typings'
 
 let $_naSelectId = 0
 
@@ -248,8 +248,10 @@ export default defineComponent({
       '--message-height': 0 + 'px',
     })
 
-    const renderedOptions: IRenderedOption[] = []
     const emitter = mitt()
+
+    const renderedOptions: IRenderedOption[] = []
+    const renderedOptionGroups: IRenderedOptionGroup[] = []
 
     let allOptions: HTMLButtonElement[] = []
     let displayedOptions: HTMLButtonElement[] = []
@@ -276,6 +278,9 @@ export default defineComponent({
       if (props.native) return
 
       emitter.on('add-option', (option) => allOptions.push(option))
+      emitter.on('add-option-group', (group) =>
+        renderedOptionGroups.push(group),
+      )
       emitter.on('activate', (uid) => {
         const currentOption = renderedOptions.find(
           (option) => option.uid === uid,
@@ -342,8 +347,6 @@ export default defineComponent({
 
     const selectOption = (target: string): void => {
       const valid = renderedOptions.find((option) => option.value === target)
-
-      console.log(renderedOptions)
 
       if (valid) {
         emit('update:modelValue', target)
@@ -414,6 +417,14 @@ export default defineComponent({
           (option) => !option.classList.contains('na-option_disabled'),
         )
 
+        renderedOptionGroups.map((group) => {
+          const hasDisplayed = group.element.querySelector(
+            '.na-option_displayed',
+          )
+
+          group.show.value = !!hasDisplayed
+        })
+
         firstOption = 0
         lastOption = availableOptions.length - 1
         currentOption = -1
@@ -450,19 +461,22 @@ export default defineComponent({
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: 0.1s ease;
-  top: calc(100% - var(--message-height) + 5px);
+  transition: 0.1s ease-out;
+  top: calc(100% - var(--message-height));
+  overflow-y: hidden;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  top: calc(100% - var(--message-height) - 5px);
+  transition: 0.1s ease-in;
+  top: calc(100% - var(--message-height) - 15px);
   opacity: 0;
+  overflow-y: hidden;
 }
 
 .no-data-fade-enter-active,
 .no-data-fade-leave-active {
-  transition: 0.1s ease-in;
+  transition: 0.2s ease-in;
   padding-top: 0;
   padding-bottom: 0;
   height: 0;
