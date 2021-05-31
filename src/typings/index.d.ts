@@ -14,3 +14,8 @@ export interface IRenderedOption {
   value: string
   selected: Ref
 }
+
+export interface IRenderedOptionGroup {
+  element: HTMLDivElement
+  show: Ref
+}

@@ -9,7 +9,7 @@
       :style="optionStyles"
       :class="[
         { 'na-option_selected': selected },
-        { 'na-option_disabled': disabled },
+        { 'na-option_disabled': isDisabled },
         { 'na-option_displayed': show },
       ]"
       @keydown.enter="activate"
@@ -27,13 +27,12 @@
     </button>
   </transition>
 
-  <option v-if="isNative" :value="value">
+  <option v-if="isNative" :value="value" :disabled="isDisabled">
     <slot>{{ value }}</slot>
   </option>
 </template>
 
 <script lang="ts">
-import { Emitter } from 'mitt'
 import {
   onMounted,
   ref,
@@ -43,6 +42,8 @@ import {
   nextTick,
   Ref,
 } from 'vue'
+
+import { Emitter } from 'mitt'
 
 let $_naOptionId = 0
 
@@ -76,6 +77,7 @@ export default defineComponent({
     const input = inject<Ref<HTMLInputElement | HTMLSelectElement>>('input')
     const isNative = inject<Boolean>('native')
     const isFilter = inject<Boolean>('filter')
+    const isDisabled = ref(false)
 
     nextTick(() => {
       emitter?.emit('add-option', option.value)
@@ -90,6 +92,12 @@ export default defineComponent({
     // Hooks
     onMounted(() => {
       if (isNative) return
+
+      isDisabled.value = props.disabled
+        ? true
+        : option.value?.closest('.na-option-group')
+        ? !!inject<Boolean>('disabled')
+        : false
 
       title.value = slots['default']
         ? optionTitle.value?.innerText!
@@ -116,7 +124,7 @@ export default defineComponent({
 
     // Methods
     const activate = (e: Event) => {
-      if (!props.disabled) emitter?.emit('activate', uid)
+      if (!isDisabled.value) emitter?.emit('activate', uid)
       else e.stopPropagation()
     }
 
@@ -138,6 +146,7 @@ export default defineComponent({
       selected,
       optionStyles,
       isNative,
+      isDisabled,
 
       // Methods
       activate,
@@ -149,7 +158,7 @@ export default defineComponent({
 <style scoped>
 .show-enter-active,
 .show-leave-active {
-  transition: 0.1s ease-out;
+  transition: 0.2s ease-out;
   padding-top: 0;
   padding-bottom: 0;
   height: 0;
@@ -158,7 +167,7 @@ export default defineComponent({
 
 .show-enter-from,
 .show-leave-to {
-  transition: 0.1s ease-in;
+  transition: 0.2s ease-in;
   min-height: 0;
   height: 0;
   padding-top: 0;
