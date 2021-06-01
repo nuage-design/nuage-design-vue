@@ -1,10 +1,11 @@
-@import "./mixins";
-@import "./variables";
-
-$colors: primary, success, info, warning, danger, dark;
+@import 'vars';
+@import 'mixins';
 
 .na-badge {
-  @include align-center;
+  @include badge-align;
+
+  color: var(--white);
+  background: var(--primary-500);
 
   font: {
     family: var(--font-family);
@@ -13,25 +14,28 @@ $colors: primary, success, info, warning, danger, dark;
     size: var(--font-size);
   }
 
-  line-height: var(--font-line-height);
+  line-height: var(--line-height);
+
+  font-stretch: extra-expanded;
 
   height: var(--height);
   min-width: var(--height);
-  color: white;
-  border-radius: calc(var(--height) / 2);
   max-width: max-content;
-  transition: 0.1s;
+
+  transition: var(--transition);
+  border-radius: calc(var(--height) / 2);
 
   padding: 0 var(--side-space);
 
-  &_dot {
+  &--dot {
     padding: 0;
     height: var(--dot-size);
     min-width: var(--dot-size);
     border-radius: 50%;
   }
 
-  @each $color in $colors {
-    @include badge-color($color, 500);
+  &--inverse {
+    color: var(--primary-500);
+    background: var(--white);
   }
 }

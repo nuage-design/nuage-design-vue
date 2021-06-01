@@ -1,7 +1,7 @@
 <template>
   <div
     class="na-button-group"
-    :class="{ 'na-button-group_vertical': vertical }"
+    :class="{ 'na-button-group--vertical': vertical }"
   >
     <slot></slot>
   </div>

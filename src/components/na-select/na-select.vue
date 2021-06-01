@@ -3,10 +3,10 @@
     ref="select"
     :class="[
       'na-select',
-      `na-select_state_${state}`,
-      { 'na-select_native': native },
-      { 'na-select_filter': filter },
-      { 'na-select_focused': focused },
+      `na-select--state-${state}`,
+      { 'na-select--native': native },
+      { 'na-select--filter': filter },
+      { 'na-select--focused': focused },
     ]"
   >
     <!-- label -->
@@ -31,7 +31,7 @@
             @blur="blur"
           />
           <datalist
-            class="na-select_filter__datalist"
+            class="na-select--filter__datalist"
             :id="`_na-select-${uid}`"
           >
             <slot></slot>
@@ -90,7 +90,7 @@
           ref="selectInput"
           class="na-select__input"
           :value="inputValue"
-          :class="{ 'na-select__input_filter': filter }"
+          :class="{ 'na-select__input--filter': filter }"
           :placeholder="placeholder"
           :readonly="!filter"
           @focus="focus"
@@ -102,7 +102,7 @@
             v-show="focused"
             :style="listStyles"
           >
-            <div ref="listContainer" class="na-select__list__container">
+            <div ref="listContainer" class="na-select__container">
               <slot></slot>
               <template v-if="options">
                 <na-option
@@ -123,7 +123,7 @@
                 </na-option>
               </template>
               <transition name="no-data-fade">
-                <div v-if="noData" class="na-select__list__no-data">
+                <div v-if="noData" class="na-select__no-data">
                   <i class="bx bxs-inbox"></i>
                   <span>No data</span>
                 </div>
@@ -134,7 +134,7 @@
       </template>
 
       <!-- chevron -->
-      <i class="bx bxs-chevron-down na-select__input__chevron"></i>
+      <i class="bx bxs-chevron-down na-select__chevron"></i>
 
       <!-- message -->
       <div ref="selectMessage">
@@ -144,14 +144,14 @@
         </span>
         <span
           v-else-if="state === 'warning'"
-          class="na-select__message na-select__message_warning"
+          class="na-select__message na-select__message--warning"
         >
           <i class="bx bxs-info-circle"></i>
           <slot name="message-warning"></slot>
         </span>
         <span
           v-else-if="state === 'danger'"
-          class="na-select__message na-select__message_danger"
+          class="na-select__message na-select__message--danger"
         >
           <i class="bx bxs-x-circle"></i>
           <slot name="message-danger"></slot>
@@ -410,16 +410,16 @@ export default defineComponent({
     const reset = (): void => {
       setTimeout(() => {
         displayedOptions = allOptions.filter((option) =>
-          option.classList.contains('na-option_displayed'),
+          option.classList.contains('na-option--displayed'),
         )
 
         availableOptions = displayedOptions.filter(
-          (option) => !option.classList.contains('na-option_disabled'),
+          (option) => !option.classList.contains('na-option--disabled'),
         )
 
         renderedOptionGroups.map((group) => {
           const hasDisplayed = group.element.querySelector(
-            '.na-option_displayed',
+            '.na-option--displayed',
           )
 
           group.show.value = !!hasDisplayed

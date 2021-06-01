@@ -1,10 +1,8 @@
 import { NaButton, NaButtonGroup } from '../components/na-button'
-import NaBadge from '../components/na-badge'
 import 'boxicons'
 
 const types = ['rounded', 'rect', 'circle']
 const styles = ['solid', 'border', 'transparent']
-const colors = ['primary', 'success', 'info', 'warning', 'danger', 'dark']
 const sizes = ['small', 'default', 'large', 'xl']
 
 export default {
@@ -23,12 +21,6 @@ export default {
         type: 'radio',
       },
     },
-    color: {
-      options: colors,
-      control: {
-        type: 'select',
-      },
-    },
     size: {
       options: sizes,
       control: {
@@ -39,7 +31,7 @@ export default {
 }
 
 export const Button = (args) => ({
-  components: { NaButton, NaBadge },
+  components: { NaButton },
   setup() {
     return { args }
   },
@@ -59,7 +51,7 @@ export const Button = (args) => ({
   <br/>
   <na-button v-bind="args">
     <span>${args.text}</span>
-    <na-badge :value="100" :color="args.color" :size="args.size" />
+    <i class='bx bx-heart' />
   </na-button>
   `,
 })
@@ -69,7 +61,7 @@ Button.args = {
 }
 
 export const ButtonGroup = (args) => ({
-  components: { NaButton, NaButtonGroup, NaBadge },
+  components: { NaButton, NaButtonGroup },
   setup() {
     return { args }
   },
@@ -87,7 +79,7 @@ export const ButtonGroup = (args) => ({
     </na-button>
     <na-button v-bind="args">
       <span>${args.text}</span>
-      <na-badge :value="100" :color="args.color" :size="args.size" />
+      <i class='bx bx-heart' />
     </na-button>
   </na-button-group>
   `,

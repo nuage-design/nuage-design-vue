@@ -1,7 +1,6 @@
-import NaBadge from '../components/na-badge'
+import { NaBadge } from '../components/na-badge'
 
-const sizes = ['small', 'default', 'large', 'xl']
-const colors = ['primary', 'success', 'info', 'warning', 'danger', 'dark']
+const sizes = ['small', 'default', 'large']
 
 export default {
   title: 'Components/Badge',
@@ -10,13 +9,7 @@ export default {
     size: {
       options: sizes,
       control: {
-        type: 'select',
-      },
-    },
-    color: {
-      options: colors,
-      control: {
-        type: 'select',
+        type: 'radio',
       },
     },
   },
@@ -34,6 +27,6 @@ export const Badge = Template.bind({})
 
 Badge.args = {
   value: 100,
-  color: 'primary',
+  size: 'default',
   inverse: false,
 }

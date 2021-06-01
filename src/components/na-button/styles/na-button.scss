@@ -1,0 +1,130 @@
+@import 'mixins';
+@import 'vars';
+
+.na-button {
+  @include align-center;
+
+  text-rendering: optimizeSpeed;
+
+  font: {
+    family: var(--font-family);
+    style: var(--font-style);
+    weight: var(--font-weight);
+    size: var(--font-size);
+  }
+
+  line-height: var(--font-line-height);
+  border-radius: var(--border-radius);
+  padding: var(--padding);
+  height: var(--height);
+  width: var(--width);
+  cursor: pointer;
+  border: none;
+  color: var(--white);
+
+  transition: var(--transition);
+  letter-spacing: var(--letter-spacing);
+
+  &--block {
+    width: 100%;
+  }
+
+  // space between elements
+  > * {
+    margin-right: var(--space);
+
+    &:nth-last-child(1) {
+      margin-right: 0;
+    }
+  }
+
+  &--style-solid {
+    background: var(--primary);
+
+    .na-badge {
+      background-color: var(--white);
+      color: var(--primary-400);
+    }
+
+    &:hover:not(.na-button--active, [disabled]),
+    &:focus:not(.na-button--active, [disabled]) {
+      background: var(--primary-400);
+    }
+  }
+
+  &--style-border {
+    background: none;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+
+    &:hover:not(.na-button--active, [disabled]) {
+      color: var(--primary-300);
+      border-color: var(--primary-300);
+
+      .na-badge {
+        background: var(--primary-300);
+      }
+    }
+
+    &:focus:not(.na-button--active, [disabled]),
+    &:active:not(.na-button--active, [disabled]) {
+      color: var(--primary);
+      border-color: var(--primary);
+
+      .na-badge {
+        background: var(--primary-300);
+      }
+    }
+  }
+
+  &--style-transparent {
+    background: none;
+    color: var(--primary);
+
+    &:hover:not(.na-button--active, [disabled]),
+    &:focus:not(.na-button--active, [disabled]) {
+      background: var(--primary-transparent);
+      box-shadow: none;
+    }
+
+    &:active:not(.na-button--active, [disabled]) {
+      color: var(--white);
+      background: var(--primary);
+    }
+  }
+
+  &--light-text:not(.na-button--style-solid) :not(i, .na-badge__text) {
+    color: var(--white);
+  }
+
+  &--active {
+    color: var(--white);
+    background: var(--primary-400);
+    border-color: var(--primary-400);
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: var(--white);
+      background: var(--primary-400);
+    }
+
+    .na-badge {
+      background: var(--primary-400);
+    }
+  }
+
+  &[disabled] {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 5px var(--primary-transparent);
+  }
+
+  i {
+    font-size: var(--icon-size);
+  }
+}

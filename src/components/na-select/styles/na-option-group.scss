@@ -1,0 +1,33 @@
+@import 'vars';
+
+.na-option-group {
+  &__label {
+    min-height: var(--option-height);
+    margin-bottom: var(--margin-bottom);
+
+    color: var(--text-secondary);
+
+    box-sizing: border-box;
+
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 0px 13px 8px;
+  }
+
+  .na-option {
+    padding-left: 26px;
+
+    &:not(&--disabled):focus {
+      padding-left: 25px;
+    }
+  }
+
+  &--disabled .na-option-group__label {
+    opacity: 0.5;
+  }
+}

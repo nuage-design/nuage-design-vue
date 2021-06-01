@@ -5,7 +5,7 @@
   <div
     v-else-if="label"
     ref="optionGroup"
-    :class="['na-option-group', { 'na-option-group_disabled': disabled }]"
+    :class="['na-option-group', { 'na-option-group--disabled': disabled }]"
   >
     <transition name="show">
       <div v-show="show" ref="label" class="na-option-group__label">
