@@ -1,18 +1,8 @@
 import { NaBadge } from '../components/na-badge'
 
-const sizes = ['small', 'default', 'large']
-
 export default {
   title: 'Components/Badge',
   component: NaBadge,
-  argTypes: {
-    size: {
-      options: sizes,
-      control: {
-        type: 'radio',
-      },
-    },
-  },
 }
 
 const Template = (args) => ({

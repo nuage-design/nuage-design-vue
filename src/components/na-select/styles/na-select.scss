@@ -1,4 +1,3 @@
-@import 'vars';
 @import 'mixins';
 
 .na-select {
@@ -16,7 +15,7 @@
   &__label {
     display: inline-block;
     color: var(--text-primary);
-    margin-bottom: var(--margin-bottom);
+    margin-bottom: var(--space-between-elements);
     letter-spacing: var(--letter-spacing);
 
     font: {
@@ -26,6 +25,32 @@
     }
 
     line-height: var(--line-height);
+
+    transition: var(--transition);
+  }
+
+  &__input {
+    @include clear-input-styles;
+
+    width: 100%;
+    height: var(--height);
+    border-radius: var(--border-radius);
+    line-height: var(--line-height);
+
+    padding-left: var(--padding);
+    padding-right: calc(var(--chevron-size) + 2 * var(--padding));
+    border: var(--border);
+
+    transition: var(--transition);
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+
+    &:focus {
+      @include input-outline;
+      border-color: var(--primary);
+    }
   }
 
   &__chevron {
@@ -33,12 +58,95 @@
     width: 0;
 
     color: var(--text-secondary);
-    font-size: var(--font-size);
+    font-size: var(--chevron-size);
     position: relative;
 
-    //
-    right: calc(var(--padding) + var(--font-size) + 1px);
+    right: calc(var(--padding) + var(--chevron-size));
     top: 4px;
+  }
+
+  &__list {
+    position: absolute;
+    min-width: 100%;
+    width: max-content;
+    min-height: calc(var(--option-height) + var(--padding) * 2);
+    max-height: calc(
+      (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
+        var(--margin-bottom) + 2 * var(--padding)
+    );
+
+    top: calc(100% - var(--message-height) - 2px);
+    z-index: 100;
+    overflow-y: auto;
+
+    border-radius: var(--border-radius);
+    background: var(--white);
+    box-shadow: var(--block-drop-shadow);
+  }
+
+  &__container {
+    padding: var(--padding);
+  }
+
+  &__no-data {
+    position: relative;
+
+    @include row-align;
+
+    justify-content: center;
+
+    color: var(--text-secondary);
+    margin-bottom: var(--margin-bottom);
+    min-height: var(--option-height);
+
+    @include space-between-elements;
+
+    i {
+      font-size: 20px;
+    }
+  }
+
+  &__message {
+    color: var(--text-secondary);
+    line-height: var(--icon-size);
+    margin-top: var(--space-between-elements);
+    transition: var(--transition);
+
+    opacity: 1;
+
+    display: flex;
+    align-content: center;
+
+    > i {
+      font-size: var(--icon-size);
+      margin-right: 5px;
+    }
+  }
+
+  &--focused {
+    &.na-select {
+      & .na-select__label {
+        color: var(--primary);
+      }
+
+      & .na-select__input {
+        box-shadow: var(--box-shadow);
+        border-color: var(--primary);
+      }
+
+      & .na-select__chevron {
+        color: var(--primary);
+      }
+    }
+  }
+
+  &--native.na-select--filter {
+    .na-select__input {
+      padding-right: var(--padding);
+    }
+    .na-select__chevron {
+      display: none;
+    }
   }
 
   &--state-success {
@@ -66,132 +174,6 @@
     }
     .na-select__message {
       color: var(--danger);
-    }
-  }
-
-  &--focused {
-    & .na-select {
-      &__label {
-        color: var(--primary);
-      }
-
-      &__input {
-        box-shadow: 0 0 0 5px var(--primary-transparent);
-        border-color: var(--primary) !important;
-
-        &__chevron {
-          color: var(--primary);
-        }
-      }
-    }
-  }
-
-  &--native.na-select--filter {
-    .na-select__input {
-      padding-right: 13px;
-    }
-    .na-select__chevron {
-      display: none;
-    }
-  }
-
-  &__input {
-    @include clear-input-styles;
-
-    height: var(--height);
-    border-radius: calc(var(--height) / 3);
-
-    width: 100%;
-
-    line-height: 100%;
-    padding-left: var(--padding);
-    padding-right: calc(var(--padding) + 1px + 20px + 8px);
-    border: 1px solid var(--dark-100);
-
-    transition: 0.1s;
-
-    &::placeholder {
-      color: var(--text-secondary);
-    }
-
-    font: {
-      family: inherit;
-      style: normal;
-      weight: 500;
-      size: var(--font-size);
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 5px var(--primary-transparent);
-      border-color: var(--primary);
-    }
-  }
-
-  &__list {
-    --block-drop-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    --padding: 10px;
-    --option-height: 33px;
-    --margin-bottom: 3px;
-
-    position: absolute;
-    min-width: 100%;
-    width: max-content;
-    box-sizing: border-box;
-    flex: 0 0 auto;
-    top: calc(100% - var(--message-height));
-    z-index: 100;
-    overflow-y: auto;
-
-    padding: 0;
-    padding-bottom: 0;
-    min-height: calc(var(--option-height) + var(--padding) * 2);
-
-    border-radius: 12px;
-    background: white;
-    box-shadow: var(--block-drop-shadow);
-    max-height: calc(
-      (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
-        var(--margin-bottom) + 2 * var(--padding)
-    );
-  }
-
-  &__container {
-    padding: 10px 10px 7px;
-    transition: 0.1s;
-  }
-
-  &__no-data {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary);
-    margin: 0;
-    margin-bottom: var(--margin-bottom);
-    padding: 0;
-    min-height: var(--option-height);
-
-    i {
-      padding-right: 8px;
-      font-size: 20px;
-    }
-  }
-
-  &__message {
-    color: var(--text-secondary);
-    font-size: 13px;
-    line-height: 18px;
-    margin-top: 7px;
-    opacity: 1;
-    transition: 0.1s;
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-
-    > i {
-      font-size: 18px;
-      margin-right: 5px;
     }
   }
 }

@@ -1,33 +1,36 @@
-@import 'vars';
+@import 'mixins';
 
 .na-option-group {
   &__label {
     min-height: var(--option-height);
     margin-bottom: var(--margin-bottom);
 
-    color: var(--text-secondary);
+    color: var(--text-primary);
 
-    box-sizing: border-box;
+    font: {
+      family: var(--font-family);
+      size: var(--font-size);
+      weight: var(--font-weight);
+    }
 
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 100%;
+    line-height: var(--line-height);
+    letter-spacing: var(--letter-spacing);
 
-    display: flex;
-    flex-direction: row;
+    @include row-align;
     align-items: flex-end;
-    padding: 0px 13px 8px;
+
+    padding: var(--padding);
   }
 
   .na-option {
-    padding-left: 26px;
+    padding-left: calc(var(--padding-left) * 2);
 
     &:not(&--disabled):focus {
-      padding-left: 25px;
+      padding-left: calc(var(--padding-left) * 2 - var(--border-radius));
     }
   }
 
   &--disabled .na-option-group__label {
-    opacity: 0.5;
+    @include disabled;
   }
 }

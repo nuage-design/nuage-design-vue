@@ -1,117 +1,72 @@
-@import 'vars';
 @import 'mixins';
 
 .na-option {
-  @include option-align;
+  @include clear-button-styles;
+  @include row-align;
 
-  margin: 0;
-  margin-bottom: var(--margin-bottom);
-  padding: 0 var(--padding-right) 0 13px;
+  justify-content: space-between;
 
-  min-width: 100%;
-  max-width: 100%;
+  margin: var(--margin);
+  padding: var(--padding);
+
+  width: 100%;
   min-height: var(--option-height);
 
-  font-size: var(--font-size);
-  font-weight: 500;
-
   color: var(--text-regular);
-  background: none;
+  border-radius: var(--border-radius);
 
-  border: none;
-  border-radius: 11px;
-
-  transition: background 0.1s, box-shadow 0.1s;
-
-  cursor: pointer;
+  transition: background var(--transition), box-shadow var(--transition);
 
   i {
     font-size: 20px;
   }
 
   &__left-side {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    min-width: max-content;
+    @include row-align;
 
     position: relative;
     left: 0;
 
-    transition: 0.1s;
+    transition: var(--transition);
 
-    // space
-    & > * {
-      margin-left: 4px;
-      margin-right: 4px;
-
-      &:nth-child(1) {
-        margin-left: 0;
-      }
-
-      &:nth-last-child(1) {
-        margin-right: 0;
-      }
-    }
+    @include space-between-elements;
   }
 
   &__right-side {
-    display: flex;
-    flex-direction: row;
-    align-items: right;
-    padding-left: 30px;
-    transition: 0.1s;
+    @include row-align;
 
     position: relative;
+    padding-left: var(--padding-left);
+    transition: var(--transition);
 
-    // space
-    & > * {
-      margin-left: 4px;
-      margin-right: 4px;
-
-      &:nth-child(1) {
-        margin-left: 0;
-      }
-
-      &:nth-last-child(1) {
-        margin-right: 0;
-      }
-    }
+    @include space-between-elements;
   }
 
   &--selected:not(&--disabled) {
-    box-shadow: inset -5px 0px 0px var(--primary);
-    color: var(--primary);
+    box-shadow: var(--box-shadow);
     background: var(--primary-transparent-light);
-
-    .na-option__left-side {
-      left: 10px;
-    }
   }
 
   &--disabled {
-    opacity: 0.5;
-    cursor: default;
-  }
+    @include disabled;
 
-  &:not(&--disabled):hover {
-    color: var(--primary);
-
-    .na-option__left-side {
-      left: 10px;
+    // fix focus bug
+    &:focus {
+      padding-left: var(--padding-left);
     }
   }
 
   &:not(&--disabled):focus {
-    outline: none;
-    box-shadow: inset -4px 0px 0px var(--primary);
-    border: 1px solid var(--primary);
-    color: var(--primary);
+    @include option-outline;
 
-    padding: 0 calc(var(--padding-right) - 1px) 0 12px;
+    border: var(--border-width) solid var(--primary);
 
-    .na-option__left-side {
-      left: 10px;
-    }
+    padding: var(--padding);
+  }
+
+  &:not(&--disabled):hover,
+  &:not(&--disabled):focus,
+  &--selected:not(&--disabled) {
+    @include active-option;
   }
 }

@@ -462,14 +462,14 @@ export default defineComponent({
 .fade-enter-active,
 .fade-leave-active {
   transition: 0.1s ease-out;
-  top: calc(100% - var(--message-height));
+  top: calc(100% - var(--message-height) - 2px);
   overflow-y: hidden;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   transition: 0.1s ease-in;
-  top: calc(100% - var(--message-height) - 15px);
+  top: calc(100% - var(--message-height) - 7px);
   opacity: 0;
   overflow-y: hidden;
 }

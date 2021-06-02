@@ -3,7 +3,6 @@
     ref="badge"
     :class="[
       'na-badge',
-      `na-badge--size-${size}`,
       { 'na-badge--inverse': inverse },
       { 'na-badge--dot': dot || !value },
     ]"
@@ -18,13 +17,6 @@ import { defineComponent, ref, onMounted, computed } from 'vue'
 export default defineComponent({
   name: 'NaBadge',
   props: {
-    size: {
-      type: String,
-      default: 'default',
-      validator: (value: string) => {
-        return ['small', 'default', 'large'].includes(value)
-      },
-    },
     value: {
       type: [String, Number],
       default: null,

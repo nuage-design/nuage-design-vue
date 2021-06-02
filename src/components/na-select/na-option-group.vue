@@ -3,6 +3,7 @@
     <slot></slot>
   </optgroup>
   <div
+    :disabled="disabled"
     v-else-if="label"
     ref="optionGroup"
     :class="['na-option-group', { 'na-option-group--disabled': disabled }]"
