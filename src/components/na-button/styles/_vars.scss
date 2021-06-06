@@ -55,7 +55,7 @@
   @each $size, $values in $sizes {
     &--size-#{$size} {
       $height: map-get($values, height);
-      $types-border-radius: (
+      $shapes-border-radius: (
         rounded: $height / 3,
         rect: 3px,
         circle: $height / 2,
@@ -76,8 +76,8 @@
         --padding: 0;
       }
 
-      @each $type, $border-radius in $types-border-radius {
-        &.na-button--type-#{$type} {
+      @each $shape, $border-radius in $shapes-border-radius {
+        &.na-button--shape-#{$shape} {
           --border-radius: #{$border-radius};
         }
       }

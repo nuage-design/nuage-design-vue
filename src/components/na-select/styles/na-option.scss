@@ -44,7 +44,7 @@
 
   &--selected:not(&--disabled) {
     box-shadow: var(--box-shadow);
-    background: var(--primary-transparent-light);
+    background: var(--primary-transparent-100);
   }
 
   &--disabled {
@@ -59,7 +59,7 @@
   &:not(&--disabled):focus {
     @include option-outline;
 
-    border: var(--border-width) solid var(--primary);
+    border: var(--border-width) solid var(--primary-400);
 
     padding: var(--padding);
   }

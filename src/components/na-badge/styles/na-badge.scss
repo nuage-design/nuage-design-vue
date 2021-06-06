@@ -4,7 +4,7 @@
   @include badge-align;
 
   color: var(--white);
-  background: var(--primary-500);
+  background: var(--primary-400);
 
   font: {
     family: var(--font-family);
@@ -34,7 +34,7 @@
   }
 
   &--inverse {
-    color: var(--primary-500);
+    color: var(--primary-400);
     background: var(--white);
   }
 }

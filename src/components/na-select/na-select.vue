@@ -177,7 +177,7 @@ import {
 import NaOption from './na-option.vue'
 
 import mitt from 'mitt'
-import { IOption, IRenderedOption, IRenderedOptionGroup } from '@/typings'
+import { IOption, IRenderedOption, IRenderedOptionGroup } from './na-select'
 
 let $_naSelectId = 0
 
@@ -395,8 +395,18 @@ export default defineComponent({
           break
 
         case 'Tab':
-          if (currentOption === lastOption) blur()
-          else next(e)
+          if (e.shiftKey) {
+            if (currentOption === firstOption) focus()
+            else prev(e)
+          } else {
+            if (currentOption === lastOption) blur()
+            else next(e)
+          }
+
+          break
+
+        case 'Shift':
+          e.preventDefault()
           break
 
         default:

@@ -46,11 +46,6 @@
     &::placeholder {
       color: var(--text-secondary);
     }
-
-    &:focus {
-      @include input-outline;
-      border-color: var(--primary);
-    }
   }
 
   &__chevron {
@@ -126,16 +121,16 @@
   &--focused {
     &.na-select {
       & .na-select__label {
-        color: var(--primary);
+        color: var(--primary-400);
       }
 
       & .na-select__input {
-        box-shadow: var(--box-shadow);
-        border-color: var(--primary);
+        outline: none;
+        border-color: var(--primary-400);
       }
 
       & .na-select__chevron {
-        color: var(--primary);
+        color: var(--primary-400);
       }
     }
   }

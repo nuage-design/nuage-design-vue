@@ -1,7 +1,7 @@
 import { NaButton, NaButtonGroup } from '../components/na-button'
 import 'boxicons'
 
-const types = ['rounded', 'rect', 'circle']
+const shapes = ['rounded', 'rect', 'circle']
 const styles = ['solid', 'border', 'transparent']
 const sizes = ['small', 'default', 'large', 'xl']
 
@@ -9,13 +9,13 @@ export default {
   title: 'Components/Button',
   component: NaButton,
   argTypes: {
-    type: {
-      options: types,
+    shape: {
+      options: shapes,
       control: {
         type: 'radio',
       },
     },
-    buttonStyle: {
+    type: {
       options: styles,
       control: {
         type: 'radio',

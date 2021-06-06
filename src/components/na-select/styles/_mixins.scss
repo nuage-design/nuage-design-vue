@@ -18,14 +18,9 @@
   background: none;
 }
 
-@mixin input-outline {
-  outline: none;
-  box-shadow: 0 0 0 5px var(--primary-transparent);
-}
-
 @mixin option-outline {
   outline: none;
-  box-shadow: inset -4px 0px 0px var(--primary);
+  box-shadow: inset -4px 0px 0px var(--primary-400);
 }
 
 @mixin space-between-elements {
@@ -58,7 +53,7 @@
 }
 
 @mixin active-option {
-  color: var(--primary);
+  color: var(--primary-400);
 
   .na-option__left-side {
     left: var(--shift);

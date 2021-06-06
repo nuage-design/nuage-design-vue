@@ -4,8 +4,8 @@
     :class="[
       'na-button',
       `na-button--size-${size}`,
-      `na-button--type-${type}`,
-      `na-button--style-${buttonStyle}`,
+      `na-button--shape-${shape}`,
+      `na-button--style-${type}`,
       { 'na-button--light-text': lightText },
       { 'na-button--active': active },
       { 'na-button--equal': equal },
@@ -30,7 +30,7 @@ export default defineComponent({
       },
     },
 
-    type: {
+    shape: {
       type: String,
       default: 'rounded',
       validator: (value: string) => {
@@ -38,7 +38,7 @@ export default defineComponent({
       },
     },
 
-    buttonStyle: {
+    type: {
       type: String,
       default: 'solid',
       validator: (value: string) => {
@@ -77,7 +77,7 @@ export default defineComponent({
     onMounted(() => {
       button.value?.style.setProperty('--space', props.space + 'px')
 
-      if (props.buttonStyle === 'solid' || props.active) {
+      if (props.type === 'solid' || props.active) {
         const badges = button.value?.querySelectorAll('.na-badge')
 
         badges?.forEach((badge) => {

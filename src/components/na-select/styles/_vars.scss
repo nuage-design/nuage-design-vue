@@ -5,12 +5,10 @@
   --message-height: 0px;
   --margin: 15px 10px 10px;
   --line-height: 100%;
-  --transition: 0.1s;
+  --transition: 0.1s ease;
   --border-width: 1px;
   --height: 33px;
   --border-radius: calc(var(--height) / 3);
-  --box-shadow: 0 0 0 5px var(--primary-transparent);
-
   --space-between-elements: 7px;
   --chevron-size: 20px;
 
@@ -53,7 +51,7 @@
   }
 
   &--selected {
-    --box-shadow: inset -5px 0px 0px var(--primary);
+    --box-shadow: inset -5px 0px 0px var(--primary-400);
   }
 
   &:focus {
