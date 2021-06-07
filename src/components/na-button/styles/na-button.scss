@@ -18,12 +18,11 @@
   padding: var(--padding);
   height: var(--height);
   width: var(--width);
+  min-width: var(--height);
   cursor: pointer;
   border: none;
-  color: var(--white);
 
   transition: var(--transition);
-  letter-spacing: var(--letter-spacing);
 
   &--block {
     width: 100%;
@@ -39,79 +38,46 @@
   }
 
   &--style-solid {
+    color: var(--white);
     background: var(--primary-400);
 
-    .na-badge {
-      background-color: var(--white);
-      color: var(--primary-400);
-    }
-
-    &:hover:not(.na-button--active, [disabled]),
-    &:focus:not(.na-button--active, [disabled]) {
-      background: var(--primary-400);
+    &:hover:not(.na-button--active, [disabled]) {
+      background: var(--primary-300);
     }
   }
 
   &--style-border {
-    background: none;
     color: var(--primary-400);
-    border: 1px solid var(--primary-400);
+    background: none;
+    border: var(--border-size) solid var(--primary-400);
 
     &:hover:not(.na-button--active, [disabled]) {
-      color: var(--primary-400);
-      border-color: var(--primary-400);
-
-      .na-badge {
-        background: var(--primary-400);
-      }
-    }
-
-    &:focus:not(.na-button--active, [disabled]),
-    &:active:not(.na-button--active, [disabled]) {
-      color: var(--primary-400);
-      border-color: var(--primary-400);
-
-      .na-badge {
-        background: var(--primary-400);
-      }
+      color: var(--primary-300);
+      border-color: var(--primary-300);
     }
   }
 
   &--style-transparent {
-    background: none;
     color: var(--primary-400);
+    background: none;
 
-    &:hover:not(.na-button--active, [disabled]),
-    &:focus:not(.na-button--active, [disabled]) {
+    &:hover:not(.na-button--active, [disabled]) {
       background: var(--primary-transparent-100);
       box-shadow: none;
     }
 
-    &:active:not(.na-button--active, [disabled]) {
-      color: var(--white);
-      background: var(--primary-400);
+    &:focus:not(.na-button--active, [disabled]) {
+      color: var(--primary-500);
+      background: var(--primary-transparent-200);
+      box-shadow: none;
     }
   }
 
-  &--light-text:not(.na-button--style-solid) :not(i, .na-badge__text) {
+  &--active,
+  &:active:not([disabled]) {
     color: var(--white);
-  }
-
-  &--active {
-    color: var(--white);
-    background: var(--primary-400);
-    border-color: var(--primary-400);
-
-    &:hover,
-    &:focus,
-    &:active {
-      color: var(--white);
-      background: var(--primary-400);
-    }
-
-    .na-badge {
-      background: var(--primary-400);
-    }
+    background: var(--primary-600);
+    border-color: var(--primary-600);
   }
 
   &[disabled] {
@@ -121,7 +87,7 @@
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 5px var(--primary-transparent-100);
+    box-shadow: 0 0 0 5px var(--primary-transparent-200);
   }
 
   i {

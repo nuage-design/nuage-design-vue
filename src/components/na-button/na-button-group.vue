@@ -1,7 +1,10 @@
 <template>
   <div
-    class="na-button-group"
-    :class="{ 'na-button-group--vertical': vertical }"
+    :class="[
+      'na-button-group',
+      { 'na-button-group--vertical': vertical },
+      { 'na-button-group--block': block },
+    ]"
   >
     <slot></slot>
   </div>
@@ -14,6 +17,10 @@ export default defineComponent({
   name: 'NaButtonGroup',
   props: {
     vertical: {
+      type: Boolean,
+      default: false,
+    },
+    block: {
       type: Boolean,
       default: false,
     },

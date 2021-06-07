@@ -6,7 +6,6 @@
       `na-button--size-${size}`,
       `na-button--shape-${shape}`,
       `na-button--style-${type}`,
-      { 'na-button--light-text': lightText },
       { 'na-button--active': active },
       { 'na-button--equal': equal },
       { 'na-button--block': block },
@@ -44,11 +43,6 @@ export default defineComponent({
       validator: (value: string) => {
         return ['solid', 'border', 'transparent'].includes(value)
       },
-    },
-
-    lightText: {
-      type: Boolean,
-      default: false,
     },
 
     active: {
