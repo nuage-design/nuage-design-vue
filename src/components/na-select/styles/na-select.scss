@@ -1,4 +1,5 @@
 @import 'mixins';
+$states: success, warning, danger;
 
 .na-select {
   position: relative;
@@ -31,6 +32,7 @@
 
   &__input {
     @include clear-input-styles;
+    transition: 0.1s;
 
     width: 100%;
     height: var(--height);
@@ -106,6 +108,8 @@
     line-height: var(--icon-size);
     margin-top: var(--space-between-elements);
     transition: var(--transition);
+    font-weight: var(--font-weight);
+    font-size: var(--font-size);
 
     opacity: 1;
 
@@ -144,31 +148,23 @@
     }
   }
 
-  &--state-success {
-    .na-select__input {
-      border-color: var(--success);
-    }
+  @each $state in $states {
+    &--state-#{$state}:not(&--focused) {
+      .na-select__chevron {
+        color: var(--#{$state}-500);
+      }
 
-    .na-select__message {
-      color: var(--success);
-    }
-  }
+      .na-select__input {
+        border-color: var(--#{$state}-500);
+      }
 
-  &--state-warning {
-    .na-select__input {
-      border-color: var(--warning);
-    }
-    .na-select__message {
-      color: var(--warning);
-    }
-  }
+      .na-select__message {
+        color: var(--text-primary);
 
-  &--state-danger {
-    .na-select__input {
-      border-color: var(--danger);
-    }
-    .na-select__message {
-      color: var(--danger);
+        i {
+          color: var(--#{$state}-500);
+        }
+      }
     }
   }
 }

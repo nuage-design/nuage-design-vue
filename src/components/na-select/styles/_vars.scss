@@ -13,10 +13,9 @@
   --chevron-size: 20px;
 
   &__label {
-    --font-family: 'Nunito Sans', sans-serif;
+    --font-family: 'Montserrat', sans-serif;
     --font-size: 13px;
-    --font-weight: 700;
-    --letter-spacing: 0.02em;
+    --font-weight: 600;
   }
 
   &__input {
@@ -36,6 +35,8 @@
 
   &__message {
     --icon-size: 18px;
+    --font-weight: 500;
+    --font-size: 13px;
   }
 }
 
@@ -62,12 +63,11 @@
 
 .na-option-group {
   &__label {
-    --font-family: 'Nunito Sans', sans-serif;
-    --font-size: 12px;
-    --font-weight: bold;
+    --font-family: 'Montserrat', sans-serif;
+    --font-size: 13px;
+    --font-weight: 600;
     --line-height: 100%;
-    --letter-spacing: 0.02em;
 
-    --padding: 0px 13px 5px;
+    --padding: 0px 13px 8px 13px;
   }
 }
