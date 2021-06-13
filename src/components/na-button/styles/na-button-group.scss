@@ -25,6 +25,13 @@
       z-index: 1;
     }
 
+    &.na-button--style-transparent {
+      &:hover:not(.na-button--active, [disabled]),
+      &:focus:not(.na-button--active, [disabled]) {
+        clip-path: inset(0px);
+      }
+    }
+
     &:nth-child(1) {
       border-top-left-radius: var(--border-radius);
       border-bottom-left-radius: var(--border-radius);

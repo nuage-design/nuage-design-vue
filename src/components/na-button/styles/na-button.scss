@@ -52,32 +52,46 @@
     border: var(--border-size) solid var(--primary-400);
 
     &:hover:not(.na-button--active, [disabled]) {
-      color: var(--primary-300);
-      border-color: var(--primary-300);
+      color: var(--primary-200);
+      border-color: var(--primary-200);
     }
   }
 
   &--style-transparent {
-    color: var(--primary-400);
+    color: var(--text-primary);
     background: none;
+    clip-path: inset(11% round var(--border-radius));
+
+    > i {
+      color: var(--primary-400);
+    }
 
     &:hover:not(.na-button--active, [disabled]) {
       background: var(--primary-transparent-100);
       box-shadow: none;
+      clip-path: inset(0px round var(--border-radius));
     }
 
     &:focus:not(.na-button--active, [disabled]) {
-      color: var(--primary-500);
+      color: var(--primary-600);
       background: var(--primary-transparent-200);
       box-shadow: none;
+      clip-path: inset(0px round var(--border-radius));
     }
   }
 
   &--active,
   &:active:not([disabled]) {
+    &.na-button--style-transparent {
+      clip-path: inset(0);
+    }
+
     color: var(--white);
     background: var(--primary-600);
     border-color: var(--primary-600);
+    > i {
+      color: var(--white);
+    }
   }
 
   &[disabled] {
