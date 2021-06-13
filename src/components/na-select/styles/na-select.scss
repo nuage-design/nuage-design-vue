@@ -1,0 +1,174 @@
+@import 'mixins';
+
+.na-select {
+  position: relative;
+
+  margin: var(--margin);
+
+  font-size: var(--font-size);
+
+  select,
+  input[readonly] {
+    cursor: pointer;
+  }
+
+  &__label {
+    display: inline-block;
+    color: var(--text-primary);
+    margin-bottom: var(--space-between-elements);
+    letter-spacing: var(--letter-spacing);
+
+    font: {
+      family: var(--font-family);
+      weight: var(--font-weight);
+      size: var(--font-size);
+    }
+
+    line-height: var(--line-height);
+
+    transition: var(--transition);
+  }
+
+  &__input {
+    @include clear-input-styles;
+
+    width: 100%;
+    height: var(--height);
+    border-radius: var(--border-radius);
+    line-height: var(--line-height);
+
+    padding-left: var(--padding);
+    padding-right: calc(var(--chevron-size) + 2 * var(--padding));
+    border: var(--border);
+
+    transition: var(--transition);
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+  }
+
+  &__chevron {
+    height: 0;
+    width: 0;
+
+    color: var(--text-secondary);
+    font-size: var(--chevron-size);
+    position: relative;
+
+    right: calc(var(--padding) + var(--chevron-size));
+    top: 4px;
+  }
+
+  &__list {
+    position: absolute;
+    min-width: 100%;
+    width: max-content;
+    min-height: calc(var(--option-height) + var(--padding) * 2);
+    max-height: calc(
+      (var(--option-height) + var(--margin-bottom)) * var(--max-size) -
+        var(--margin-bottom) + 2 * var(--padding)
+    );
+
+    top: calc(100% - var(--message-height) - 2px);
+    z-index: 100;
+    overflow-y: auto;
+
+    border-radius: var(--border-radius);
+    background: var(--white);
+    box-shadow: var(--block-drop-shadow);
+  }
+
+  &__container {
+    padding: var(--padding);
+  }
+
+  &__no-data {
+    position: relative;
+
+    @include row-align;
+
+    justify-content: center;
+
+    color: var(--text-secondary);
+    margin-bottom: var(--margin-bottom);
+    min-height: var(--option-height);
+
+    @include space-between-elements;
+
+    i {
+      font-size: 20px;
+    }
+  }
+
+  &__message {
+    color: var(--text-secondary);
+    line-height: var(--icon-size);
+    margin-top: var(--space-between-elements);
+    transition: var(--transition);
+
+    opacity: 1;
+
+    display: flex;
+    align-content: center;
+
+    > i {
+      font-size: var(--icon-size);
+      margin-right: 5px;
+    }
+  }
+
+  &--focused {
+    &.na-select {
+      & .na-select__label {
+        color: var(--primary-400);
+      }
+
+      & .na-select__input {
+        outline: none;
+        border-color: var(--primary-400);
+      }
+
+      & .na-select__chevron {
+        color: var(--primary-400);
+      }
+    }
+  }
+
+  &--native.na-select--filter {
+    .na-select__input {
+      padding-right: var(--padding);
+    }
+    .na-select__chevron {
+      display: none;
+    }
+  }
+
+  &--state-success {
+    .na-select__input {
+      border-color: var(--success);
+    }
+
+    .na-select__message {
+      color: var(--success);
+    }
+  }
+
+  &--state-warning {
+    .na-select__input {
+      border-color: var(--warning);
+    }
+    .na-select__message {
+      color: var(--warning);
+    }
+  }
+
+  &--state-danger {
+    .na-select__input {
+      border-color: var(--danger);
+    }
+    .na-select__message {
+      color: var(--danger);
+    }
+  }
+}

@@ -8,9 +8,9 @@
       :value="value"
       :style="optionStyles"
       :class="[
-        { 'na-option_selected': selected },
-        { 'na-option_disabled': isDisabled },
-        { 'na-option_displayed': show },
+        { 'na-option--selected': selected },
+        { 'na-option--disabled': isDisabled },
+        { 'na-option--displayed': show },
       ]"
       @keydown.enter="activate"
       @click="activate"

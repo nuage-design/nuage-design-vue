@@ -1,0 +1,73 @@
+.na-select {
+  --padding: 13px;
+  --padding-right: 10px;
+  --font-size: 14px;
+  --message-height: 0px;
+  --margin: 15px 10px 10px;
+  --line-height: 100%;
+  --transition: 0.1s ease;
+  --border-width: 1px;
+  --height: 33px;
+  --border-radius: calc(var(--height) / 3);
+  --space-between-elements: 7px;
+  --chevron-size: 20px;
+
+  &__label {
+    --font-family: 'Nunito Sans', sans-serif;
+    --font-size: 13px;
+    --font-weight: 700;
+    --letter-spacing: 0.02em;
+  }
+
+  &__input {
+    --border: var(--border-width) solid var(--dark-100);
+  }
+
+  &__container {
+    --padding: 10px 10px 7px;
+  }
+
+  &__list {
+    --block-drop-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    --padding: 10px;
+    --option-height: 33px;
+    --margin-bottom: 3px;
+  }
+
+  &__message {
+    --icon-size: 18px;
+  }
+}
+
+.na-option {
+  --padding-left: 13px;
+
+  --padding: 0 var(--padding-right) 0 var(--padding-left);
+  --margin: 0 0 var(--margin-bottom) 0;
+  --shift: 10px;
+
+  &__right-side {
+    --padding-left: 30px;
+  }
+
+  &--selected {
+    --box-shadow: inset -5px 0px 0px var(--primary-400);
+  }
+
+  &:focus {
+    --padding: 0 calc(var(--padding-right) - var(--border-width)) 0
+      calc(var(--padding-left) - var(--border-width));
+  }
+}
+
+.na-option-group {
+  &__label {
+    --font-family: 'Nunito Sans', sans-serif;
+    --font-size: 12px;
+    --font-weight: bold;
+    --line-height: 100%;
+    --letter-spacing: 0.02em;
+
+    --padding: 0px 13px 5px;
+  }
+}

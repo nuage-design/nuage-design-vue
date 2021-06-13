@@ -1,12 +1,11 @@
-import "../src/styles/_colors.css";
-import "../src/styles/_fonts.css";
-import "../node_modules/boxicons/css/boxicons.min.css";
+import '../src/styles'
+import '../node_modules/boxicons/css/boxicons.min.css'
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+  actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
       date: /Date$/,
     },
   },
-};
+}

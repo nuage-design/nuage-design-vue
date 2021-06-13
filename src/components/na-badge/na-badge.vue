@@ -3,12 +3,9 @@
     ref="badge"
     :class="[
       'na-badge',
-      `na-badge_size_${size}`,
-      `na-badge_color_${color}`,
-      { 'na-badge_inverse': inverse },
-      { 'na-badge_dot': dot || !value },
+      { 'na-badge--inverse': inverse },
+      { 'na-badge--dot': dot || !value },
     ]"
-    :custom-color="!isColorStyle ? color : null"
   >
     <span class="na-badge__text" v-if="!dot">{{ displayValue }}</span>
   </div>
@@ -17,15 +14,9 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed } from 'vue'
 
-import _colors from '../../scripts/colors'
-
 export default defineComponent({
   name: 'NaBadge',
   props: {
-    size: {
-      type: String,
-      default: 'default',
-    },
     value: {
       type: [String, Number],
       default: null,
@@ -33,10 +24,6 @@ export default defineComponent({
     maxValue: {
       type: Number,
       default: 99,
-    },
-    color: {
-      type: String,
-      default: 'primary',
     },
     inverse: {
       type: Boolean,
@@ -48,8 +35,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const isColorStyle = ref(_colors.isColorStyle(props.color))
-
     const badge = ref<HTMLDivElement>()
 
     onMounted(() => {
@@ -70,7 +55,7 @@ export default defineComponent({
       return props.value
     })
 
-    return { displayValue, isColorStyle, badge }
+    return { displayValue, badge }
   },
 })
 </script>

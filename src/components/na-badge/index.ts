@@ -1,3 +1,3 @@
-import './styles/main.scss'
+import './styles'
 
-export { default } from './na-badge.vue'
+export { default as NaBadge } from './na-badge.vue'

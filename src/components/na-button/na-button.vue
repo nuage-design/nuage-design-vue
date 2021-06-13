@@ -3,14 +3,12 @@
     ref="button"
     :class="[
       'na-button',
-      `na-button_size_${size}`,
-      `na-button_type_${type}`,
-      `na-button_style_${buttonStyle}`,
-      `na-button_color_${color}`,
-      { 'na-button_light-text': lightText },
-      { 'na-button_active': active },
-      { 'na-button_equal': equal },
-      { 'na-button_block': block },
+      `na-button--size-${size}`,
+      `na-button--shape-${shape}`,
+      `na-button--style-${type}`,
+      { 'na-button--active': active },
+      { 'na-button--equal': equal },
+      { 'na-button--block': block },
     ]"
   >
     <slot />
@@ -31,7 +29,7 @@ export default defineComponent({
       },
     },
 
-    type: {
+    shape: {
       type: String,
       default: 'rounded',
       validator: (value: string) => {
@@ -39,22 +37,12 @@ export default defineComponent({
       },
     },
 
-    buttonStyle: {
+    type: {
       type: String,
       default: 'solid',
       validator: (value: string) => {
         return ['solid', 'border', 'transparent'].includes(value)
       },
-    },
-
-    color: {
-      type: String,
-      default: 'primary',
-    },
-
-    lightText: {
-      type: Boolean,
-      default: false,
     },
 
     active: {
@@ -83,7 +71,7 @@ export default defineComponent({
     onMounted(() => {
       button.value?.style.setProperty('--space', props.space + 'px')
 
-      if (props.buttonStyle === 'solid' || props.active) {
+      if (props.type === 'solid' || props.active) {
         const badges = button.value?.querySelectorAll('.na-badge')
 
         badges?.forEach((badge) => {

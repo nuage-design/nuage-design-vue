@@ -1,0 +1,93 @@
+.na-button {
+  $small: (
+    height: 27px,
+    padding: 11px,
+    font-size: 13px,
+    font-equal: 16px,
+    font-weight: 600,
+    icon-size: 18px,
+    border-size: 1px,
+  );
+
+  $default: (
+    height: 33px,
+    padding: 13px,
+    font-size: 14px,
+    font-equal: 18px,
+    font-weight: 600,
+    icon-size: 20px,
+    border-size: 2px,
+  );
+
+  $large: (
+    height: 41px,
+    padding: 21px,
+    font-size: 16px,
+    font-equal: 22px,
+    font-weight: 700,
+    icon-size: 24px,
+    border-size: 2px,
+  );
+
+  $xl: (
+    height: 47px,
+    padding: 23px,
+    font-size: 17px,
+    font-equal: 24px,
+    font-weight: 700,
+    icon-size: 26px,
+    border-size: 2px,
+  );
+
+  $sizes: (
+    small: $small,
+    default: $default,
+    large: $large,
+    xl: $xl,
+  );
+
+  --font-family: Montserrat, sans-serif;
+  --font-style: normal;
+  --font-line-height: 100%;
+  --width: auto;
+  --space: 8px;
+  --transition: 0.1s;
+
+  &--equal {
+    --padding: 0;
+  }
+
+  @each $size, $values in $sizes {
+    &--size-#{$size} {
+      $height: map-get($values, height);
+      $shapes-border-radius: (
+        rect: 3px,
+        rounded: $height / 3,
+        circle: $height / 2,
+      );
+
+      --height: #{$height};
+      --padding: 0 #{map-get($values, padding)};
+      --font-size: #{map-get($values, font-size)};
+      --icon-size: #{map-get($values, icon-size)};
+      --font-weight: #{map-get($values, font-weight)};
+      --border-size: #{map-get($values, border-size)};
+
+      &.na-button--style-border {
+        --padding: 0 calc(#{map-get($values, padding)} - var(--border-size));
+      }
+
+      &.na-button--equal {
+        --width: var(--height);
+        --font-size: #{map-get($values, font-equal)};
+        --padding: 0;
+      }
+
+      @each $shape, $border-radius in $shapes-border-radius {
+        &.na-button--shape-#{$shape} {
+          --border-radius: #{$border-radius};
+        }
+      }
+    }
+  }
+}

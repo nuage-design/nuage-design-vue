@@ -1,0 +1,72 @@
+@import 'mixins';
+
+.na-option {
+  @include clear-button-styles;
+  @include row-align;
+
+  justify-content: space-between;
+
+  margin: var(--margin);
+  padding: var(--padding);
+
+  width: 100%;
+  min-height: var(--option-height);
+
+  color: var(--text-regular);
+  border-radius: var(--border-radius);
+
+  transition: background var(--transition), box-shadow var(--transition);
+
+  i {
+    font-size: 20px;
+  }
+
+  &__left-side {
+    @include row-align;
+
+    position: relative;
+    left: 0;
+
+    transition: var(--transition);
+
+    @include space-between-elements;
+  }
+
+  &__right-side {
+    @include row-align;
+
+    position: relative;
+    padding-left: var(--padding-left);
+    transition: var(--transition);
+
+    @include space-between-elements;
+  }
+
+  &--selected:not(&--disabled) {
+    box-shadow: var(--box-shadow);
+    background: var(--primary-transparent-100);
+  }
+
+  &--disabled {
+    @include disabled;
+
+    // fix focus bug
+    &:focus {
+      padding-left: var(--padding-left);
+    }
+  }
+
+  &:not(&--disabled):focus {
+    @include option-outline;
+
+    border: var(--border-width) solid var(--primary-400);
+
+    padding: var(--padding);
+  }
+
+  &:not(&--disabled):hover,
+  &:not(&--disabled):focus,
+  &--selected:not(&--disabled) {
+    @include active-option;
+  }
+}
