@@ -1,34 +1,42 @@
 .na-button {
   $small: (
-    height: 28px,
-    padding: 12px,
+    height: 27px,
+    padding: 11px,
     font-size: 13px,
-    font-equal: 14px,
-    icon-size: 16px,
+    font-equal: 16px,
+    font-weight: 600,
+    icon-size: 18px,
+    border-size: 1px,
   );
 
   $default: (
     height: 33px,
     padding: 13px,
     font-size: 14px,
-    font-equal: 17px,
-    icon-size: 17px,
+    font-equal: 18px,
+    font-weight: 600,
+    icon-size: 20px,
+    border-size: 2px,
   );
 
   $large: (
-    height: 42px,
+    height: 41px,
     padding: 21px,
     font-size: 16px,
-    font-equal: 20px,
+    font-equal: 22px,
+    font-weight: 700,
     icon-size: 24px,
+    border-size: 2px,
   );
 
   $xl: (
     height: 47px,
-    padding: 21px,
-    font-size: 16px,
-    font-equal: 20px,
-    icon-size: 24px,
+    padding: 23px,
+    font-size: 17px,
+    font-equal: 24px,
+    font-weight: 700,
+    icon-size: 26px,
+    border-size: 2px,
   );
 
   $sizes: (
@@ -38,14 +46,11 @@
     xl: $xl,
   );
 
-  --font-family: Nunito Sans, sans-serif;
+  --font-family: Montserrat, sans-serif;
   --font-style: normal;
   --font-line-height: 100%;
   --width: auto;
   --space: 8px;
-  --font-weight: 600;
-
-  --letter-spacing: 0.02em;
   --transition: 0.1s;
 
   &--equal {
@@ -56,8 +61,8 @@
     &--size-#{$size} {
       $height: map-get($values, height);
       $shapes-border-radius: (
-        rounded: $height / 3,
         rect: 3px,
+        rounded: $height / 3,
         circle: $height / 2,
       );
 
@@ -65,9 +70,11 @@
       --padding: 0 #{map-get($values, padding)};
       --font-size: #{map-get($values, font-size)};
       --icon-size: #{map-get($values, icon-size)};
+      --font-weight: #{map-get($values, font-weight)};
+      --border-size: #{map-get($values, border-size)};
 
       &.na-button--style-border {
-        --padding: 0 #{map-get($values, padding) - 1px};
+        --padding: 0 calc(#{map-get($values, padding)} - var(--border-size));
       }
 
       &.na-button--equal {

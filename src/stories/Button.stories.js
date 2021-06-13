@@ -57,7 +57,7 @@ export const Button = (args) => ({
 })
 
 Button.args = {
-  text: 'Button',
+  text: 'Кнопка',
 }
 
 export const ButtonGroup = (args) => ({
@@ -66,7 +66,7 @@ export const ButtonGroup = (args) => ({
     return { args }
   },
   template: /*html*/ `
-  <na-button-group :vertical="args.vertical">
+  <na-button-group :vertical="args.vertical" :block="args.block">
     <na-button v-bind="args">
       <span>${args.text}</span>
     </na-button>
@@ -86,6 +86,7 @@ export const ButtonGroup = (args) => ({
 })
 
 ButtonGroup.args = {
-  text: 'Button',
+  text: 'Кнопка',
   vertical: false,
+  block: false,
 }
