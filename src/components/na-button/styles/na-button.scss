@@ -61,6 +61,7 @@
     color: var(--text-primary);
     background: none;
     clip-path: inset(11% round var(--border-radius));
+    transition: 0.1s ease-in-out;
 
     > i {
       color: var(--primary-400);
