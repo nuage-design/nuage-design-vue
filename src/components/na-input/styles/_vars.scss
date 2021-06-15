@@ -1,0 +1,15 @@
+.na-input {
+  --height: 33px;
+  --icon-size: 20px;
+
+  --padding: 13px;
+  --margin: 15px 10px 10px;
+
+  --line-height: 100%;
+
+  --border-width: 1px;
+  --border-radius: calc(var(--height) / 3);
+  --border: var(--border-width) solid var(--dark-100);
+
+  --transition: 0.1s ease-in-out;
+}

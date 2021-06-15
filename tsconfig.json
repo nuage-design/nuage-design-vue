@@ -30,10 +30,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "src/stories/Badge.stories.js",
-    "src/stories/Button.stories.js",
-    "src/stories/Select.stories.js"
+    "tests/**/*.tsx", 
   ],
   "exclude": [
     "node_modules"

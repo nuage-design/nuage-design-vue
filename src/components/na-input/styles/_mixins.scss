@@ -1,0 +1,13 @@
+@mixin clear-input-styles {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  background: none;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-400);
+  }
+}
