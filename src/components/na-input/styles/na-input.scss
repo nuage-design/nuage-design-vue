@@ -1,18 +1,21 @@
 @import 'mixins';
 
 .na-input {
-  @include clear-input-styles;
+  &__input {
+    @include clear-input-styles;
 
-  height: var(--height);
-  line-height: var(--line-height);
+    width: 100%;
+    height: var(--height);
+    line-height: var(--line-height);
 
-  padding-left: var(--padding);
-  padding-right: calc(var(--icon-size) + 2 * var(--padding));
+    padding-left: var(--padding);
+    padding-right: calc(var(--icon-size) + 2 * var(--padding));
 
-  border-radius: var(--border-radius);
-  border: var(--border);
+    border-radius: var(--border-radius);
+    border: var(--border);
 
-  transition: var(--transition);
+    transition: var(--transition);
+  }
 
   &::placeholder {
     color: var(--text-secondary);

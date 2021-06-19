@@ -9,7 +9,17 @@
 
   --border-width: 1px;
   --border-radius: calc(var(--height) / 3);
-  --border: var(--border-width) solid var(--dark-100);
+  --space-between-elements: 7px;
 
   --transition: 0.1s ease-in-out;
+
+  &__label {
+    --font-family: 'Montserrat', sans-serif;
+    --font-size: 13px;
+    --font-weight: 600;
+  }
+
+  &__input {
+    --border: var(--border-width) solid var(--dark-100);
+  }
 }

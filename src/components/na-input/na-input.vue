@@ -1,8 +1,10 @@
 <template>
-  <label>
-    <span v-if="label" ref="label" class="na-input__label">{{ label }}</span>
-    <input ref="input" class="na-input" :placeholder="placeholder" />
-  </label>
+  <div class="na-input">
+    <label>
+      <span v-if="label" ref="label" class="na-input__label">{{ label }}</span>
+      <input ref="input" class="na-input__input" :placeholder="placeholder" />
+    </label>
+  </div>
 </template>
 
 <script lang="ts">

@@ -10,7 +10,13 @@ const Template = (args) => ({
   setup() {
     return { args }
   },
-  template: /*html*/ `<na-input v-bind='args'></na-input>`,
+  template: /*html*/ `
+  <na-input v-bind='args' style="width: 200px">
+    <template #message-default>Help me</template>
+    <template #message-success>You are good man!</template>
+    <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
+    <template #message-danger>Danger!</template>
+  </na-input>`,
 })
 
 export const Input = Template.bind({})
