@@ -1,8 +1,17 @@
 import { NaInput } from '../components/na-input'
+const states = ['default', 'success', 'warning', 'danger']
 
 export default {
   title: 'Components/Input',
   component: NaInput,
+  argTypes: {
+    state: {
+      options: states,
+      control: {
+        type: 'radio',
+      },
+    },
+  },
 }
 
 const Template = (args) => ({
@@ -24,4 +33,5 @@ export const Input = Template.bind({})
 Input.args = {
   label: 'Label',
   placeholder: 'Placeholder',
+  state: 'default',
 }
