@@ -1,8 +1,29 @@
 <template>
-  <div :class="['na-input', `na-input--state-${state}`]">
+  <div
+    ref="root"
+    :class="[
+      'na-input',
+      `na-input--state-${state}`,
+      { 'na-input--focused': focused },
+    ]"
+  >
     <label>
       <span v-if="label" ref="label" class="na-input__label">{{ label }}</span>
-      <input ref="input" class="na-input__input" :placeholder="placeholder" />
+
+      <input
+        ref="input"
+        class="na-input__input"
+        @focus="focus"
+        @blur="blur"
+        @input="$emit('update:modelValue', $event.target.value)"
+        :placeholder="placeholder"
+      />
+
+      <div class="na-input__internal-elements">
+        <slot name="left-side"></slot>
+        <slot name="right-side"></slot>
+      </div>
+
       <!-- message -->
       <div ref="inputMessage">
         <span v-if="state === 'success'" class="na-input__message">
@@ -33,29 +54,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import inputMixin, { inputSetup } from '../../mixins/input'
 
 export default defineComponent({
   name: 'NaInput',
-  props: {
-    placeholder: {
-      type: String,
-      default: null,
-    },
-    label: {
-      type: String,
-      default: null,
-    },
-
-    state: {
-      type: String,
-      default: 'default',
-      validator: (value: string) => {
-        return ['default', 'success', 'warning', 'danger'].includes(value)
-      },
-    },
-  },
-  setup() {
-    return {}
+  mixins: [inputMixin],
+  setup(_props, { slots }) {
+    const { root, focused, focus, blur } = inputSetup(slots)
+    return { root, focused, focus, blur }
   },
 })
 </script>

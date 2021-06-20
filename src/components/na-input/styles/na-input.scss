@@ -6,27 +6,6 @@ $states: success, warning, danger;
   margin: var(--margin);
   font-size: var(--font-size);
 
-  &__input {
-    @include clear-input-styles;
-    box-sizing: border-box;
-
-    width: 100%;
-    height: var(--height);
-    line-height: var(--line-height);
-
-    padding-left: var(--padding);
-    padding-right: calc(var(--icon-size) + 2 * var(--padding));
-
-    border-radius: var(--border-radius);
-    border: var(--border);
-
-    transition: var(--transition);
-
-    &::placeholder {
-      color: var(--text-secondary);
-    }
-  }
-
   &__label {
     display: inline-block;
     color: var(--text-primary);
@@ -42,6 +21,44 @@ $states: success, warning, danger;
     line-height: var(--line-height);
 
     transition: var(--transition);
+  }
+
+  &__input {
+    @include clear-input-styles;
+    box-sizing: border-box;
+
+    width: 100%;
+    height: var(--height);
+    line-height: var(--line-height);
+
+    padding-left: calc(var(--padding) + var(--left-side-padding));
+
+    padding-right: calc(var(--padding) + var(--right-side-padding));
+
+    border-radius: var(--border-radius);
+    border: var(--border);
+
+    transition: all var(--transition), padding-left 0s;
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+  }
+
+  &__internal-elements {
+    position: relative;
+    height: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: calc(-1 * var(--height) / 2);
+    padding: 0 13px;
+
+    > i {
+      font-size: var(--icon-size);
+      color: var(--text-secondary);
+    }
   }
 
   &__message {
@@ -61,6 +78,10 @@ $states: success, warning, danger;
       font-size: var(--icon-size);
       margin-right: 5px;
     }
+  }
+
+  &--focused &__label {
+    color: var(--primary-400);
   }
 
   @each $state in $states {

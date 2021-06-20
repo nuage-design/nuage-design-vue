@@ -1,6 +1,6 @@
 .na-input {
   --height: 33px;
-  --icon-size: 20px;
+  --icon-size: 18px;
 
   --padding: 13px;
   --margin: 15px 10px 10px;
@@ -12,15 +12,24 @@
   --border-radius: calc(var(--height) / 3);
   --space-between-elements: 7px;
 
+  --button-size: 26px;
+  --left-side-padding: 0px;
+  --right-side-padding: 0px;
+
   --transition: 0.1s ease-in-out;
 
   &__label {
     --font-family: 'Montserrat', sans-serif;
     --font-size: 13px;
-    --font-weight: 600;
+    --font-weight: 500;
   }
 
   &__input {
     --border: var(--border-width) solid var(--dark-100);
+  }
+
+  &__message {
+    --font-weight: 500;
+    --font-size: 13px;
   }
 }
