@@ -23,23 +23,11 @@
       "dom",
       "dom.iterable",
       "scripthost"
-    ]
+    ],
+    "resolveJsonModule": true,
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "src/stories/Badge.stories.js",
-    "src/stories/Button.stories.js",
-    "src/stories/Select.stories.js"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": [
     "node_modules"
   ],
-  "typeRoots": [
-      "./node_modules/@types",
-      "./@types"
-    ],
 }
