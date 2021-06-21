@@ -59,7 +59,7 @@ import inputMixin, { inputSetup } from '../../mixins/input'
 export default defineComponent({
   name: 'NaInput',
   mixins: [inputMixin],
-  setup(_props, { slots }) {
+  setup: (_props, { slots }) => {
     const { root, focused, focus, blur } = inputSetup(slots)
     return { root, focused, focus, blur }
   },

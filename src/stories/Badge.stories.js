@@ -14,7 +14,6 @@ const Template = (args) => ({
 })
 
 export const Badge = Template.bind({})
-
 Badge.args = {
   value: 100,
   size: 'default',
