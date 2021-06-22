@@ -174,8 +174,6 @@ import {
   nextTick,
 } from 'vue'
 
-import { NaInput } from '../na-input'
-
 import NaOption from './na-option.vue'
 
 import mitt from 'mitt'
@@ -186,7 +184,6 @@ let $_naSelectId = 0
 export default defineComponent({
   name: 'NaSelect',
   components: { NaOption },
-  extends: NaInput,
   props: {
     modelValue: {
       type: String,

@@ -1,8 +1,6 @@
-@use "sass:math";
-
 .na-button {
   $small: (
-    height: 26px,
+    height: 27px,
     padding: 11px,
     font-size: 13px,
     font-equal: 16px,
@@ -64,8 +62,8 @@
       $height: map-get($values, height);
       $shapes-border-radius: (
         rect: 3px,
-        rounded: math.div($height, 3),
-        circle: $height * 0.5,
+        rounded: $height / 3,
+        circle: $height / 2,
       );
 
       --height: #{$height};
