@@ -1,6 +1,6 @@
-import { defineComponent, onMounted, ref, Slots } from 'vue'
+import { defineComponent, ref, Slots } from 'vue'
 
-export default defineComponent({
+export const inputMixin = defineComponent({
   props: {
     modelValue: {
       type: String,
@@ -24,7 +24,7 @@ export default defineComponent({
   },
 })
 
-export function inputSetup(slots: Slots) {
+export const inputSetup = (slots: Slots) => {
   const root = ref<HTMLDivElement>()
 
   const focused = ref(false)
@@ -32,25 +32,20 @@ export function inputSetup(slots: Slots) {
   const leftSidePadding = slots['left-side'] ? 23 : 0
   const rightSidePadding = slots['right-side'] ? 30 : 0
 
-  onMounted(() => {
-    root.value?.style.setProperty('--left-side-padding', leftSidePadding + 'px')
-    root.value?.style.setProperty(
-      '--right-side-padding',
-      rightSidePadding + 'px',
-    )
-  })
-
   const focus = (): void => {
     focused.value = true
   }
 
   const blur = (): void => {
-    setTimeout(() => (focused.value = false))
+    focused.value = false
   }
 
   return {
     root,
     focused,
+
+    leftSidePadding,
+    rightSidePadding,
 
     focus,
     blur,

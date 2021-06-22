@@ -31,7 +31,7 @@ const Template = (args) => ({
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
     <template #message-danger>Danger!</template>
     <template #left-side>
-      <i class='bx bxs-lock-alt' ></i>
+      <i class='bx bxs-lock-alt'></i>
     </template>
     <template #right-side>
       <na-button equal size="small" type="transparent">

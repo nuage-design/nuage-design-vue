@@ -13,43 +13,6 @@ $states: success, warning, danger;
     cursor: pointer;
   }
 
-  &__label {
-    display: inline-block;
-    color: var(--text-primary);
-    margin-bottom: var(--space-between-elements);
-    letter-spacing: var(--letter-spacing);
-
-    font: {
-      family: var(--font-family);
-      weight: var(--font-weight);
-      size: var(--font-size);
-    }
-
-    line-height: var(--line-height);
-
-    transition: var(--transition);
-  }
-
-  &__input {
-    @include clear-input-styles;
-    transition: 0.1s;
-
-    width: 100%;
-    height: var(--height);
-    border-radius: var(--border-radius);
-    line-height: var(--line-height);
-
-    padding-left: var(--padding);
-    padding-right: calc(var(--chevron-size) + 2 * var(--padding));
-    border: var(--border);
-
-    transition: var(--transition);
-
-    &::placeholder {
-      color: var(--text-secondary);
-    }
-  }
-
   &__chevron {
     height: 0;
     width: 0;
@@ -145,26 +108,6 @@ $states: success, warning, danger;
     }
     .na-select__chevron {
       display: none;
-    }
-  }
-
-  @each $state in $states {
-    &--state-#{$state}:not(&--focused) {
-      .na-select__chevron {
-        color: var(--#{$state}-500);
-      }
-
-      .na-select__input {
-        border-color: var(--#{$state}-500);
-      }
-
-      .na-select__message {
-        color: var(--text-primary);
-
-        i {
-          color: var(--#{$state}-500);
-        }
-      }
     }
   }
 }

@@ -1,19 +1,28 @@
 <template>
   <div
-    ref="select"
+    ref="root"
     :class="[
       'na-select',
-      `na-select--state-${state}`,
       { 'na-select--native': native },
       { 'na-select--filter': filter },
-      { 'na-select--focused': focused },
+
+      'na-input',
+      `na-input--state-${state}`,
+      { 'na-input--focused': focused },
+    ]"
+    :style="[
+      `--left-side-padding:${leftSidePadding}px;`,
+      `--right-side-padding:${rightSidePadding}px;`,
     ]"
   >
     <!-- label -->
     <label>
-      <span v-if="label" ref="selectLabel" class="na-select__label">{{
-        label
-      }}</span>
+      <span
+        v-if="label"
+        ref="selectLabel"
+        class="na-select__label na-input__label"
+        >{{ label }}</span
+      >
 
       <!-- native select -->
       <template v-if="native">
@@ -21,7 +30,7 @@
         <template v-if="filter">
           <input
             ref="selectInput"
-            class="na-select__input"
+            class="na-select__input na-input__input"
             onchange="this.blur();"
             :placeholder="placeholder"
             :list="`_na-select-${uid}`"
@@ -52,7 +61,7 @@
         <template v-else>
           <select
             ref="selectInput"
-            class="na-select__input"
+            class="na-select__input na-input__input"
             :value="modelValue"
             @change="$emit('update:modelValue', $event.target.value)"
             @focus="focus"
@@ -88,7 +97,7 @@
       <template v-else>
         <input
           ref="selectInput"
-          class="na-select__input"
+          class="na-select__input na-input__input"
           :value="inputValue"
           :class="{ 'na-select__input--filter': filter }"
           :placeholder="placeholder"
@@ -133,32 +142,13 @@
         </transition>
       </template>
 
-      <!-- chevron -->
-      <i class="bx bxs-chevron-down na-select__chevron"></i>
-
-      <!-- message -->
-      <div ref="selectMessage">
-        <span v-if="state === 'success'" class="na-select__message">
-          <i class="bx bxs-check-circle"></i>
-          <slot name="message-success"></slot>
-        </span>
-        <span
-          v-else-if="state === 'warning'"
-          class="na-select__message na-select__message--warning"
-        >
-          <i class="bx bxs-info-circle"></i>
-          <slot name="message-warning"></slot>
-        </span>
-        <span
-          v-else-if="state === 'danger'"
-          class="na-select__message na-select__message--danger"
-        >
-          <i class="bx bxs-x-circle"></i>
-          <slot name="message-danger"></slot>
-        </span>
-        <span v-else class="na-select__message">
-          <slot name="message-default"></slot>
-        </span>
+      <div class="na-input__internal-elements">
+        <div class="na-input__left-side">
+          <slot name="left-side"></slot>
+        </div>
+        <div class="na-input__right-side">
+          <i class="bx bxs-chevron-down"></i>
+        </div>
       </div>
     </label>
   </div>
@@ -177,6 +167,7 @@ import {
 import { NaInput } from '../na-input'
 
 import NaOption from './na-option.vue'
+import { inputMixin, inputSetup } from '../../mixins/na-input-mixin'
 
 import mitt from 'mitt'
 import { IOption, IRenderedOption, IRenderedOptionGroup } from './na-select'
@@ -185,22 +176,10 @@ let $_naSelectId = 0
 
 export default defineComponent({
   name: 'NaSelect',
+  mixins: [inputMixin],
   components: { NaOption },
   extends: NaInput,
   props: {
-    modelValue: {
-      type: String,
-      default: null,
-    },
-
-    state: {
-      type: String,
-      default: 'default',
-      validator: (value: string) => {
-        return ['default', 'success', 'warning', 'danger'].includes(value)
-      },
-    },
-
     native: {
       type: Boolean,
       default: false,
@@ -209,16 +188,6 @@ export default defineComponent({
     filter: {
       type: Boolean,
       default: false,
-    },
-
-    label: {
-      type: String,
-      default: null,
-    },
-
-    placeholder: {
-      type: String,
-      default: null,
     },
 
     size: {
@@ -232,11 +201,13 @@ export default defineComponent({
     },
   },
   emits: ['update:modelValue'],
-  setup(props, { emit }) {
+  setup: (props, { emit, slots }) => {
+    const { leftSidePadding, rightSidePadding } = inputSetup(slots)
+
     const uid = ++$_naSelectId
 
     // Template refs
-    const select = ref<HTMLElement>()
+    const root = ref<HTMLElement>()
     const selectLabel = ref<HTMLElement>()
     const selectInput = ref<HTMLInputElement | HTMLSelectElement>()
     const selectList = ref<HTMLElement>()
@@ -342,7 +313,7 @@ export default defineComponent({
     const onClickOutside = (e: Event): void => {
       if (e.target instanceof HTMLElement) {
         if (e.target.closest('.na-option')) blur()
-        if (e.target.closest('.na-select') === select.value) return
+        if (e.target.closest('.na-select') === root.value) return
       }
 
       blur()
@@ -449,8 +420,10 @@ export default defineComponent({
     return {
       uid,
 
+      leftSidePadding,
+      rightSidePadding,
       // Template refs
-      select,
+      root,
       selectInput,
       selectLabel,
       selectList,

@@ -54,11 +54,12 @@ $states: success, warning, danger;
     align-items: center;
     top: calc(-1 * var(--height) / 2);
     padding: 0 13px;
+  }
 
-    > i {
-      font-size: var(--icon-size);
-      color: var(--text-secondary);
-    }
+  &__left-side > i,
+  &__right-side > i {
+    font-size: var(--icon-size);
+    color: var(--text-secondary);
   }
 
   &__message {
@@ -80,22 +81,31 @@ $states: success, warning, danger;
     }
   }
 
-  &--focused &__label {
+  &--focused &__input {
+    border-color: var(--primary-400);
+  }
+
+  &--focused &__label,
+  &--focused &__right-side > i {
     color: var(--primary-400);
   }
 
   @each $state in $states {
-    &--state-#{$state}:not(&--focused) {
-      .na-input__input {
+    &--state-#{$state}:not(&--focused) & {
+      &__input {
         border-color: var(--#{$state}-500);
       }
 
-      .na-input__message {
+      &__message {
         color: var(--text-primary);
 
         i {
           color: var(--#{$state}-500);
         }
+      }
+
+      &__right-side > i {
+        color: var(--#{$state}-500);
       }
     }
   }

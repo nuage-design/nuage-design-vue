@@ -1,26 +1,8 @@
 .na-select {
-  --padding: 13px;
-  --padding-right: 10px;
   --font-size: 14px;
   --message-height: 0px;
-  --margin: 15px 10px 10px;
-  --line-height: 100%;
-  --transition: 0.1s ease;
-  --border-width: 1px;
-  --height: 33px;
-  --border-radius: calc(var(--height) / 3);
-  --space-between-elements: 7px;
+
   --chevron-size: 20px;
-
-  &__label {
-    --font-family: 'Montserrat', sans-serif;
-    --font-size: 13px;
-    --font-weight: 600;
-  }
-
-  &__input {
-    --border: var(--border-width) solid var(--dark-100);
-  }
 
   &__container {
     --padding: 10px 10px 7px;
@@ -31,12 +13,6 @@
     --padding: 10px;
     --option-height: 33px;
     --margin-bottom: 3px;
-  }
-
-  &__message {
-    --icon-size: 18px;
-    --font-weight: 500;
-    --font-size: 13px;
   }
 }
 

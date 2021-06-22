@@ -9,15 +9,6 @@
   align-items: center;
 }
 
-@mixin clear-input-styles {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  appearance: none;
-  background: none;
-}
-
 @mixin option-outline {
   outline: none;
   box-shadow: inset -4px 0px 0px var(--primary-400);

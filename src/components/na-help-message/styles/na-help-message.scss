@@ -1,0 +1,28 @@
+$states: success, warning, danger;
+
+.na-help-message {
+  color: var(--text-secondary);
+  line-height: var(--icon-size);
+  margin: var(--margin);
+  transition: var(--transition);
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+
+  display: flex;
+  align-content: center;
+
+  > i {
+    font-size: var(--icon-size);
+    margin-right: 5px;
+  }
+
+  @each $state in $states {
+    &--state-#{$state} {
+      color: var(--text-primary);
+
+      i {
+        color: var(--#{$state}-500);
+      }
+    }
+  }
+}

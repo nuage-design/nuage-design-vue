@@ -6,6 +6,10 @@
       `na-input--state-${state}`,
       { 'na-input--focused': focused },
     ]"
+    :style="[
+      `--left-side-padding:${leftSidePadding}px;`,
+      `--right-side-padding:${rightSidePadding}px;`,
+    ]"
   >
     <label>
       <span v-if="label" ref="label" class="na-input__label">{{ label }}</span>
@@ -20,33 +24,12 @@
       />
 
       <div class="na-input__internal-elements">
-        <slot name="left-side"></slot>
-        <slot name="right-side"></slot>
-      </div>
-
-      <!-- message -->
-      <div ref="inputMessage">
-        <span v-if="state === 'success'" class="na-input__message">
-          <i class="bx bxs-check-circle"></i>
-          <slot name="message-success"></slot>
-        </span>
-        <span
-          v-else-if="state === 'warning'"
-          class="na-input__message na-input__message--warning"
-        >
-          <i class="bx bxs-info-circle"></i>
-          <slot name="message-warning"></slot>
-        </span>
-        <span
-          v-else-if="state === 'danger'"
-          class="na-input__message na-input__message--danger"
-        >
-          <i class="bx bxs-x-circle"></i>
-          <slot name="message-danger"></slot>
-        </span>
-        <span v-else class="na-input__message">
-          <slot name="message-default"></slot>
-        </span>
+        <div class="na-input__left-side">
+          <slot name="left-side"></slot>
+        </div>
+        <div class="na-input__right-side">
+          <slot name="right-side"></slot>
+        </div>
       </div>
     </label>
   </div>
@@ -54,14 +37,20 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import inputMixin, { inputSetup } from '../../mixins/input'
+import { inputMixin, inputSetup } from '../../mixins/na-input-mixin'
 
 export default defineComponent({
   name: 'NaInput',
   mixins: [inputMixin],
-  setup(_props, { slots }) {
-    const { root, focused, focus, blur } = inputSetup(slots)
-    return { root, focused, focus, blur }
+  setup: (_, { slots }) => {
+    const {
+      leftSidePadding,
+      rightSidePadding,
+      focused,
+      focus,
+      blur,
+    } = inputSetup(slots)
+    return { leftSidePadding, rightSidePadding, focused, focus, blur }
   },
 })
 </script>
