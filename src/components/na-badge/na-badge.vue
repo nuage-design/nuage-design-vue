@@ -1,14 +1,7 @@
-<template>
-  <div
-    ref="badge"
-    :class="[
-      'na-badge',
-      { 'na-badge--inverse': inverse },
-      { 'na-badge--dot': dot || !value },
-    ]"
-  >
-    <span class="na-badge__text" v-if="!dot">{{ displayValue }}</span>
-  </div>
+<template lang="pug">
+div(ref='badge', :class='classes')
+  span.na-badge__text(v-if='!dot')
+    | {{ displayValue }}
 </template>
 
 <script lang="ts">
@@ -45,6 +38,12 @@ export default defineComponent({
       }
     })
 
+    const classes = computed(() => [
+      'na-badge',
+      { 'na-badge--inverse': props.inverse },
+      { 'na-badge--dot': props.dot || !props.value },
+    ])
+
     const displayValue = computed(() => {
       if (props.maxValue && +props.value) {
         return +props.value > +props.maxValue
@@ -55,7 +54,7 @@ export default defineComponent({
       return props.value
     })
 
-    return { displayValue, badge }
+    return { displayValue, badge, classes }
   },
 })
 </script>

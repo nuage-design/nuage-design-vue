@@ -19,4 +19,12 @@ module.exports = {
     '@storybook/addon-postcss',
     '@storybook/addon-a11y',
   ],
+  webpackFinal: async (config) => {
+    config.module.rules.push({
+      test: /\.pug$/,
+      use: [{ loader: 'pug-plain-loader' }],
+    })
+
+    return config
+  },
 }
