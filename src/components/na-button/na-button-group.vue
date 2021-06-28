@@ -1,17 +1,10 @@
-<template>
-  <div
-    :class="[
-      'na-button-group',
-      { 'na-button-group--vertical': vertical },
-      { 'na-button-group--block': block },
-    ]"
-  >
-    <slot></slot>
-  </div>
+<template lang="pug">
+div(:class='classes')
+  slot
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   name: 'NaButtonGroup',
@@ -25,8 +18,14 @@ export default defineComponent({
       default: false,
     },
   },
-  setup() {
-    return {}
+  setup(props) {
+    const classes = computed(() => [
+      'na-button-group',
+      { 'na-button-group--vertical': props.vertical },
+      { 'na-button-group--block': props.block },
+    ])
+
+    return { classes }
   },
 })
 </script>

@@ -1,36 +1,26 @@
-<template>
-  <transition name="show">
-    <button
-      v-if="!isNative"
-      v-show="show"
-      ref="option"
-      class="na-option"
-      :value="value"
-      :style="optionStyles"
-      :class="[
-        { 'na-option--selected': selected },
-        { 'na-option--disabled': isDisabled },
-        { 'na-option--displayed': show },
-      ]"
-      @keydown.enter="activate"
-      @click="activate"
-    >
-      <span class="na-option__left-side">
-        <slot name="left-side" />
-        <span ref="optionTitle" class="na-option__title">
-          <slot>{{ value }}</slot>
-        </span>
-      </span>
-      <span v-if="$slots['right-side']" class="na-option__right-side">
-        <slot name="right-side" />
-      </span>
-    </button>
-  </transition>
+<template lang="pug">
+option(v-if='isNative', :value='value', :disabled='isDisabled')
+  slot {{ value }}
 
-  <option v-if="isNative" :value="value" :disabled="isDisabled">
-    <slot>{{ value }}</slot>
-  </option>
+transition(v-else, name='show')
+  button.na-option(
+    v-show='show',
+    ref='option',
+    :value='value',
+    :style='optionStyles',
+    :class='classes',
+    @keydown.enter='activate',
+    @click='activate'
+  )
+    span.na-option__left-side
+      slot(name='left-side')
+      span.na-option__title(ref='optionTitle')
+        slot {{ value }}
+
+    span.na-option__right-side(v-if='$slots["right-side"]')
+      slot(name='right-side')
 </template>
+
 
 <script lang="ts">
 import {
@@ -41,9 +31,11 @@ import {
   inject,
   nextTick,
   Ref,
+  computed,
 } from 'vue'
 
 import { Emitter } from 'mitt'
+import type { EmitterEvents } from './na-select'
 
 let $_naOptionId = 0
 
@@ -73,11 +65,17 @@ export default defineComponent({
     const optionStyles = ref({})
 
     // Injects
-    const emitter = inject<Emitter>('emitter')
+    const emitter = inject<Emitter<EmitterEvents>>('emitter')
     const input = inject<Ref<HTMLInputElement | HTMLSelectElement>>('input')
     const isNative = inject<Boolean>('native')
     const isFilter = inject<Boolean>('filter')
     const isDisabled = ref(false)
+
+    const classes = computed(() => [
+      { 'na-option--selected': selected },
+      { 'na-option--disabled': isDisabled },
+      { 'na-option--displayed': show },
+    ])
 
     nextTick(() => {
       emitter?.emit('add-option', option.value)
@@ -123,7 +121,9 @@ export default defineComponent({
     })
 
     // Methods
-    const activate = (e: Event) => {
+    const activate = (
+      e: Event | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
       if (!isDisabled.value) emitter?.emit('activate', uid)
       else e.stopPropagation()
     }
@@ -141,6 +141,7 @@ export default defineComponent({
       optionTitle,
 
       // Data
+      classes,
       title,
       show,
       selected,

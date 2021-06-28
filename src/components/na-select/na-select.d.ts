@@ -19,3 +19,9 @@ export interface IRenderedOptionGroup {
   element: HTMLDivElement
   show: Ref
 }
+
+export type EmitterEvents = {
+  'add-option'?: HTMLButtonElement
+  'add-rendered-option': Object
+  activate: number
+}

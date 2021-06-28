@@ -1,28 +1,20 @@
-<template>
-  <div
-    v-if="state === 'success'"
-    class="na-help-message na-help-message--state-success"
-  >
-    <i class="bx bxs-check-circle"></i>
-    <slot name="message-success"></slot>
-  </div>
-  <div
-    v-else-if="state === 'warning'"
-    class="na-help-message na-help-message--state-warning"
-  >
-    <i class="bx bxs-info-circle"></i>
-    <slot name="message-warning"></slot>
-  </div>
-  <div
-    v-else-if="state === 'danger'"
-    class="na-help-message na-help-message--state-danger"
-  >
-    <i class="bx bxs-x-circle"></i>
-    <slot name="message-danger"></slot>
-  </div>
-  <div v-else class="na-help-message">
-    <slot name="message-default"></slot>
-  </div>
+<template lang="pug">
+.na-help-message.na-help-message--state-success(v-if='state === "success"')
+  i.bx.bxs-check-circle
+  slot(name='message-success')
+
+.na-help-message.na-help-message--state-warning(
+  v-else-if='state === "warning"'
+)
+  i.bx.bxs-info-circle
+  slot(name='message-warning')
+
+.na-help-message.na-help-message--state-danger(v-else-if='state === "danger"')
+  i.bx.bxs-x-circle
+  slot(name='message-danger')
+
+.na-help-message(v-else)
+  slot(name='message-default')
 </template>
 
 <script lang="ts">

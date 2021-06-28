@@ -1,4 +1,4 @@
-import { NaButton, NaButtonGroup } from '../components/na-button'
+import { NaButton } from '../components/na-button'
 
 const shapes = ['rounded', 'rect', 'circle']
 const styles = ['solid', 'border', 'transparent']
@@ -29,49 +29,16 @@ export default {
   },
 }
 
-export const Button = (args) => ({
+const ButtonTemplate = (args) => ({
   components: { NaButton },
   setup() {
     return { args }
   },
   template: /* html */ `
   <na-button v-bind="args">
-    <span>${args.text}</span>
+    <span>Кнопка</span>
   </na-button>
   `,
 })
 
-Button.args = {
-  text: 'Кнопка',
-}
-
-// export const ButtonGroup = (args) => ({
-//   components: { NaButton, NaButtonGroup },
-//   setup() {
-//     return { args }
-//   },
-//   template: /*html*/ `
-//   <na-button-group :vertical="args.vertical" :block="args.block">
-//     <na-button v-bind="args">
-//       <span>${args.text}</span>
-//     </na-button>
-//     <na-button v-bind="args" disabled>
-//       <span>${args.text}</span>
-//     </na-button>
-//     <na-button v-bind="args">
-//       <i class='bx bx-heart' />
-//       <span>${args.text}</span>
-//     </na-button>
-//     <na-button v-bind="args">
-//       <span>${args.text}</span>
-//       <i class='bx bx-heart' />
-//     </na-button>
-//   </na-button-group>
-//   `,
-// })
-
-// ButtonGroup.args = {
-//   text: 'Кнопка',
-//   vertical: false,
-//   block: false,
-// }
+export const Button = ButtonTemplate.bind({})

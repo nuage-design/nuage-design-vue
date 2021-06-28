@@ -1,49 +1,31 @@
-<template>
-  <div
-    ref="root"
-    :class="[
-      'na-input',
-      `na-input--state-${state}`,
-      { 'na-input--focused': focused },
-    ]"
-    :style="[
-      `--left-side-padding:${leftSidePadding}px;`,
-      `--right-side-padding:${rightSidePadding}px;`,
-    ]"
-  >
-    <label>
-      <span v-if="label" ref="label" class="na-input__label">{{ label }}</span>
-
-      <input
-        ref="input"
-        class="na-input__input"
-        @focus="focus"
-        @blur="blur"
-        @input="$emit('update:modelValue', $event.target.value)"
-        :placeholder="placeholder"
-      />
-
-      <div class="na-input__internal-elements">
-        <div class="na-input__left-side">
-          <slot name="left-side"></slot>
-        </div>
-        <div class="na-input__right-side">
-          <slot name="right-side"></slot>
-        </div>
-      </div>
-    </label>
-  </div>
+<template lang="pug">
+div(ref='root', :class='classes')
+  label
+    span.na-input__label(v-if='label', ref='label')
+      | {{ label }}
+    input.na-input__input(
+      ref='input',
+      @focus='focus',
+      @blur='blur',
+      @input='updateModelValue',
+      :placeholder='placeholder'
+    )
+    .na-input__internal-elements
+      .na-input__left-side
+        slot(name='left-side')
+      .na-input__right-side
+        slot(name='right-side')
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { inputMixin, inputSetup } from '../../mixins/na-input-mixin'
 
 export default defineComponent({
   name: 'NaInput',
   emits: ['update:modelValue'],
   mixins: [inputMixin],
-  setup: (_, { slots }) => {
+  setup: (props, { slots, emit }) => {
     const {
       leftSidePadding,
       rightSidePadding,
@@ -51,7 +33,37 @@ export default defineComponent({
       focus,
       blur,
     } = inputSetup(slots)
-    return { leftSidePadding, rightSidePadding, focused, focus, blur }
+
+    const input = ref<HTMLInputElement>()
+
+    onMounted(() => {
+      input.value?.style.setProperty(
+        '--left-side-padding',
+        leftSidePadding + 'px',
+      )
+      input.value?.style.setProperty(
+        '--right-side-padding',
+        rightSidePadding + 'px',
+      )
+    })
+
+    const updateModelValue = () =>
+      emit('update:modelValue', input?.value?.value)
+
+    const classes = computed(() => [
+      'na-input',
+      `na-input--state-${props.state}`,
+      { 'na-input--focused': focused.value },
+    ])
+
+    return {
+      focused,
+      focus,
+      blur,
+      classes,
+      input,
+      updateModelValue,
+    }
   },
 })
 </script>
