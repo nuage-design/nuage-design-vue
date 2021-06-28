@@ -41,6 +41,7 @@ import { inputMixin, inputSetup } from '../../mixins/na-input-mixin'
 
 export default defineComponent({
   name: 'NaInput',
+  emits: ['update:modelValue'],
   mixins: [inputMixin],
   setup: (_, { slots }) => {
     const {

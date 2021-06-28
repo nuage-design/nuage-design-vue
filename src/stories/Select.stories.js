@@ -19,8 +19,6 @@ export default {
 const Template = (args) => ({
   components: { NaSelect, NaOption, NaOptionGroup },
   setup() {
-    const value1 = ref('')
-    const value2 = ref('')
     const items = ref([
       { icon: 'bx bxl-html5', value: 'HTML' },
       { icon: 'bx bxl-css3', value: 'CSS' },
@@ -37,16 +35,10 @@ const Template = (args) => ({
       { leftIcon: 'bx bxl-sass', value: 'SCSS', title: 'Класс!' },
     ])
 
-    return { args, items, value1, value2, options }
+    return { args, items, options }
   },
   template: /* html */ `
-  <na-select v-bind='args' v-model="value1" style="width: 180px" :options="options">
-    <template #message-default>Help me</template>
-    <template #message-success>You are good man!</template>
-    <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
-    <template #message-danger>Danger!</template>
-  </na-select>
-  <na-select v-bind='args' v-model="value2" style="width: 270px">
+  <na-select v-bind='args' style="width: 270px">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>

@@ -1,5 +1,4 @@
 import { NaBadge } from '../components/na-badge'
-import { html } from 'lit-html'
 
 export default {
   title: 'Components/Badge',
@@ -11,8 +10,8 @@ const Template = (args) => ({
   setup() {
     return { args }
   },
-  template: (args) => html`
-    <na-badge v-bind="${args}"></na-badge>
+  template: /* html */ `
+    <na-badge v-bind="args"></na-badge>
   `,
 })
 

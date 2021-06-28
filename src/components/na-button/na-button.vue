@@ -1,22 +1,10 @@
-<template>
-  <button
-    ref="button"
-    :class="[
-      'na-button',
-      `na-button--size-${size}`,
-      `na-button--shape-${shape}`,
-      `na-button--style-${type}`,
-      { 'na-button--active': active },
-      { 'na-button--equal': equal },
-      { 'na-button--block': block },
-    ]"
-  >
-    <slot />
-  </button>
+<template lang="pug">
+button(ref='button', :class='classes')
+  slot
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
 
 export default defineComponent({
   name: 'NaButton',
@@ -68,6 +56,16 @@ export default defineComponent({
   setup(props) {
     const button = ref<HTMLButtonElement>()
 
+    const classes = computed(() => [
+      'na-button',
+      `na-button--size-${props.size}`,
+      `na-button--shape-${props.shape}`,
+      `na-button--style-${props.type}`,
+      { 'na-button--active': props.active },
+      { 'na-button--equal': props.equal },
+      { 'na-button--block': props.block },
+    ])
+
     onMounted(() => {
       button.value?.style.setProperty('--space', props.space + 'px')
 
@@ -100,7 +98,7 @@ export default defineComponent({
       }
     })
 
-    return { button }
+    return { button, classes }
   },
 })
 </script>

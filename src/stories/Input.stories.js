@@ -1,6 +1,5 @@
 import { NaInput } from '../components/na-input'
 import { NaButton } from '../components/na-button'
-import { ref } from 'vue'
 
 const states = ['default', 'success', 'warning', 'danger']
 
@@ -20,12 +19,10 @@ export default {
 const Template = (args) => ({
   components: { NaInput, NaButton },
   setup() {
-    const value = ref('')
-
-    return { args, value }
+    return { args }
   },
   template: /*html*/ `
-  <na-input v-bind='args' v-model="value" style="width: 200px">
+  <na-input v-bind='args' style="width: 200px">
     <template #message-default>Help me</template>
     <template #message-success>You are good man!</template>
     <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
@@ -39,8 +36,6 @@ const Template = (args) => ({
       </na-button>
     </template>
   </na-input>
-
-  <p>Value: {{ value }}</p>
   `,
 })
 
