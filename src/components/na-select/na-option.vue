@@ -7,7 +7,6 @@ transition(v-else, name='show')
     v-show='show',
     ref='option',
     :value='value',
-    :style='optionStyles',
     :class='classes',
     @keydown.enter='activate',
     @click='activate'
@@ -62,7 +61,6 @@ export default defineComponent({
     const title = ref('')
     const show = ref(true)
     const selected = ref(false)
-    const optionStyles = ref({})
 
     // Injects
     const emitter = inject<Emitter<EmitterEvents>>('emitter')
@@ -72,9 +70,9 @@ export default defineComponent({
     const isDisabled = ref(false)
 
     const classes = computed(() => [
-      { 'na-option--selected': selected },
-      { 'na-option--disabled': isDisabled },
-      { 'na-option--displayed': show },
+      { 'na-option--selected': selected.value },
+      { 'na-option--disabled': isDisabled.value },
+      { 'na-option--displayed': show.value },
     ])
 
     nextTick(() => {
@@ -101,9 +99,10 @@ export default defineComponent({
         ? optionTitle.value?.innerText!
         : props.value
 
-      optionStyles.value = slots['right-side']
-        ? { '--padding-right': '18px' }
-        : { '--padding-right': '38px' }
+      option.value?.style.setProperty(
+        '--padding-right',
+        slots['right-side'] ? '18px' : '38px',
+      )
 
       if (input?.value && isFilter) {
         input.value.addEventListener('input', filter)
@@ -145,7 +144,6 @@ export default defineComponent({
       title,
       show,
       selected,
-      optionStyles,
       isNative,
       isDisabled,
 

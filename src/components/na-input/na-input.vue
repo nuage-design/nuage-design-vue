@@ -1,20 +1,14 @@
 <template lang="pug">
-div(ref='root', :class='classes')
-  label
-    span.na-input__label(v-if='label', ref='label')
-      | {{ label }}
-    input.na-input__input(
-      ref='input',
-      @focus='focus',
-      @blur='blur',
-      @input='updateModelValue',
-      :placeholder='placeholder'
-    )
-    .na-input__internal-elements
-      .na-input__left-side
-        slot(name='left-side')
-      .na-input__right-side
-        slot(name='right-side')
+include ../../mixins/na-input-mixin/inputTemplate
+
++input('inputClasses')
+  input.na-input__input(
+    ref='input',
+    @focus='focus',
+    @blur='blur',
+    @input='updateModelValue',
+    :placeholder='placeholder'
+  )
 </template>
 
 <script lang="ts">
@@ -50,7 +44,7 @@ export default defineComponent({
     const updateModelValue = () =>
       emit('update:modelValue', input?.value?.value)
 
-    const classes = computed(() => [
+    const inputClasses = computed(() => [
       'na-input',
       `na-input--state-${props.state}`,
       { 'na-input--focused': focused.value },
@@ -60,7 +54,7 @@ export default defineComponent({
       focused,
       focus,
       blur,
-      classes,
+      inputClasses,
       input,
       updateModelValue,
     }

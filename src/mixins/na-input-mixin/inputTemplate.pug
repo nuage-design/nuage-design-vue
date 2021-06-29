@@ -1,0 +1,14 @@
+mixin input(classes)
+  div(ref='root', :class=classes)
+    label
+      span.na-input__label(v-if='label', ref='labelRef')
+        | {{ label }}
+
+      block
+      
+      .na-input__internal-elements
+        .na-input__left-side
+          slot(name='left-side')
+        .na-input__right-side
+          block rightSide
+            slot(name='right-side')

@@ -16,12 +16,13 @@ export interface IRenderedOption {
 }
 
 export interface IRenderedOptionGroup {
-  element: HTMLDivElement
+  element?: HTMLDivElement
   show: Ref
 }
 
 export type EmitterEvents = {
   'add-option'?: HTMLButtonElement
-  'add-rendered-option': Object
+  'add-rendered-option': IRenderedOption
+  'add-option-group': IRenderedOptionGroup
   activate: number
 }

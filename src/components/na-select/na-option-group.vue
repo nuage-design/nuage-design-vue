@@ -1,27 +1,27 @@
-<template>
-  <optgroup v-if="isNative && !isFilter" :label="label" :disabled="disabled">
-    <slot></slot>
-  </optgroup>
-  <div
-    :disabled="disabled"
-    v-else-if="label"
-    ref="optionGroup"
-    :class="['na-option-group', { 'na-option-group--disabled': disabled }]"
-  >
-    <transition name="show">
-      <div v-show="show" ref="label" class="na-option-group__label">
-        {{ label }}
-      </div>
-    </transition>
-    <slot></slot>
-  </div>
-  <slot v-else></slot>
+<template lang="pug">
+optgroup(v-if='isNative && !isFilter', :label='label', :disabled='disabled')
+  slot
+
+div(
+  v-else-if='label',
+  ref='optionGroup',
+  :disabled='disabled',
+  :class='classes'
+)
+  transition(name='show')
+    .na-option-group__label(v-show='show', ref='label')
+      | {{ label }}
+
+  slot
+
+slot(v-else)
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, inject, nextTick, ref } from 'vue'
+import { defineComponent, provide, inject, nextTick, ref, computed } from 'vue'
 
 import { Emitter } from 'mitt'
+import type { EmitterEvents } from './na-select'
 
 export default defineComponent({
   name: 'NaOptionGroup',
@@ -43,9 +43,14 @@ export default defineComponent({
     provide('disabled', props.disabled)
 
     // Injects
-    const emitter = inject<Emitter>('emitter')
+    const emitter = inject<Emitter<EmitterEvents>>('emitter')
     const isNative = inject<Boolean>('native')
     const isFilter = inject<Boolean>('filter')
+
+    const classes = computed(() => [
+      'na-option-group',
+      { 'na-option-group--disabled': props.disabled },
+    ])
 
     // Data
     const show = ref(true)
@@ -57,7 +62,7 @@ export default defineComponent({
       })
     })
 
-    return { optionGroup, isNative, isFilter, show }
+    return { optionGroup, isNative, isFilter, show, classes }
   },
 })
 </script>
