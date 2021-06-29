@@ -65,12 +65,10 @@ $states: success, warning, danger;
   &__message {
     color: var(--text-secondary);
     line-height: var(--icon-size);
-    margin-top: var(--space-between-elements);
+    margin: var(--margin);
     transition: var(--transition);
     font-weight: var(--font-weight);
     font-size: var(--font-size);
-
-    opacity: 1;
 
     display: flex;
     align-content: center;
@@ -78,6 +76,16 @@ $states: success, warning, danger;
     > i {
       font-size: var(--icon-size);
       margin-right: 5px;
+    }
+
+    @each $state in $states {
+      &--state-#{$state} {
+        color: var(--text-primary);
+
+        i {
+          color: var(--#{$state}-500);
+        }
+      }
     }
   }
 

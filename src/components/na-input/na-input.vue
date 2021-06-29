@@ -1,7 +1,7 @@
 <template lang="pug">
 include ../../mixins/na-input-mixin/inputTemplate
 
-+input('inputClasses')
++input('classes')
   input.na-input__input(
     ref='input',
     @focus='focus',
@@ -44,7 +44,7 @@ export default defineComponent({
     const updateModelValue = () =>
       emit('update:modelValue', input?.value?.value)
 
-    const inputClasses = computed(() => [
+    const classes = computed(() => [
       'na-input',
       `na-input--state-${props.state}`,
       { 'na-input--focused': focused.value },
@@ -54,7 +54,7 @@ export default defineComponent({
       focused,
       focus,
       blur,
-      inputClasses,
+      classes,
       input,
       updateModelValue,
     }

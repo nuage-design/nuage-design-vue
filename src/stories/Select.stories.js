@@ -39,6 +39,10 @@ const Template = (args) => ({
   },
   template: /* html */ `
   <na-select v-bind='args' style="width: 270px">
+    <template #message-default>Help me</template>
+    <template #message-success>You are good man!</template>
+    <template #message-warning>Don't worry, be happy! Don't worry, be happy!</template>
+    <template #message-danger>Danger!</template>
     <na-option-group label="Группа 1" disabled>
       <na-option
         v-for="(item, index) in items"
