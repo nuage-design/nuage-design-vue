@@ -1,10 +1,8 @@
 <template lang="pug">
 include ../../mixins/na-input-mixin/inputTemplate
 
-+input('selectClasses')
-  // native select
++input('selectClasses', ['bx', 'bxs-chevron-down'])
   template(v-if='native')
-    // filter
     template(v-if='filter')
       input.na-input__input(
         ref='inputRef',
@@ -25,7 +23,6 @@ include ../../mixins/na-input-mixin/inputTemplate
           )
             | {{ option.title }}
 
-    // no filter
     template(v-else)
       select.na-input__input(
         ref='inputRef',
@@ -33,7 +30,6 @@ include ../../mixins/na-input-mixin/inputTemplate
         @focus='focus',
         @blur='blur'
       )
-        // placeholder
         option(disabled, v-if='placeholder')
           | {{ placeholder }}
         slot
@@ -50,7 +46,6 @@ include ../../mixins/na-input-mixin/inputTemplate
             template(v-else)
               | {{ option.value }}
 
-  // custom select
   template(v-else)
     input.na-input__input(
       ref='inputRef',

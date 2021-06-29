@@ -1,4 +1,4 @@
-mixin input(classes)
+mixin input(classes, rightIcon)
   div(ref='root', :class=classes)
     label
       span.na-input__label(v-if='label', ref='labelRef')
@@ -10,5 +10,7 @@ mixin input(classes)
         .na-input__left-side
           slot(name='left-side')
         .na-input__right-side
-          block rightSide
-            slot(name='right-side')
+          if rightIcon
+            i(class=rightIcon)
+          else
+           slot(name='right-side')
