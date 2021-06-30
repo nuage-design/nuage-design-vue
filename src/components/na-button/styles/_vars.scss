@@ -4,8 +4,8 @@
   $small: (
     height: 26px,
     padding: 11px,
-    font-size: 13px,
-    font-equal: 16px,
+    font-size: 11px,
+    font-equal: 13px,
     font-weight: 600,
     icon-size: 18px,
     border-size: 1px,
@@ -18,7 +18,7 @@
     font-equal: 18px,
     font-weight: 600,
     icon-size: 20px,
-    border-size: 2px,
+    border-size: 1px,
   );
 
   $large: (
@@ -54,6 +54,10 @@
   --width: auto;
   --space: 8px;
   --transition: 0.1s;
+  --body-shadows: 0px 2px 4px rgba(0, 0, 0, 0.15),
+    0px 4px 8px rgba(0, 0, 0, 0.15), inset 0px -1px 4px rgba(0, 0, 0, 0.1),
+    inset 0px 1px 4px rgba(255, 255, 255, 0.25);
+  --icon-shadows: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25));
 
   &--equal {
     --padding: 0;

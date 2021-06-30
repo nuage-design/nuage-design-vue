@@ -90,8 +90,6 @@ import {
   computed,
 } from 'vue'
 
-import { NaInput } from '../na-input'
-
 import NaOption from './na-option.vue'
 import { inputMixin, inputSetup } from '../../mixins/na-input-mixin'
 
@@ -109,7 +107,6 @@ export default defineComponent({
   name: 'NaSelect',
   mixins: [inputMixin],
   components: { NaOption },
-  extends: NaInput,
   props: {
     native: {
       type: Boolean,
@@ -160,7 +157,6 @@ export default defineComponent({
     ])
 
     selectList.value?.style.setProperty('--max-size', String(props.size))
-    selectList.value?.style.setProperty('--message-height', 0 + 'px')
 
     const emitter: Emitter<EmitterEvents> = mitt()
 
@@ -226,12 +222,6 @@ export default defineComponent({
       root.value?.style.setProperty(
         '--right-side-padding',
         rightSidePadding + 'px',
-      )
-
-      const messageHeight = selectMessage.value?.offsetHeight
-      selectList.value?.style.setProperty(
-        '--message-height',
-        messageHeight + 'px',
       )
 
       reset()
@@ -391,14 +381,12 @@ export default defineComponent({
 .fade-enter-active,
 .fade-leave-active {
   transition: 0.1s ease-out;
-  top: calc(100% - var(--message-height) - 2px);
   overflow-y: hidden;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   transition: 0.1s ease-in;
-  top: calc(100% - var(--message-height) - 7px);
   opacity: 0;
   overflow-y: hidden;
 }

@@ -13,18 +13,6 @@ $states: success, warning, danger;
     cursor: pointer;
   }
 
-  &__chevron {
-    height: 0;
-    width: 0;
-
-    color: var(--text-secondary);
-    font-size: var(--chevron-size);
-    position: relative;
-
-    right: calc(var(--padding) + var(--chevron-size));
-    top: 4px;
-  }
-
   &__list {
     position: absolute;
     min-width: 100%;
@@ -35,7 +23,8 @@ $states: success, warning, danger;
         var(--margin-bottom) + 2 * var(--padding)
     );
 
-    top: calc(100% - var(--message-height) - 2px);
+    will-change: opacity;
+
     z-index: 100;
     overflow-y: auto;
 

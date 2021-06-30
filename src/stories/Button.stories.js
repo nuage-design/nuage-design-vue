@@ -37,8 +37,14 @@ const ButtonTemplate = (args) => ({
   template: /* html */ `
   <na-button v-bind="args">
     <span>Кнопка</span>
+    <i class="bx bxs-heart"></i>
   </na-button>
   `,
 })
 
 export const Button = ButtonTemplate.bind({})
+Button.args = {
+  shape: 'rounded',
+  type: 'solid',
+  size: 'default',
+}

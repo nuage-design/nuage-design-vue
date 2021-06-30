@@ -40,6 +40,11 @@
   &--style-solid {
     color: var(--white);
     background: var(--primary-400);
+    box-shadow: var(--body-shadows);
+
+    i {
+      filter: var(--icon-shadows);
+    }
 
     &:hover:not(.na-button--active, [disabled]) {
       background: var(--primary-300);
