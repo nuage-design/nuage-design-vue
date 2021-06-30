@@ -47,4 +47,7 @@ Button.args = {
   shape: 'rounded',
   type: 'solid',
   size: 'default',
+  block: false,
+  equal: false,
+  space: 8,
 }

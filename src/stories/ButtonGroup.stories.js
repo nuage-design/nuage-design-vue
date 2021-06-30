@@ -19,17 +19,8 @@ export default {
 
 const template = (type) => /* html */ `
   <na-button-group v-bind="args">
-    <na-button type='${type}'>
-      <span>Кнопка 1</span>
-    </na-button>
-    <na-button type='${type}'>
-      <span>Кнопка 2</span>
-    </na-button>
-    <na-button type='${type}'>
-      <span>Кнопка 3</span>
-    </na-button>
-    <na-button type='${type}'>
-      <span>Кнопка 4</span>
+    <na-button v-for="item in [1, 2, 3, 4]" :key="item.id" type='${type}'>
+      <span>Кнопка {{item}}</span>
     </na-button>
   </na-button-group>
   `
@@ -58,6 +49,20 @@ const ButtonGroupBorder = (args) => ({
 
 export const Border = ButtonGroupBorder.bind({})
 Border.args = {
+  vertical: false,
+  block: false,
+}
+
+const ButtonGroupTransparent = (args) => ({
+  components: { NaButton, NaButtonGroup },
+  setup() {
+    return { args }
+  },
+  template: template('transparent'),
+})
+
+export const Transparent = ButtonGroupTransparent.bind({})
+Transparent.args = {
   vertical: false,
   block: false,
 }
