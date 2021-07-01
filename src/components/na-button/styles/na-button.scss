@@ -54,11 +54,11 @@
   &--style-border {
     color: var(--primary-400);
     background: none;
-    border: var(--border-size) solid var(--primary-400);
+    border: var(--border-size) solid var(--primary-transparent-200);
 
-    &:hover:not(.na-button--active, [disabled]) {
-      color: var(--primary-200);
-      border-color: var(--primary-200);
+    &:hover:not(.na-button--active, [disabled]),
+    &:focus:not(.na-button--active, [disabled]) {
+      border-color: var(--primary-400);
     }
   }
 
