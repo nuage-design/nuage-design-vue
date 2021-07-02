@@ -6,9 +6,8 @@ label.na-checkbox(:class='classes')
     :disabled='disabled',
     :value='value'
   )
-  span.na-checkbox__label.na-checkbox__label 
-    template(v-if='value') {{ value }}
-    slot(v-else)
+  span.na-checkbox__label
+    slot
 </template>
 
 <script lang="ts">
@@ -56,7 +55,6 @@ export default defineComponent({
       flex-grow: 0;
       border: 2px solid var(--primary-transparent-200);
       border-radius: 7px;
-      margin-right: 10px;
       background-repeat: no-repeat;
       background-position: center center;
     }
@@ -94,6 +92,10 @@ export default defineComponent({
       &:not(:checked) + .na-checkbox__label::before {
         border-color: var(--primary-400);
       }
+    }
+
+    &:not(:focus) + .na-checkbox__label::after {
+      filter: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25));
     }
 
     &:checked + .na-checkbox__label {

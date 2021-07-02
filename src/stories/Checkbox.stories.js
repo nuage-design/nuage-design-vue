@@ -11,16 +11,19 @@ const Template = (args) => ({
     return { args }
   },
   template: /* html */ `
-    <na-checkbox v-bind="args">Checkbox 1</na-checkbox><br>
+    <na-checkbox style="width:300px;" v-bind="args">Checkbox 1</na-checkbox><br>
     <na-checkbox v-bind="args">Checkbox 2</na-checkbox><br>
     <na-checkbox v-bind="args">Checkbox 3</na-checkbox><br>
-    <na-checkbox v-bind="args">Checkbox 4</na-checkbox>
+    <na-checkbox v-bind="args">Checkbox 4</na-checkbox><br>
+    <na-checkbox v-bind="args"></na-checkbox><br>
+    <na-checkbox v-bind="args"></na-checkbox>
   `,
 })
 
 export const Checkbox = Template.bind({})
 Checkbox.args = {
+  value: '',
   checked: false,
   disabled: false,
-  value: '',
+  mirror: true,
 }
