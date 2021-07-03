@@ -43,6 +43,7 @@ export default defineComponent({
     align-items: center;
     user-select: none;
     position: relative;
+    margin: 0 -10px;
 
     &::before {
       transition: 0.1s ease-in-out;
@@ -57,6 +58,7 @@ export default defineComponent({
       border-radius: 7px;
       background-repeat: no-repeat;
       background-position: center center;
+      margin: 0 10px;
     }
 
     &::after {
@@ -69,6 +71,7 @@ export default defineComponent({
       border-radius: 7px;
       background-repeat: no-repeat;
       background-position: center center;
+      margin: 0 10px;
     }
   }
 
