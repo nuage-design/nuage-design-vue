@@ -11,19 +11,16 @@ const Template = (args) => ({
     return { args }
   },
   template: /* html */ `
-    <na-radio v-bind="args">Radio 1</na-radio><br>
-    <na-radio v-bind="args">Radio 2</na-radio><br>
-    <na-radio v-bind="args">Radio 3</na-radio><br>
-    <na-radio v-bind="args">Radio 4</na-radio><br>
-    <na-radio v-bind="args"></na-radio><br>
-    <na-radio v-bind="args"></na-radio>
+    <na-radio name='test' v-bind="args">Radio 1</na-radio><br>
+    <na-radio name='test' disabled v-bind="args">Radio 2</na-radio><br>
+    <na-radio name='test' v-bind="args">Radio 3</na-radio><br>
+    <na-radio name='test' v-bind="args">Radio 4</na-radio><br>
+    <na-radio name='test' v-bind="args"></na-radio><br>
+    <na-radio name='test' v-bind="args"></na-radio>
   `,
 })
 
 export const Radio = Template.bind({})
 Radio.args = {
   value: '',
-  checked: false,
-  disabled: false,
-  mirror: true,
 }
