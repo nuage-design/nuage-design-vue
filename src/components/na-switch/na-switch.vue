@@ -1,12 +1,12 @@
 <template lang="pug">
-label.na-checkbox(:class='classes')
+label.na-switch(:class='classes')
   input(
     type='checkbox',
     :checked='checked',
     :disabled='disabled',
     :value='value'
   )
-  span.na-checkbox__label
+  span.na-switch__label
     slot
 </template>
 
@@ -23,9 +23,7 @@ export default defineComponent({
     disabled: Boolean,
   },
   setup(props) {
-    const classes = computed(() => [
-      { 'na-checkbox--disabled': props.disabled },
-    ])
+    const classes = computed(() => [{ 'na-switch--disabled': props.disabled }])
 
     return { classes }
   },
@@ -33,11 +31,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.na-checkbox {
+.na-switch {
   display: inline-block;
   margin: 3px;
+  position: relative;
   cursor: pointer;
-  line-height: 22px;
 
   &__label {
     display: inline-flex;
@@ -45,34 +43,33 @@ export default defineComponent({
     user-select: none;
     position: relative;
     margin: 0 -10px;
+    line-height: 22px;
 
     &::before {
       transition: 0.1s ease-in-out;
       content: '';
       display: inline-block;
-      width: 19px;
-      height: 19px;
+      min-width: 40px;
+      height: 22px;
       flex-shrink: 0;
-      transform: scale(1);
       flex-grow: 0;
-      border: 2px solid var(--primary-transparent-200);
-      border-radius: 6px;
-      background-repeat: no-repeat;
-      background-position: center center;
+      border-radius: 11px;
+      box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
+      background-color: var(--primary-800);
       margin: 0 10px;
     }
 
     &::after {
-      width: 19px;
-      height: 19px;
-      transform: scale(0);
+      width: 16px;
+      height: 16px;
       position: absolute;
       transition: 0.1s ease-in-out;
       content: '';
-      border-radius: 6px;
-      background-repeat: no-repeat;
-      background-position: center center;
+      border-radius: 8px;
       margin: 0 10px;
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+      background-color: var(--white);
+      left: 3px;
     }
   }
 
@@ -81,35 +78,46 @@ export default defineComponent({
     z-index: -1;
     opacity: 0;
 
+    &:active + .na-switch__label {
+      &::after {
+        transition: 0.1s ease-in-out;
+        width: 34px;
+      }
+    }
+
     &:not(:disabled) {
-      &:not(:checked) + .na-checkbox__label:hover::before {
+      &:not(:checked) + .na-switch__label:hover::before {
         border-color: var(--primary-400);
       }
     }
 
     &:focus {
-      & + .na-checkbox__label::before,
-      & + .na-checkbox__label::after {
+      & + .na-switch__label::before {
+        border-color: var(--primary-400);
         box-shadow: 0 0 0 5px var(--primary-transparent-200);
       }
 
-      &:not(:checked) + .na-checkbox__label::before {
+      &:not(:checked) + .na-switch__label::before {
         border-color: var(--primary-400);
       }
     }
 
-    &:not(:focus) + .na-checkbox__label::after {
+    & + .na-switch__label::after {
       filter: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25));
     }
 
-    &:checked + .na-checkbox__label {
+    &:checked + .na-switch__label {
       &::before {
-        transform: scale(0);
+        background-color: var(--primary-400);
       }
       &::after {
-        transform: scale(1);
-        background-color: var(--primary-400);
-        background-image: url('./assets/check.svg');
+        left: 21px;
+      }
+    }
+
+    &:checked:active + .na-switch__label {
+      &::after {
+        left: 3px;
       }
     }
   }

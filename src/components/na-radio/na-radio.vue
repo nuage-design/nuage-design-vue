@@ -53,8 +53,8 @@ export default defineComponent({
       transition: 0.1s ease-in-out;
       content: '';
       display: inline-block;
-      width: 21px;
-      height: 21px;
+      width: 19px;
+      height: 19px;
       flex-shrink: 0;
       transform: scale(1);
       flex-grow: 0;
@@ -77,7 +77,7 @@ export default defineComponent({
       background-position: center center;
 
       border-radius: 50%;
-      left: 16px;
+      left: 15px;
     }
   }
 
