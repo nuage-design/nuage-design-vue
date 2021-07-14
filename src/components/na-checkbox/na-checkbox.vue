@@ -47,7 +47,7 @@ export default defineComponent({
     margin: 0 -10px;
 
     &::before {
-      transition: 0.1s ease-in-out;
+      transition: 0.2s ease-in-out;
       content: '';
       display: inline-block;
       width: 19px;
@@ -67,7 +67,7 @@ export default defineComponent({
       height: 19px;
       transform: scale(0);
       position: absolute;
-      transition: 0.1s ease-in-out;
+      transition: 0.2s ease-in-out;
       content: '';
       border-radius: 6px;
       background-repeat: no-repeat;

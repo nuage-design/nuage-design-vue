@@ -44,9 +44,9 @@ export default defineComponent({
     position: relative;
     margin: 0 -10px;
     line-height: 22px;
+    width: auto;
 
     &::before {
-      transition: 0.1s ease-in-out;
       content: '';
       display: inline-block;
       min-width: 40px;
@@ -63,7 +63,7 @@ export default defineComponent({
       width: 16px;
       height: 16px;
       position: absolute;
-      transition: 0.1s ease-in-out;
+
       content: '';
       border-radius: 8px;
       margin: 0 10px;
@@ -78,11 +78,8 @@ export default defineComponent({
     z-index: -1;
     opacity: 0;
 
-    &:active + .na-switch__label {
-      &::after {
-        transition: 0.1s ease-in-out;
-        width: 34px;
-      }
+    &:active + .na-switch__label::after {
+      width: 34px;
     }
 
     &:not(:disabled) {
@@ -93,12 +90,7 @@ export default defineComponent({
 
     &:focus {
       & + .na-switch__label::before {
-        border-color: var(--primary-400);
         box-shadow: 0 0 0 5px var(--primary-transparent-200);
-      }
-
-      &:not(:checked) + .na-switch__label::before {
-        border-color: var(--primary-400);
       }
     }
 
@@ -115,10 +107,8 @@ export default defineComponent({
       }
     }
 
-    &:checked:active + .na-switch__label {
-      &::after {
-        left: 3px;
-      }
+    &:checked:active + .na-switch__label::after {
+      left: 3px;
     }
   }
 
