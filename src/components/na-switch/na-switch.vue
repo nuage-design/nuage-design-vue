@@ -36,6 +36,7 @@ export default defineComponent({
   margin: 3px;
   position: relative;
   cursor: pointer;
+  user-select: none;
 
   &__label {
     display: inline-flex;
@@ -45,6 +46,7 @@ export default defineComponent({
     margin: 0 -10px;
     line-height: 22px;
     width: auto;
+    user-select: none;
 
     &::before {
       content: '';
@@ -57,12 +59,14 @@ export default defineComponent({
       box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
       background-color: var(--primary-800);
       margin: 0 10px;
+      transition: 0.1s ease-in-out;
     }
 
     &::after {
       width: 16px;
       height: 16px;
       position: absolute;
+      transition: 0.1s ease-in-out;
 
       content: '';
       border-radius: 8px;
