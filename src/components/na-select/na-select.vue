@@ -108,21 +108,12 @@ export default defineComponent({
   mixins: [inputMixin],
   components: { NaOption },
   props: {
-    native: {
-      type: Boolean,
-      default: false,
-    },
-
-    filter: {
-      type: Boolean,
-      default: false,
-    },
-
+    native: Boolean,
+    filter: Boolean,
     size: {
       type: Number,
       default: null,
     },
-
     options: {
       type: Array as PropType<IOption[]>,
       default: null,
