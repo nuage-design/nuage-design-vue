@@ -21,15 +21,11 @@ const Template = (args) => ({
     return { args }
   },
   template: /* html */ `
-  <br><br><br><br>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi placeat omnis, quis, doloremque, alias id quas illum <na-tooltip v-bind='args'>
-      <template #message>Lorem ipsum</template>
-       <b>DOLOR</b>
-        </na-tooltip> animi excepturi perspiciatis. Minima accusamus nesciunt corrupti sequi nulla sapiente, adipisci quaerat.
-        <na-tooltip v-bind='args'>
-      <template #message>Lorem ipsum</template>
-       
-    </na-tooltip>
+  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate sint tempore eos fuga! Ut id dolore reiciendis
+  <na-tooltip v-bind='args'>
+    <b>aperiam</b>
+  </na-tooltip>, distinctio voluptate facilis tempore nemo ex ea ab blanditiis repellat! Saepe, rerum.
+  
   `,
 })
 
