@@ -4,57 +4,39 @@ div(ref='badge', :class='classes')
     | {{ displayValue }}
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted, computed } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
 
-export default defineComponent({
-  name: 'NaBadge',
-  props: {
-    value: {
-      type: [String, Number],
-      default: null,
-    },
-    maxValue: {
-      type: Number,
-      default: 99,
-    },
-    inverse: {
-      type: Boolean,
-      default: false,
-    },
-    dot: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const badge = ref<HTMLDivElement>()
+interface Props {
+  value: [string, number]
+  maxValue: number
+  inverse: boolean
+  dot: boolean
+}
 
-    onMounted(() => {
-      if (+props.value) {
-        if (props.value >= 0 && props.value < 10) {
-          badge.value?.style.setProperty('--side-space', '0')
-        }
-      }
-    })
+const props = withDefaults(defineProps<Props>(), {
+  maxValue: 99,
+})
 
-    const classes = computed(() => [
-      'na-badge',
-      { 'na-badge--inverse': props.inverse },
-      { 'na-badge--dot': props.dot || !props.value },
-    ])
+const badge = ref<HTMLDivElement>()
 
-    const displayValue = computed(() => {
-      if (props.maxValue && +props.value) {
-        return +props.value > +props.maxValue
-          ? props.maxValue + '+'
-          : props.value
-      }
+onMounted(() => {
+  if (+props.value >= 0 && +props.value < 10) {
+    badge.value?.style.setProperty('--side-space', '0')
+  }
+})
 
-      return props.value
-    })
+const classes = computed(() => [
+  'na-badge',
+  { 'na-badge--inverse': props.inverse },
+  { 'na-badge--dot': props.dot || !props.value },
+])
 
-    return { displayValue, badge, classes }
-  },
+const displayValue = computed(() => {
+  if (props.maxValue && +props.value) {
+    return +props.value > +props.maxValue ? props.maxValue + '+' : props.value
+  }
+
+  return props.value
 })
 </script>

@@ -3,29 +3,17 @@ div(:class='classes')
   slot
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
-export default defineComponent({
-  name: 'NaButtonGroup',
-  props: {
-    vertical: {
-      type: Boolean,
-      default: false,
-    },
-    block: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const classes = computed(() => [
-      'na-button-group',
-      { 'na-button-group--vertical': props.vertical },
-      { 'na-button-group--block': props.block },
-    ])
+const props = defineProps<{
+  vertical: boolean
+  block: boolean
+}>()
 
-    return { classes }
-  },
-})
+const classes = computed(() => [
+  'na-button-group',
+  { 'na-button-group--vertical': props.vertical },
+  { 'na-button-group--block': props.block },
+])
 </script>

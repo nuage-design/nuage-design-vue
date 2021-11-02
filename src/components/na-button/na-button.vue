@@ -3,102 +3,67 @@ button(ref='button', :class='classes')
   slot
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted, computed } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
 
-export default defineComponent({
-  name: 'NaButton',
-  props: {
-    size: {
-      type: String,
-      default: 'default',
-      validator: (value: string) => {
-        return ['small', 'default', 'large', 'xl'].includes(value)
-      },
-    },
+interface Props {
+  size: string
+  shape: string
+  type: string
+  active: boolean
+  block: boolean
+  equal: boolean
+  space: number
+}
 
-    shape: {
-      type: String,
-      default: 'rounded',
-      validator: (value: string) => {
-        return ['rounded', 'rect', 'circle'].includes(value)
-      },
-    },
+const props = withDefaults(defineProps<Props>(), {
+  size: 'default',
+  shape: 'rounded',
+  type: 'solid',
+  space: 8,
+})
 
-    type: {
-      type: String,
-      default: 'solid',
-      validator: (value: string) => {
-        return ['solid', 'border', 'transparent'].includes(value)
-      },
-    },
+const button = ref<HTMLButtonElement>()
 
-    active: {
-      type: Boolean,
-      default: false,
-    },
+const classes = computed(() => [
+  'na-button',
+  `na-button--size-${props.size}`,
+  `na-button--shape-${props.shape}`,
+  `na-button--style-${props.type}`,
+  { 'na-button--active': props.active },
+  { 'na-button--equal': props.equal },
+  { 'na-button--block': props.block },
+])
 
-    block: {
-      type: Boolean,
-      default: false,
-    },
+onMounted(() => {
+  button.value?.style.setProperty('--space', props.space + 'px')
 
-    equal: {
-      type: Boolean,
-      default: false,
-    },
+  if (props.type === 'solid' || props.active) {
+    const badges = button.value?.querySelectorAll('.na-badge')
 
-    space: {
-      type: Number,
-      default: 8,
-    },
-  },
-  setup(props) {
-    const button = ref<HTMLButtonElement>()
-
-    const classes = computed(() => [
-      'na-button',
-      `na-button--size-${props.size}`,
-      `na-button--shape-${props.shape}`,
-      `na-button--style-${props.type}`,
-      { 'na-button--active': props.active },
-      { 'na-button--equal': props.equal },
-      { 'na-button--block': props.block },
-    ])
-
-    onMounted(() => {
-      button.value?.style.setProperty('--space', props.space + 'px')
-
-      if (props.type === 'solid' || props.active) {
-        const badges = button.value?.querySelectorAll('.na-badge')
-
-        badges?.forEach((badge) => {
-          badge.classList.add('na-badge_inverse')
-        })
-      }
-
-      if (props.equal) {
-        const firstItem = button.value?.firstElementChild
-
-        if (firstItem instanceof HTMLElement) {
-          let text = firstItem.innerText
-
-          if (text) firstItem.innerText = text[0]
-
-          if (firstItem.classList.contains('na-badge')) {
-            firstItem.innerText = ''
-            firstItem.classList.add('na-badge_dot')
-          }
-
-          if (button.value) {
-            button.value.innerHTML = ''
-            button.value.append(firstItem)
-          }
-        }
-      }
+    badges?.forEach((badge) => {
+      badge.classList.add('na-badge_inverse')
     })
+  }
 
-    return { button, classes }
-  },
+  if (props.equal) {
+    const firstItem = button.value?.firstElementChild
+
+    if (firstItem instanceof HTMLElement) {
+      let text = firstItem.innerText
+
+      if (text) firstItem.innerText = text[0]
+
+      if (firstItem.classList.contains('na-badge')) {
+        firstItem.innerText = ''
+        firstItem.classList.add('na-badge_dot')
+      }
+
+      if (button.value) {
+        button.value.innerHTML = ''
+        button.value.append(firstItem)
+      }
+    }
+  }
 })
 </script>

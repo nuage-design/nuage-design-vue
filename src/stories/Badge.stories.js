@@ -19,6 +19,5 @@ export const Badge = Template.bind({})
 
 Badge.args = {
   value: 100,
-  size: 'default',
   inverse: false,
 }
