@@ -10,24 +10,16 @@ label.na-switch(:class='classes')
     slot
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
-export default defineComponent({
-  props: {
-    value: {
-      type: String,
-      default: null,
-    },
-    checked: Boolean,
-    disabled: Boolean,
-  },
-  setup(props) {
-    const classes = computed(() => [{ 'na-switch--disabled': props.disabled }])
+const props = defineProps<{
+  value: string
+  checked: boolean
+  disabled: boolean
+}>()
 
-    return { classes }
-  },
-})
+const classes = computed(() => [{ 'na-switch--disabled': props.disabled }])
 </script>
 
 <style lang="scss">

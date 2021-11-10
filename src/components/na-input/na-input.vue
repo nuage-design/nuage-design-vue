@@ -11,53 +11,53 @@ include ../../mixins/na-input-mixin/inputTemplate
   )
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
-import { inputMixin, inputSetup } from '../../mixins/na-input-mixin'
+<script setup lang="ts">
+import { computed, withDefaults, useSlots, onMounted, ref } from 'vue'
 
-export default defineComponent({
-  name: 'NaInput',
-  emits: ['update:modelValue'],
-  mixins: [inputMixin],
-  setup: (props, { slots, emit }) => {
-    const {
-      leftSidePadding,
-      rightSidePadding,
-      focused,
-      focus,
-      blur,
-    } = inputSetup(slots)
+interface Props {
+  modelValue?: string
+  placeholder?: string
+  label?: string
+  state?: string
+}
 
-    const input = ref<HTMLInputElement>()
-
-    onMounted(() => {
-      input.value?.style.setProperty(
-        '--left-side-padding',
-        leftSidePadding + 'px',
-      )
-      input.value?.style.setProperty(
-        '--right-side-padding',
-        rightSidePadding + 'px',
-      )
-    })
-
-    const updateModelValue = () =>
-      emit('update:modelValue', input?.value?.value)
-
-    const classes = computed(() => [
-      'na-input',
-      `na-input--state-${props.state}`,
-      { 'na-input--focused': focused.value },
-    ])
-
-    return {
-      focused,
-      focus,
-      blur,
-      classes,
-      input,
-      updateModelValue,
-    }
-  },
+const props = withDefaults(defineProps<Props>(), {
+  state: 'default',
 })
+
+const slots = useSlots()
+const emit = defineEmits(['update:modelValue'])
+
+const root = ref<HTMLDivElement>()
+
+const focused = ref(false)
+
+const leftSidePadding = slots['left-side'] ? 23 : 0
+const rightSidePadding = slots['right-side'] ? 30 : 0
+
+const focus = (): void => {
+  focused.value = true
+}
+
+const blur = (): void => {
+  focused.value = false
+}
+
+const input = ref<HTMLInputElement>()
+
+onMounted(() => {
+  input.value?.style.setProperty('--left-side-padding', leftSidePadding + 'px')
+  input.value?.style.setProperty(
+    '--right-side-padding',
+    rightSidePadding + 'px',
+  )
+})
+
+const updateModelValue = () => emit('update:modelValue', input?.value?.value)
+
+const classes = computed(() => [
+  'na-input',
+  `na-input--state-${props.state}`,
+  { 'na-input--focused': focused.value },
+])
 </script>
