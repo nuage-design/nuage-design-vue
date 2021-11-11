@@ -16,6 +16,7 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   value: string
+  name: string
   checked: boolean
   disabled: boolean
 }>()

@@ -20,7 +20,6 @@ transition(v-else, name='show')
       slot(name='right-side')
 </template>
 
-
 <script lang="ts">
 import {
   onMounted,
@@ -120,9 +119,7 @@ export default defineComponent({
     })
 
     // Methods
-    const activate = (
-      e: Event | React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    ) => {
+    const activate = (e: Event) => {
       if (!isDisabled.value) emitter?.emit('activate', uid)
       else e.stopPropagation()
     }

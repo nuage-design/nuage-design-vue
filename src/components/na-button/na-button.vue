@@ -7,13 +7,13 @@ button(ref='button', :class='classes')
 import { ref, onMounted, computed } from 'vue'
 
 interface Props {
-  size: string
-  shape: string
-  type: string
-  active: boolean
-  block: boolean
-  equal: boolean
-  space: number
+  size?: string
+  shape?: string
+  type?: string
+  active?: boolean
+  block?: boolean
+  equal?: boolean
+  space?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {

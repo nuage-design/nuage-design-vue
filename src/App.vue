@@ -1,10 +1,23 @@
-<script script setup lang="ts">
-import { NaButton } from './components/na-button/'
-</script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <NaButton size="default">Кнопка</NaButton>
+  <na-button>
+    <span>Кнопка</span>
+    <i class="bx bxs-heart"></i>
+  </na-button>
 </template>
 
-<style></style>
+<script lang="ts">
+import './styles'
+import '../node_modules/boxicons/css/boxicons.css'
+
+import { defineComponent } from 'vue'
+import { NaButton } from './components/na-button'
+
+export default defineComponent({
+  name: 'App',
+  components: {
+    NaButton,
+  },
+})
+</script>
+
+<style lang="scss"></style>
