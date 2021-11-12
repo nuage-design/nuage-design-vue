@@ -25,6 +25,11 @@
       z-index: 1;
     }
 
+    &.na-button--style-solid {
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15),
+        0px 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
     &.na-button--style-transparent {
       &:hover:not(.na-button--active, [disabled]),
       &:focus:not(.na-button--active, [disabled]) {

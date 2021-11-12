@@ -4,6 +4,8 @@
 .na-button {
   @include align-center;
 
+  margin: 0;
+
   text-rendering: optimizeSpeed;
 
   font: {

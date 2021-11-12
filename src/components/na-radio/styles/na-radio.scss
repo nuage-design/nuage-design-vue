@@ -1,7 +1,9 @@
 .na-radio {
   display: inline-block;
-  margin: 3px;
+  margin: 5px 0;
   cursor: pointer;
+  line-height: 22px;
+  height: 22px;
 
   &__label {
     display: inline-flex;
@@ -22,7 +24,7 @@
       border: 2px solid var(--primary-transparent-200);
       background-repeat: no-repeat;
       background-position: center center;
-      margin: 0 10px;
+      margin: 0 12px;
 
       border-radius: 50%;
     }
@@ -38,7 +40,7 @@
       background-position: center center;
 
       border-radius: 50%;
-      left: 15px;
+      left: 17px;
     }
   }
 

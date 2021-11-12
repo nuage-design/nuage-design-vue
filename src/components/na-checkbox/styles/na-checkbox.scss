@@ -1,8 +1,9 @@
 .na-checkbox {
   display: inline-block;
-  margin: 3px;
+  margin: 5px 0;
   cursor: pointer;
   line-height: 22px;
+  height: 22px;
 
   &__label {
     display: inline-flex;
@@ -24,7 +25,7 @@
       border-radius: 6px;
       background-repeat: no-repeat;
       background-position: center center;
-      margin: 0 10px;
+      margin: 0 12px;
     }
 
     &::after {
@@ -37,7 +38,7 @@
       border-radius: 6px;
       background-repeat: no-repeat;
       background-position: center center;
-      margin: 0 10px;
+      margin: 0 12px;
     }
   }
 
