@@ -1,10 +1,10 @@
 <template lang="pug">
-button(ref='button', :class='classes')
+button(ref="button" :class="classes")
   slot
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 
 interface Props {
   size?: string
@@ -23,9 +23,9 @@ const props = withDefaults(defineProps<Props>(), {
   space: 8,
 })
 
-const button = ref<HTMLButtonElement>()
+let button = $ref<HTMLButtonElement>()
 
-const classes = computed(() => [
+let classes = $computed(() => [
   'na-button',
   `na-button--size-${props.size}`,
   `na-button--shape-${props.shape}`,
@@ -36,18 +36,18 @@ const classes = computed(() => [
 ])
 
 onMounted(() => {
-  button.value?.style.setProperty('--space', props.space + 'px')
+  button.style.setProperty('--space', props.space + 'px')
 
   if (props.type === 'solid' || props.active) {
-    const badges = button.value?.querySelectorAll('.na-badge')
+    const badges = button.querySelectorAll('.na-badge')
 
-    badges?.forEach((badge) => {
+    badges?.forEach(badge => {
       badge.classList.add('na-badge_inverse')
     })
   }
 
   if (props.equal) {
-    const firstItem = button.value?.firstElementChild
+    const firstItem = button.firstElementChild
 
     if (firstItem instanceof HTMLElement) {
       let text = firstItem.innerText
@@ -59,9 +59,9 @@ onMounted(() => {
         firstItem.classList.add('na-badge_dot')
       }
 
-      if (button.value) {
-        button.value.innerHTML = ''
-        button.value.append(firstItem)
+      if (button) {
+        button.innerHTML = ''
+        button.append(firstItem)
       }
     }
   }
