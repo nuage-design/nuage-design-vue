@@ -8,6 +8,7 @@ import { NaCheckbox } from './components/na-checkbox'
 import { NaRadio } from './components/na-radio'
 import { NaInput } from './components/na-input'
 import { NaSwitch } from './components/na-switch'
+import { NaTooltip } from './components/na-tooltip'
 </script>
 
 <template lang="pug">
@@ -74,6 +75,14 @@ na-input(label="Label" placeholder="Placeholder" style="width: 270px")
   template(#right-side)
     na-button(equal size="small" type="transparent")
       i.bx.bx-low-vision
+br
+na-tooltip
+  na-button(type="transparent")
+    span Кнопка
+    i.bx.bxs-heart
+  template(#tip)
+    | Tooltip
+br
 br
 </template>
 
