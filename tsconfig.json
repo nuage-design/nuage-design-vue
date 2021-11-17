@@ -1,6 +1,10 @@
 {
   "strict": true,
   "compilerOptions": {
+    "declarationDir": "lib",
+    "declaration": true,
+    "importHelpers": true,
+    "experimentalDecorators": true,
     "target": "esnext",
     "useDefineForClassFields": true,
     "module": "esnext",

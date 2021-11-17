@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, useSlots, onBeforeUnmount, onBeforeMount } from 'vue'
+import { onMounted, onBeforeUnmount } from 'vue'
 
 interface Props {
   position?: string
@@ -16,8 +16,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   position: 'top',
 })
-
-const slots = useSlots()
 
 let tip = $ref<HTMLDivElement>()
 let content = $ref<HTMLDivElement>()

@@ -1,5 +1,5 @@
+/// <reference types=".pnpm/vue@3.2.22/node_modules/vue/ref-macros" />
 /// <reference types="vite/client" />
-/// <reference types="vue/ref-macros" />
 
 declare module '*.vue' {
   import { DefineComponent } from 'vue'
